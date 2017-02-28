@@ -13,5 +13,51 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Hello World!"
+        android:id="@+id/title" />
+
+    <Button
+        android:text="Log In"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendButton"
+        android:elevation="0dp"
+        android:layout_marginLeft="31dp"
+        android:layout_marginStart="31dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/title"
+        android:layout_toEndOf="@+id/title"
+        android:layout_marginBottom="148dp"
+        android:onClick="logIn"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:layout_marginTop="21dp"
+        android:id="@+id/password"
+        android:allowUndo="true"
+        android:autoText="false"
+        android:duplicateParentState="false"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:layout_below="@+id/username"
+        android:layout_alignLeft="@+id/username"
+        android:layout_alignStart="@+id/username"
+        android:hint="Password" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_marginTop="67dp"
+        android:id="@+id/username"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:hint="Username" />
+
 </RelativeLayout>

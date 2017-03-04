@@ -1,10 +1,13 @@
 package com.example.i2lc.edi;
 
 import android.content.Intent;
+import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import static java.lang.System.out;
 
 public class LoInActivity extends AppCompatActivity {
 

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,8 +17,8 @@ import java.io.File;
 
 public class ImageRender extends ImageView {
 
-    float xPosition;
-    private float yPostion;
+    private float xPosition;
+    private float yPosition;
     private float width;
     private float height;
     private float actualWidth;
@@ -47,15 +48,15 @@ public class ImageRender extends ImageView {
     public ImageRender(Context context) {
         super(context);
 
-        this.xPosition = 1.0f;
-        this.yPostion = 1.0f;
+        this.xPosition = 0.0f;
+        this.yPosition = 0.0f;
         this.width = 1.0f;
         this.height = 1.0f;
         this.elementID = 1;
         this.layer = 0;
-        this.path = "";
+        this.path = "edi_v2";
 
-        Image = BitmapFactory.decodeResource(getResources(), R.drawable.spacex);
+        this.Image = BitmapFactory.decodeResource(getResources(), R.drawable.edi_v2);
     }
 
     public void setDefaultAspectRatio() {
@@ -64,12 +65,37 @@ public class ImageRender extends ImageView {
     }
 
 
+    // Scales bitmap to desired width and height
+    public static Bitmap scaleBitmap(Bitmap image, int maxWidth, int maxHeight, Boolean aspectratiolock) {
+        if (maxHeight > 0 && maxWidth > 0) {
+            int width = image.getWidth();
+            int height = image.getHeight();
+            float ratioBitmap = (float) width / (float) height;
+            float ratioMax = (float) maxWidth / (float) maxHeight;
+            int finalWidth = maxWidth;
+            int finalHeight = maxHeight;
+
+            if(aspectratiolock == true) {
+                if (ratioMax > 1) {
+                    finalWidth = (int) ((float) maxHeight * ratioBitmap);
+                } else {
+                    finalHeight = (int) ((float) maxWidth / ratioBitmap);
+                }
+            }
+            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+            return image;
+        } else {
+            return image;
+        }
+    }
+
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        canvas.drawColor(Color.BLUE);
-        canvas.drawBitmap(Image, 100, 20, null);
+        canvas.drawColor(Color.WHITE);
+        this.Image = scaleBitmap(this.Image, this.getWidth(), this.getHeight(), false);
+        canvas.drawBitmap(this.Image, this.xPosition, this.yPosition, null);
     }
 
     //Getters and setters
@@ -82,12 +108,12 @@ public class ImageRender extends ImageView {
         this.xPosition = xPosition;
     }
 
-    public float getyPostion() {
-        return this.yPostion;
+    public float getyPosition() {
+        return this.yPosition;
     }
 
-    public void setyPostion(float yPostion) {
-        this.yPostion = yPostion;
+    public void setyPosition(float yPosition) {
+        this.yPosition = yPosition;
     }
 
     public float getWidthFloat() { //TODO check this

@@ -1,10 +1,14 @@
-package com.example.i2lc.imagemodule;
+package com.example.i2lc;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.os.StrictMode;
+import android.graphics.Paint;
+import android.view.View;
 import android.widget.ImageView;
+import java.io.File;
 
 /**
  * Created by vlad on 04/03/2017.
@@ -12,7 +16,7 @@ import android.widget.ImageView;
 
 public class ImageRender extends ImageView {
 
-    private float xPosition;
+    float xPosition;
     private float yPostion;
     private float width;
     private float height;
@@ -40,19 +44,18 @@ public class ImageRender extends ImageView {
     private float opacity = 1;
     private boolean clickable = false;
 
+    public ImageRender(Context context) {
+        super(context);
 
+        this.xPosition = 1.0f;
+        this.yPostion = 1.0f;
+        this.width = 1.0f;
+        this.height = 1.0f;
+        this.elementID = 1;
+        this.layer = 0;
+        this.path = "";
 
-    ImageRender (float xPosition, float yPostion, float width, float height, int elementID, int layer, String path) {
-
-        this.xPosition = xPosition;
-        this.yPostion = yPostion;
-        this.width = width;
-        this.height = height;
-        this.elementID = elementID;
-        this.layer = layer;
-        this.path = path;
-
-        setDefaultAspectRatio();
+        Image = BitmapFactory.decodeResource(getResources(), R.drawable.spacex);
     }
 
     public void setDefaultAspectRatio() {
@@ -62,8 +65,11 @@ public class ImageRender extends ImageView {
 
 
     @Override
-    public void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        canvas.drawColor(Color.BLUE);
+        canvas.drawBitmap(Image, 100, 20, null);
     }
 
     //Getters and setters

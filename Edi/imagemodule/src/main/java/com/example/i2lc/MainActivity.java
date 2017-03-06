@@ -2,6 +2,7 @@ package com.example.i2lc;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,15 +20,22 @@ public class MainActivity extends AppCompatActivity {
 
         ImageRender imageRender = new ImageRender(this);
 
-//        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
         Canvas testCanvas = new Canvas();
 
-//        imageRender.draw(testCanvas);
+        //imageRender.setActualHeight(0.3f);
+//        imageRender.setBorderColor(Color.RED);
+//        imageRender.setBorderWidth(20);
+//
+        imageRender.setWidth(100);
+        imageRender.setHeight(100);
+        imageRender.setOpacity(1.0f);
+
+
+//        imageRender.setxPosition(0.0f);
+//        imageRender.setyPosition(0.0f);
+//
+        imageRender.onDraw(testCanvas);
 
         setContentView(imageRender);
-
-//        LinearLayout layout = (LinearLayout)findViewById(R.id.test_layout);
-//
-//        layout.addView(imageRender);
     }
 }

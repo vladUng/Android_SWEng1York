@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.View;
 import android.widget.ImageView;
 import java.io.File;
@@ -28,7 +29,7 @@ public class ImageRender extends ImageView {
     private int elementID;
     private int layer;
     private int borderWidth;
-    private String borderColor; //TODO tbd for the type
+    private int borderColor; //TODO tbd for the type, it should be int, they want the setter in string ....
     private Bitmap Image;
     private String path = "";
     private boolean visibility = true;
@@ -42,7 +43,7 @@ public class ImageRender extends ImageView {
     private String onLongClickAction = "";
     private boolean aspectratiolock = true ;
     private float elementaspectratio;
-    private float opacity = 1;
+    private float opacity = 1.0f;
     private boolean clickable = false;
 
     public ImageRender(Context context) {
@@ -56,7 +57,11 @@ public class ImageRender extends ImageView {
         this.layer = 0;
         this.path = "edi_v2";
 
+
         this.Image = BitmapFactory.decodeResource(getResources(), R.drawable.edi_v2);
+
+        //TODO check if they want to keep this
+        setBorderColor(Color.GREEN);
     }
 
     public void setDefaultAspectRatio() {
@@ -66,7 +71,7 @@ public class ImageRender extends ImageView {
 
 
     // Scales bitmap to desired width and height
-    public static Bitmap scaleBitmap(Bitmap image, int maxWidth, int maxHeight, Boolean aspectratiolock) {
+    public Bitmap scaleBitmap(Bitmap image, int maxWidth, int maxHeight) {
         if (maxHeight > 0 && maxWidth > 0) {
             int width = image.getWidth();
             int height = image.getHeight();
@@ -83,10 +88,8 @@ public class ImageRender extends ImageView {
                 }
             }
             image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
-            return image;
-        } else {
-            return image;
         }
+        return image;
     }
 
 
@@ -94,8 +97,33 @@ public class ImageRender extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(Color.WHITE);
-        this.Image = scaleBitmap(this.Image, this.getWidth(), this.getHeight(), false);
-        canvas.drawBitmap(this.Image, this.xPosition, this.yPosition, null);
+
+        this.Image = scaleBitmap(this.Image, this.getWidth(), this.getHeight());
+
+        //set opacity
+        setAlpha(this.opacity);
+
+        if (getBorderWidth() >= 0 ) {
+            drawBorder(canvas);
+        }
+
+        float newPosY = this.getHeight() * yPosition;
+        float newPosX = this.getWidth() *  xPosition;
+
+        canvas.drawBitmap(this.Image, newPosX, newPosY, null);
+}
+
+
+
+    private void drawBorder(Canvas canvas) {
+
+        Paint paint = new Paint();
+        paint.setColor(borderColor);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(borderWidth);
+
+        Rect rect = new Rect(borderWidth / 2, borderWidth / 2, Image.getWidth() - borderWidth/2, Image.getHeight() - borderWidth /  2);
+        canvas.drawRect(rect, paint);
     }
 
     //Getters and setters
@@ -123,7 +151,6 @@ public class ImageRender extends ImageView {
     public void setWidth(float width) {
         this.width = width;
     }
-
 
     public float getHeightFloat() { //TODO check this
         return this.height;
@@ -185,11 +212,11 @@ public class ImageRender extends ImageView {
         this.borderWidth = borderWidth;
     }
 
-    public String getBorderColor() {
+    public int getBorderColor() {
         return this.borderColor;
     }
 
-    public void setBorderColor(String borderColor) {
+    public void setBorderColor(int borderColor) {
         this.borderColor = borderColor;
     }
 

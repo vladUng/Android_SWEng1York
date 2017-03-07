@@ -71,25 +71,24 @@ public class ImageRender extends ImageView {
 
 
     // Scales bitmap to desired width and height
-    public Bitmap scaleBitmap(Bitmap image, int maxWidth, int maxHeight) {
+    private void scaleBitmap(float maxWidth, float maxHeight) {
         if (maxHeight > 0 && maxWidth > 0) {
-            int width = image.getWidth();
-            int height = image.getHeight();
+            int width = Image.getWidth();
+            int height = Image.getHeight();
             float ratioBitmap = (float) width / (float) height;
-            float ratioMax = (float) maxWidth / (float) maxHeight;
-            int finalWidth = maxWidth;
-            int finalHeight = maxHeight;
+            float ratioMax = maxWidth / maxHeight;
+            float finalWidth = maxWidth;
+            float finalHeight = maxHeight;
 
             if(aspectratiolock == true) {
                 if (ratioMax > 1) {
-                    finalWidth = (int) ((float) maxHeight * ratioBitmap);
+                    finalWidth = (int) ( maxHeight * ratioBitmap);
                 } else {
-                    finalHeight = (int) ((float) maxWidth / ratioBitmap);
+                    finalHeight = (int) ( maxWidth / ratioBitmap);
                 }
             }
-            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+           Image = Bitmap.createScaledBitmap(Image, (int)finalWidth, (int)finalHeight, true);
         }
-        return image;
     }
 
 
@@ -98,32 +97,46 @@ public class ImageRender extends ImageView {
         super.onDraw(canvas);
         canvas.drawColor(Color.WHITE);
 
-        this.Image = scaleBitmap(this.Image, this.getWidth(), this.getHeight());
+        float newWidth = this.getWidth() * width;
+        float newHeight = this.getHeight() * height;
+
+        scaleBitmap(newWidth, newHeight); //scale the current image bitmap
 
         //set opacity
         setAlpha(this.opacity);
 
-        if (getBorderWidth() >= 0 ) {
-            drawBorder(canvas);
-        }
+        float newPosY = Image.getHeight() *  yPosition;
+        float newPosX = Image.getWidth()  *  xPosition;
 
-        float newPosY = this.getHeight() * yPosition;
-        float newPosX = this.getWidth() *  xPosition;
+        if (getBorderWidth() >= 0 ) {
+            drawBorder(canvas, (int)newPosX, (int)newPosY);
+        }
 
         canvas.drawBitmap(this.Image, newPosX, newPosY, null);
 }
 
 
-
-    private void drawBorder(Canvas canvas) {
+    private void drawBorder(Canvas canvas, int xPosition, int yPosition) {
 
         Paint paint = new Paint();
         paint.setColor(borderColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(borderWidth);
 
-        Rect rect = new Rect(borderWidth / 2, borderWidth / 2, Image.getWidth() - borderWidth/2, Image.getHeight() - borderWidth /  2);
+        Rect rect = new Rect(xPosition + borderWidth / 2, yPosition + borderWidth / 2,
+                xPosition + Image.getWidth() - borderWidth / 2, yPosition + Image.getHeight() - borderWidth /  2);
+
         canvas.drawRect(rect, paint);
+    }
+
+    public Boolean liesWithin(int xPos, int yPos, int widthPixels, int heightPixels) {
+
+        int xPositionPixel = (int) (Image.getWidth() * xPosition);
+        int yPositionPixel = (int) (Image.getHeight() * yPosition);
+
+        Rect rect = new Rect(xPositionPixel, yPositionPixel, xPositionPixel + widthPixels, yPositionPixel + heightPixels);
+
+        return rect.contains(xPos, yPos, widthPixels, heightPixels);
     }
 
     //Getters and setters

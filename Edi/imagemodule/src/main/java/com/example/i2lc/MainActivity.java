@@ -23,17 +23,17 @@ public class MainActivity extends AppCompatActivity {
         Canvas testCanvas = new Canvas();
 
         //imageRender.setActualHeight(0.3f);
-//        imageRender.setBorderColor(Color.RED);
-//        imageRender.setBorderWidth(20);
+        imageRender.setBorderColor(Color.RED);
+        imageRender.setBorderWidth(20);
 //
-        imageRender.setWidth(100);
-        imageRender.setHeight(100);
+        imageRender.setWidth(0.8f);
+        imageRender.setHeight(0.9f);
         imageRender.setOpacity(1.0f);
+        imageRender.setAspectratiolock(true);
 
+        imageRender.setxPosition(0.1f);
+        imageRender.setyPosition(0.1f);
 
-//        imageRender.setxPosition(0.0f);
-//        imageRender.setyPosition(0.0f);
-//
         imageRender.onDraw(testCanvas);
 
         setContentView(imageRender);

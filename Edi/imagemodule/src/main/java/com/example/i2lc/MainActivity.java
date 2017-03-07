@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         Canvas testCanvas = new Canvas();
 
+        //imageRender.loadImage();
+
         //imageRender.setActualHeight(0.3f);
         imageRender.setBorderColor(Color.RED);
         imageRender.setBorderWidth(20);

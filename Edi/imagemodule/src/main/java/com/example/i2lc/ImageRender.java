@@ -8,9 +8,17 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.lang.reflect.Field;
 
 /**
  * Created by vlad on 04/03/2017.
@@ -49,24 +57,18 @@ public class ImageRender extends ImageView {
     public ImageRender(Context context) {
         super(context);
 
-        this.xPosition = 0.0f;
-        this.yPosition = 0.0f;
-        this.width = 1.0f;
-        this.height = 1.0f;
-        this.elementID = 1;
-        this.layer = 0;
-        this.path = "edi_v2";
+        xPosition = 0.0f;
+        yPosition = 0.0f;
+        width = 1.0f;
+        height = 1.0f;
+        elementID = 1;
+        layer = 0;
+        path = "edi_v2";
 
-
-        this.Image = BitmapFactory.decodeResource(getResources(), R.drawable.edi_v2);
+        Image = BitmapFactory.decodeResource(getResources(), R.drawable.edi_v2);
 
         //TODO check if they want to keep this
         setBorderColor(Color.GREEN);
-    }
-
-    public void setDefaultAspectRatio() {
-        //TODO do stuff here
-        elementaspectratio = 0.0f;
     }
 
 
@@ -80,7 +82,7 @@ public class ImageRender extends ImageView {
             float finalWidth = maxWidth;
             float finalHeight = maxHeight;
 
-            if(aspectratiolock == true) {
+            if(aspectratiolock) {
                 if (ratioMax > 1) {
                     finalWidth = (int) ( maxHeight * ratioBitmap);
                 } else {
@@ -114,6 +116,47 @@ public class ImageRender extends ImageView {
 
         canvas.drawBitmap(this.Image, newPosX, newPosY, null);
 }
+    public boolean intersects(int x, int y){
+        boolean withinBounds = false;
+        if ((float) x <= actualWidth && (float) y <= actualHeight){
+            withinBounds = true;
+        }
+        return withinBounds;
+    }
+
+    public Boolean liesWithin(int xPos, int yPos, int widthPixels, int heightPixels) {
+
+        int xPositionPixel = (int) (Image.getWidth() * xPosition);
+        int yPositionPixel = (int) (Image.getHeight() * yPosition);
+
+        Rect rect = new Rect(xPositionPixel, yPositionPixel, xPositionPixel + widthPixels, yPositionPixel + heightPixels);
+
+        return rect.contains(xPos, yPos, widthPixels, heightPixels);
+    }
+
+    public String onClick(){
+        if(onclickaction.length() > 0) {
+            return onclickaction;
+        } else
+        {
+            return onclickinfo;
+        }
+    }
+
+    //Check whether client really wants this;
+    //it's essentially a getter.
+    public boolean isClickable(){
+        return clickable;
+    }
+
+    public void loadImage(){
+        //TODO
+    }
+
+    public void discardImage(){
+        Image = null;
+        //or Image.recycle();
+    }
 
 
     private void drawBorder(Canvas canvas, int xPosition, int yPosition) {
@@ -129,15 +172,7 @@ public class ImageRender extends ImageView {
         canvas.drawRect(rect, paint);
     }
 
-    public Boolean liesWithin(int xPos, int yPos, int widthPixels, int heightPixels) {
 
-        int xPositionPixel = (int) (Image.getWidth() * xPosition);
-        int yPositionPixel = (int) (Image.getHeight() * yPosition);
-
-        Rect rect = new Rect(xPositionPixel, yPositionPixel, xPositionPixel + widthPixels, yPositionPixel + heightPixels);
-
-        return rect.contains(xPos, yPos, widthPixels, heightPixels);
-    }
 
     //Getters and setters
 
@@ -345,7 +380,7 @@ public class ImageRender extends ImageView {
         this.opacity = opacity;
     }
 
-    public boolean isClickable() {
+    public boolean getClickable() {
         return this.clickable;
     }
 

@@ -1,43 +1,31 @@
 package com.example.i2lc;
 
-import android.content.Context;
+
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.lang.reflect.Field;
 
 /**
  * Created by vlad on 04/03/2017.
  */
 
-public class ImageRender extends ImageView {
+public class ImageRender {
 
     private float xPosition;
     private float yPosition;
     private float width;
     private float height;
-    private float actualWidth;
-    private float actualHeight;
+    private float actualWidth = 0.0f;
+    private float actualHeight = 0.0f;
     private float actualXpos;
     private float actualYpos;
     private int elementID;
     private int layer;
     private int borderWidth;
-    private int borderColor; //TODO tbd for the type, it should be int, they want the setter in string ....
+    private int borderColor = Color.GREEN; //TODO tbd for the type, it should be int, they want the setter in string ....
     private Bitmap Image;
     private String path = "";
     private boolean visibility = true;
@@ -54,23 +42,16 @@ public class ImageRender extends ImageView {
     private float opacity = 1.0f;
     private boolean clickable = false;
 
-    public ImageRender(Context context) {
-        super(context);
+    ImageRender(float xPosition, float yPosition, float width, float height, int elementID, int layer, String path ) {
 
-        xPosition = 0.0f;
-        yPosition = 0.0f;
-        width = 1.0f;
-        height = 1.0f;
-        elementID = 1;
-        layer = 0;
-        path = "edi_v2";
-
-        Image = BitmapFactory.decodeResource(getResources(), R.drawable.edi_v2);
-
-        //TODO check if they want to keep this
-        setBorderColor(Color.GREEN);
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.width = width;
+        this.height = height;
+        this.elementID = elementID;
+        this.layer = layer;
+        this.path = path;
     }
-
 
     // Scales bitmap to desired width and height
     private void scaleBitmap(float maxWidth, float maxHeight) {
@@ -93,32 +74,35 @@ public class ImageRender extends ImageView {
         }
     }
 
+    protected void onDraw(Canvas canvas, Bitmap bitmap) {
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        canvas.drawColor(Color.WHITE);
+        Image = bitmap.copy(Bitmap.Config.ARGB_8888, true); //needed this to transform it in a mutable bitmap, shouldn't needeed in the final version
 
-        float newWidth = this.getWidth() * width;
-        float newHeight = this.getHeight() * height;
+//      loadImage(); TODO: uncomment on the release version
+
+        float newWidth = Image.getWidth() * width;
+        float newHeight =  Image.getHeight() * height;
 
         scaleBitmap(newWidth, newHeight); //scale the current image bitmap
 
         //set opacity
-        setAlpha(this.opacity);
+        Paint alphaPaint = new Paint();
+        alphaPaint.setAlpha((int) (opacity * 255));
+
 
         float newPosY = Image.getHeight() *  yPosition;
         float newPosX = Image.getWidth()  *  xPosition;
 
-        if (getBorderWidth() >= 0 ) {
+        if (borderWidth > 0 ) {
             drawBorder(canvas, (int)newPosX, (int)newPosY);
         }
 
-        canvas.drawBitmap(this.Image, newPosX, newPosY, null);
-}
-    public boolean intersects(int x, int y){
+        canvas.drawBitmap(this.Image, newPosX, newPosY, alphaPaint);
+    }
+
+    public boolean intersects(int x, int y) {
         boolean withinBounds = false;
-        if ((float) x <= actualWidth && (float) y <= actualHeight){
+        if ((float) x <= actualWidth && (float) y <= actualHeight) {
             withinBounds = true;
         }
         return withinBounds;
@@ -134,7 +118,7 @@ public class ImageRender extends ImageView {
         return rect.contains(xPos, yPos, widthPixels, heightPixels);
     }
 
-    public String onClick(){
+    public String onClick () {
         if(onclickaction.length() > 0) {
             return onclickaction;
         } else
@@ -143,14 +127,8 @@ public class ImageRender extends ImageView {
         }
     }
 
-    //Check whether client really wants this;
-    //it's essentially a getter.
-    public boolean isClickable(){
-        return clickable;
-    }
-
     public void loadImage(){
-        //TODO
+        //      Image = BitmapFactory.decodeFile(path); TODO: uncomment on the release version
     }
 
     public void discardImage(){
@@ -165,14 +143,14 @@ public class ImageRender extends ImageView {
         paint.setColor(borderColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(borderWidth);
+        paint.setAlpha((int) (opacity * 255));
+
 
         Rect rect = new Rect(xPosition + borderWidth / 2, yPosition + borderWidth / 2,
                 xPosition + Image.getWidth() - borderWidth / 2, yPosition + Image.getHeight() - borderWidth /  2);
 
         canvas.drawRect(rect, paint);
     }
-
-
 
     //Getters and setters
 

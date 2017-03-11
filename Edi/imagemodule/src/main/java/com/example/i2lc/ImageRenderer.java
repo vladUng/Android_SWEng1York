@@ -1,6 +1,7 @@
 package com.example.i2lc;
 
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -43,10 +44,10 @@ public class ImageRenderer {
     private float opacity = 1.0f;
     private boolean clickable = false;
 
-    ImageRenderer() {
+    public ImageRenderer() {
     }
 
-    ImageRenderer(float xPosition, float yPosition, float width, float height, int elementID, int layer, String path ) {
+    public ImageRenderer(float xPosition, float yPosition, float width, float height, int elementID, int layer, String path) {
 
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -76,7 +77,7 @@ public class ImageRenderer {
            Image = Bitmap.createScaledBitmap(Image, (int)finalWidth, (int)finalHeight, true);
     }
 
-    protected void onDraw(Canvas canvas) {
+    public void onDraw(Canvas canvas) {
 
         scaleBitmap(); //scale the current image bitmap
         //set opacity
@@ -85,7 +86,6 @@ public class ImageRenderer {
         drawBorder(canvas);
         canvas.drawBitmap(Image, actualXpos, actualYpos, alphaPaint);
     }
-
 
     public boolean intersects(int x, int y) {
         boolean withinBounds = false;
@@ -97,12 +97,9 @@ public class ImageRenderer {
 
     public Boolean liesWithin(int xPos, int yPos, int widthPixels, int heightPixels) {
 
-        int xPositionPixel = (int) (Image.getWidth() * xPosition);
-        int yPositionPixel = (int) (Image.getHeight() * yPosition);
+        Rect rect = new Rect(xPos, yPos, xPos + widthPixels, yPos + heightPixels);
 
-        Rect rect = new Rect(xPositionPixel, yPositionPixel, xPositionPixel + widthPixels, yPositionPixel + heightPixels);
-
-        return rect.contains(xPos, yPos, widthPixels, heightPixels);
+        return rect.contains((int)actualXpos, (int) actualYpos, (int) (actualXpos + actualWidth), (int) (actualYpos + actualHeight));
     }
 
     public String onClick () {
@@ -115,7 +112,7 @@ public class ImageRenderer {
     }
 
     public void loadImage(){
-             Image = BitmapFactory.decodeFile(path);// TODO: uncomment on the release version
+        Image = BitmapFactory.decodeFile(path);
     }
 
     public void discardImage(){
@@ -159,7 +156,7 @@ public class ImageRenderer {
         this.yPosition = yPosition;
     }
 
-    public float getWidthFloat() { //TODO check this
+    public float getWidth() { //TODO check this
         return this.width;
     }
 
@@ -167,7 +164,7 @@ public class ImageRenderer {
         this.width = width;
     }
 
-    public float getHeightFloat() { //TODO check this
+    public float getHeight() { //TODO check this
         return this.height;
     }
 

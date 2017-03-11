@@ -11,7 +11,7 @@ import android.view.View;
 
 public class CustomTestView extends View {
 
-    String path = "/storage/emulated/0/DCIM/Camera/edi_v2.png";
+    String path = "/storage/emulated/0/DCIM/Camera/IMG_20170309_163351";
 
     public CustomTestView(Context context) {
         super(context);

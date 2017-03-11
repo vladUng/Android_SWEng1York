@@ -1,13 +1,9 @@
 package com.example.i2lc;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.View;
-
-import java.io.InputStream;
 
 /**
  * Created by vlad on 08/03/2017.
@@ -15,38 +11,28 @@ import java.io.InputStream;
 
 public class CustomTestView extends View {
 
-    int identifier;
+    String path = "/storage/emulated/0/DCIM/Camera/edi_v2.png";
 
     public CustomTestView(Context context) {
         super(context);
-        identifier = getResources().getIdentifier("edi_v2", "drawable", context.getPackageName());
+        //identifier = getResources().getIdentifier("edi_v2", "drawable", context.getPackageName());
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-
-        ImageRender customImg = new ImageRender(0.0f, 0.0f, 0.2f, 0.2f, 999, 0, "adsas");
-
-        InputStream ins = getResources().openRawResource(identifier);
-        Bitmap bads = BitmapFactory.decodeStream(ins);
-
-        customImg.setAspectratiolock(true);
+        ImageRenderer customImg = new ImageRenderer(0.0f, 0.0f, 0.5f, 0.5f, 999, 0, path);
+        customImg.loadImage();
+        customImg.setActualXpos(0.0f);
+        customImg.setActualYpos(0.0f);
+        customImg.setActualWidth(1000);
+        customImg.setActualHeight(500);
+        customImg.setAspectRatioLock(true);
         customImg.setBorderWidth(20);
-        customImg.setBorderColor(Color.GRAY);
-
+        customImg.setBorderColor(Color.GREEN);
         customImg.setOpacity(1.0f);
-
-        customImg.onDraw(canvas, bads);
-
-        Boolean bla = customImg.liesWithin(0, 0, 700, 800);
-        Boolean bla2 = customImg.intersects(0,4);
-
-
+        customImg.onDraw(canvas);
         customImg.discardImage();
-
-        boolean asda = true;
     }
 }

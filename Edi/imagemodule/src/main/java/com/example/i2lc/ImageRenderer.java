@@ -2,6 +2,7 @@ package com.example.i2lc;
 
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,13 +13,13 @@ import android.graphics.Rect;
  * Created by vlad on 04/03/2017.
  */
 
-public class ImageRender {
+public class ImageRenderer {
 
     private float xPosition;
     private float yPosition;
     private float width;
     private float height;
-    private float actualWidth = 0.0f;
+    private float actualWidth = 0.0f; //TODO Actual Width/height/pos in ints (cuz pixels...)
     private float actualHeight = 0.0f;
     private float actualXpos;
     private float actualYpos;
@@ -29,20 +30,23 @@ public class ImageRender {
     private Bitmap Image;
     private String path = "";
     private boolean visibility = true;
-    private int StartSequence = 0;
+    private int startSequence = 0;
     private int endSequence = 0;
     private float duration;
-    private float remaingDuration;
-    private String onclickinfo = "";
-    private String onclickaction = "";
+    private float remainingDuration;
+    private String onClickInfo = "";
+    private String onClickAction = "";
     private String onDoubleClickAction = "";
     private String onLongClickAction = "";
-    private boolean aspectratiolock = true ;
-    private float elementaspectratio;
+    private boolean aspectRatioLock = true ;
+    private float elementAspectRatio;
     private float opacity = 1.0f;
     private boolean clickable = false;
 
-    ImageRender(float xPosition, float yPosition, float width, float height, int elementID, int layer, String path ) {
+    ImageRenderer() {
+    }
+
+    ImageRenderer(float xPosition, float yPosition, float width, float height, int elementID, int layer, String path ) {
 
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -54,51 +58,34 @@ public class ImageRender {
     }
 
     // Scales bitmap to desired width and height
-    private void scaleBitmap(float maxWidth, float maxHeight) {
-        if (maxHeight > 0 && maxWidth > 0) {
+    private void scaleBitmap() {
             int width = Image.getWidth();
             int height = Image.getHeight();
             float ratioBitmap = (float) width / (float) height;
-            float ratioMax = maxWidth / maxHeight;
-            float finalWidth = maxWidth;
-            float finalHeight = maxHeight;
+            float ratioMax = actualWidth / actualHeight;
+            float finalWidth = actualWidth;
+            float finalHeight = actualHeight;
 
-            if(aspectratiolock) {
+            if(aspectRatioLock) {
                 if (ratioMax > 1) {
-                    finalWidth = (int) ( maxHeight * ratioBitmap);
+                    finalWidth = (int) ( actualHeight * ratioBitmap);
                 } else {
-                    finalHeight = (int) ( maxWidth / ratioBitmap);
+                    finalHeight = (int) ( actualWidth / ratioBitmap);
                 }
             }
            Image = Bitmap.createScaledBitmap(Image, (int)finalWidth, (int)finalHeight, true);
-        }
     }
 
-    protected void onDraw(Canvas canvas, Bitmap bitmap) {
+    protected void onDraw(Canvas canvas) {
 
-        Image = bitmap.copy(Bitmap.Config.ARGB_8888, true); //needed this to transform it in a mutable bitmap, shouldn't needeed in the final version
-
-//      loadImage(); TODO: uncomment on the release version
-
-        float newWidth = Image.getWidth() * width;
-        float newHeight =  Image.getHeight() * height;
-
-        scaleBitmap(newWidth, newHeight); //scale the current image bitmap
-
+        scaleBitmap(); //scale the current image bitmap
         //set opacity
         Paint alphaPaint = new Paint();
         alphaPaint.setAlpha((int) (opacity * 255));
-
-
-        float newPosY = Image.getHeight() *  yPosition;
-        float newPosX = Image.getWidth()  *  xPosition;
-
-        if (borderWidth > 0 ) {
-            drawBorder(canvas, (int)newPosX, (int)newPosY);
-        }
-
-        canvas.drawBitmap(this.Image, newPosX, newPosY, alphaPaint);
+        drawBorder(canvas);
+        canvas.drawBitmap(Image, actualXpos, actualYpos, alphaPaint);
     }
+
 
     public boolean intersects(int x, int y) {
         boolean withinBounds = false;
@@ -119,16 +106,16 @@ public class ImageRender {
     }
 
     public String onClick () {
-        if(onclickaction.length() > 0) {
-            return onclickaction;
+        if(onClickAction.length() > 0) {
+            return onClickAction;
         } else
         {
-            return onclickinfo;
+            return onClickInfo;
         }
     }
 
     public void loadImage(){
-        //      Image = BitmapFactory.decodeFile(path); TODO: uncomment on the release version
+             Image = BitmapFactory.decodeFile(path);// TODO: uncomment on the release version
     }
 
     public void discardImage(){
@@ -137,7 +124,9 @@ public class ImageRender {
     }
 
 
-    private void drawBorder(Canvas canvas, int xPosition, int yPosition) {
+    private void drawBorder(Canvas canvas) {
+        int xPos = (int) actualXpos;
+        int yPos = (int) actualYpos;
 
         Paint paint = new Paint();
         paint.setColor(borderColor);
@@ -146,8 +135,8 @@ public class ImageRender {
         paint.setAlpha((int) (opacity * 255));
 
 
-        Rect rect = new Rect(xPosition + borderWidth / 2, yPosition + borderWidth / 2,
-                xPosition + Image.getWidth() - borderWidth / 2, yPosition + Image.getHeight() - borderWidth /  2);
+        Rect rect = new Rect(xPos + borderWidth / 2, yPos + borderWidth / 2,
+                xPos + Image.getWidth() - borderWidth / 2, yPos + Image.getHeight() - borderWidth /  2);
 
         canvas.drawRect(rect, paint);
     }
@@ -271,11 +260,11 @@ public class ImageRender {
     }
 
     public int getStartsequence() {
-        return this.StartSequence;
+        return this.startSequence;
     }
 
     public void setStartsequence(int startSequence) {
-        this.StartSequence = startSequence;
+        this.startSequence = startSequence;
     }
 
     public int getEndSequence() {
@@ -294,28 +283,28 @@ public class ImageRender {
         this.duration = duration;
     }
 
-    public float getRemaingDuration() {
-        return this.remaingDuration;
+    public float getRemainingDuration() {
+        return this.remainingDuration;
     }
 
-    public void setRemaingDuration(float remaingDuration) {
-        this.remaingDuration = remaingDuration;
+    public void setRemainingDuration(float remainingDuration) {
+        this.remainingDuration = remainingDuration;
     }
 
-    public String getOnclickinfo() {
-        return this.onclickinfo;
+    public String getOnClickInfo() {
+        return this.onClickInfo;
     }
 
-    public void setOnclickinfo(String onclickinfo) {
-        this.onclickinfo = onclickinfo;
+    public void setOnClickInfo(String onClickInfo) {
+        this.onClickInfo = onClickInfo;
     }
 
-    public String getOnclickaction() {
-        return this.onclickaction;
+    public String getOnClickAction() {
+        return this.onClickAction;
     }
 
-    public void setOnclickaction(String onclickaction) {
-        this.onclickaction = onclickaction;
+    public void setOnClickAction(String onClickAction) {
+        this.onClickAction = onClickAction;
     }
 
     public String getOnDoubleClickAction() {
@@ -334,20 +323,20 @@ public class ImageRender {
         this.onLongClickAction = onLongClickAction;
     }
 
-    public boolean isAspectratiolock() {
-        return this.aspectratiolock;
+    public boolean isAspectRatioLock() {
+        return this.aspectRatioLock;
     }
 
-    public void setAspectratiolock(boolean aspectratiolock) {
-        this.aspectratiolock = aspectratiolock;
+    public void setAspectRatioLock(boolean aspectRatioLock) {
+        this.aspectRatioLock = aspectRatioLock;
     }
 
-    public float getElementaspectratio() {
-        return this.elementaspectratio;
+    public float getElementAspectRatio() {
+        return this.elementAspectRatio;
     }
 
-    public void setElementaspectratio(float elementaspectratio) {
-        this.elementaspectratio = elementaspectratio;
+    public void setElementAspectRatio(float elementAspectRatio) {
+        this.elementAspectRatio = elementAspectRatio;
     }
 
     public float getOpacity() {

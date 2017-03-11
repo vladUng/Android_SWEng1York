@@ -11,11 +11,11 @@ import android.view.View;
 
 public class CustomTestView extends View {
 
-    String path = "/storage/emulated/0/DCIM/Camera/IMG_20170309_163351";
+    String path = "/storage/emulated/0/DCIM/Camera/edi_v2.pg";
+    boolean bool;
 
     public CustomTestView(Context context) {
         super(context);
-        //identifier = getResources().getIdentifier("edi_v2", "drawable", context.getPackageName());
     }
 
 
@@ -24,14 +24,14 @@ public class CustomTestView extends View {
         super.onDraw(canvas);
         ImageRenderer customImg = new ImageRenderer(0.0f, 0.0f, 0.5f, 0.5f, 999, 0, path);
         customImg.loadImage();
-        customImg.setActualXpos(0.0f);
-        customImg.setActualYpos(0.0f);
-        customImg.setActualWidth(1000);
-        customImg.setActualHeight(500);
+        customImg.setActualXpos(50.0f);
+        customImg.setActualYpos(50.0f);
+        customImg.setActualWidth(400);
+        customImg.setActualHeight(900);
         customImg.setAspectRatioLock(true);
-        customImg.setBorderWidth(20);
+        customImg.setBorderWidth(5);
         customImg.setBorderColor(Color.GREEN);
-        customImg.setOpacity(1.0f);
+        customImg.setOpacity(1f);
         customImg.onDraw(canvas);
         customImg.discardImage();
     }

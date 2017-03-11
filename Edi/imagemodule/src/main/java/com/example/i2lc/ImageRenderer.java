@@ -1,7 +1,6 @@
 package com.example.i2lc;
 
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -27,8 +26,8 @@ public class ImageRenderer {
     private int elementID;
     private int layer;
     private int borderWidth;
-    private int borderColor = Color.GREEN; //TODO tbd for the type, it should be int, they want the setter in string ....
-    private Bitmap Image;
+    private int borderColor = Color.GREEN;
+    private Bitmap image = Bitmap.createBitmap(500,500,Bitmap.Config.ARGB_8888);
     private String path = "";
     private boolean visibility = true;
     private int startSequence = 0;
@@ -55,36 +54,62 @@ public class ImageRenderer {
         this.height = height;
         this.elementID = elementID;
         this.layer = layer;
-        this.path = path;
+
+        if(isValidImageFile(path)) {
+            this.path = path;
+        } else{
+            System.out.println("File at path not a valid image file!");
+        }
+    }
+
+    //Checks if file at specified path is a valid image file
+    private boolean isValidImageFile (String path) {
+        String[] imageExtensions = new String[] {"jpg", "png", "gif", "jpeg"};
+        boolean isValidImageFile = false;
+        for (String extension : imageExtensions) {
+            if (path.endsWith(extension)) {
+                isValidImageFile = true;
+            }
+        }
+        return isValidImageFile;
     }
 
     // Scales bitmap to desired width and height
     private void scaleBitmap() {
-            int width = Image.getWidth();
-            int height = Image.getHeight();
-            float ratioBitmap = (float) width / (float) height;
-            float ratioMax = actualWidth / actualHeight;
-            float finalWidth = actualWidth;
-            float finalHeight = actualHeight;
+        float imageWidth = image.getWidth();
+        float imageHeight = image.getHeight();
+        float widthRatio = actualWidth/imageWidth;
+        float heightRatio = actualHeight/imageHeight;
 
-            if(aspectRatioLock) {
-                if (ratioMax > 1) {
-                    finalWidth = (int) ( actualHeight * ratioBitmap);
-                } else {
-                    finalHeight = (int) ( actualWidth / ratioBitmap);
-                }
+        if(aspectRatioLock) {
+            if (imageWidth > actualWidth) {
+                imageWidth *= widthRatio;
+                imageHeight *= widthRatio;
+                heightRatio = actualHeight/imageHeight;
             }
-           Image = Bitmap.createScaledBitmap(Image, (int)finalWidth, (int)finalHeight, true);
+            if (imageHeight > actualHeight) {
+                imageHeight *=  heightRatio;
+                imageWidth *=  heightRatio;
+            }
+        } else {
+            imageWidth = actualWidth;
+            imageHeight = actualHeight;
+        }
+        image = Bitmap.createScaledBitmap(image, (int)imageWidth, (int)imageHeight, true);
     }
 
     public void onDraw(Canvas canvas) {
-
+        Paint paint = new Paint();
         scaleBitmap(); //scale the current image bitmap
-        //set opacity
-        Paint alphaPaint = new Paint();
-        alphaPaint.setAlpha((int) (opacity * 255));
+        paint.setAlpha((int) (opacity * 255)); //set opacity
         drawBorder(canvas);
-        canvas.drawBitmap(Image, actualXpos, actualYpos, alphaPaint);
+        if (isValidImageFile(path)) {
+            canvas.drawBitmap(image, actualXpos ,actualYpos , paint);
+        } else {
+            paint.setColor(Color.RED);
+            canvas.drawText("Wrong path/Not a valid image file", actualXpos+2*borderWidth,
+                           actualYpos+2*borderWidth + paint.getTextSize(), paint);
+        }
     }
 
     public boolean intersects(int x, int y) {
@@ -96,10 +121,9 @@ public class ImageRenderer {
     }
 
     public Boolean liesWithin(int xPos, int yPos, int widthPixels, int heightPixels) {
-
         Rect rect = new Rect(xPos, yPos, xPos + widthPixels, yPos + heightPixels);
-
-        return rect.contains((int)actualXpos, (int) actualYpos, (int) (actualXpos + actualWidth), (int) (actualYpos + actualHeight));
+        Rect imageRect = new Rect((int)actualXpos, (int)actualYpos,(int)(actualXpos+actualWidth), (int)(actualYpos+actualHeight));
+        return rect.contains(imageRect);
     }
 
     public String onClick () {
@@ -112,34 +136,33 @@ public class ImageRenderer {
     }
 
     public void loadImage(){
-        Image = BitmapFactory.decodeFile(path);
+        if(isValidImageFile(path)) {
+            image = BitmapFactory.decodeFile(path);
+        } else {
+            System.out.println("File at path not valid image file!");
+        }
     }
 
     public void discardImage(){
-        Image = null;
-        //or Image.recycle();
+        image = null;
     }
 
 
     private void drawBorder(Canvas canvas) {
         int xPos = (int) actualXpos;
         int yPos = (int) actualYpos;
-
         Paint paint = new Paint();
+
         paint.setColor(borderColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(borderWidth);
         paint.setAlpha((int) (opacity * 255));
-
-
         Rect rect = new Rect(xPos + borderWidth / 2, yPos + borderWidth / 2,
-                xPos + Image.getWidth() - borderWidth / 2, yPos + Image.getHeight() - borderWidth /  2);
-
+                xPos + image.getWidth() - borderWidth / 2, yPos + image.getHeight() - borderWidth /  2);
         canvas.drawRect(rect, paint);
     }
 
     //Getters and setters
-
     public float getxPosition() {
         return this.xPosition;
     }
@@ -156,20 +179,30 @@ public class ImageRenderer {
         this.yPosition = yPosition;
     }
 
-    public float getWidth() { //TODO check this
+    public float getWidth() {
         return this.width;
     }
 
     public void setWidth(float width) {
-        this.width = width;
+        if(width > 0) {
+            this.width = width;
+        } else{
+            System.out.println("width cannot be <= 0");
+            this.width = 0;
+        }
     }
 
-    public float getHeight() { //TODO check this
+    public float getHeight() {
         return this.height;
     }
 
     public void setHeight(float height) {
-        this.height = height;
+        if(height > 0) {
+            this.height = height;
+        } else{
+            System.out.println("height cannot be <= 0");
+            this.height = 0;
+        }
     }
 
     public float getActualWidth() {
@@ -177,7 +210,12 @@ public class ImageRenderer {
     }
 
     public void setActualWidth(float actualWidth) {
-        this.actualWidth = actualWidth;
+        if(actualWidth > 0) {
+            this.actualWidth = actualWidth;
+        } else {
+            System.out.println("actualWidth must be > 0!");
+            this.width = 0;
+        }
     }
 
     public float getActualHeight() {
@@ -185,7 +223,12 @@ public class ImageRenderer {
     }
 
     public void setActualHeight(float actualHeight) {
-        this.actualHeight = actualHeight;
+        if(actualHeight > 0) {
+            this.actualHeight = actualHeight;
+        } else{
+            System.out.println("actualHeight must be > 0");
+            this.actualHeight = 0;
+        }
     }
 
     public float getActualXpos() {
@@ -221,7 +264,12 @@ public class ImageRenderer {
     }
 
     public void setBorderWidth(int borderWidth) {
-        this.borderWidth = borderWidth;
+        if(borderWidth >= 0) {
+            this.borderWidth = borderWidth;
+        } else {
+            System.out.println("borderWidth must be >= 0");
+            this.borderWidth = 0;
+        }
     }
 
     public int getBorderColor() {
@@ -233,11 +281,11 @@ public class ImageRenderer {
     }
 
     public Bitmap getImage() {
-        return this.Image;
+        return this.image;
     }
 
     public void setImage(Bitmap image) {
-        Image = image;
+        this.image = image;
     }
 
     public String getPath() {
@@ -245,7 +293,11 @@ public class ImageRenderer {
     }
 
     public void setPath(String path) {
-        this.path = path;
+        if(isValidImageFile(path)) {
+            this.path = path;
+        } else{
+            System.out.println("File at path not a valid image file!");
+        }
     }
 
     public boolean isVisibility() {
@@ -261,7 +313,12 @@ public class ImageRenderer {
     }
 
     public void setStartsequence(int startSequence) {
-        this.startSequence = startSequence;
+        if(startSequence >= 0) {
+            this.startSequence = startSequence;
+        } else {
+            System.out.print("startSequence cannot be smaller than zero!");
+            this.startSequence = 0;
+        }
     }
 
     public int getEndSequence() {
@@ -269,7 +326,13 @@ public class ImageRenderer {
     }
 
     public void setEndSequence(int endSequence) {
-        this.endSequence = endSequence;
+        if(endSequence >= 0 && endSequence >= startSequence) {
+            this.endSequence = endSequence;
+        } else {
+            System.out.println("endSequence cannot be smaller than zero or smaller than startSequence!");
+            this.endSequence = startSequence;
+        }
+
     }
 
     public float getDuration() {
@@ -277,7 +340,12 @@ public class ImageRenderer {
     }
 
     public void setDuration(float duration) {
-        this.duration = duration;
+        if(duration >= 0) {
+            this.duration = duration;
+        } else {
+            System.out.println("duration must be >= 0!");
+            this.duration = 0;
+        }
     }
 
     public float getRemainingDuration() {
@@ -285,7 +353,12 @@ public class ImageRenderer {
     }
 
     public void setRemainingDuration(float remainingDuration) {
-        this.remainingDuration = remainingDuration;
+        if (remainingDuration >= 0) {
+            this.remainingDuration = remainingDuration;
+        } else{
+            System.out.println("remainingDuration must be >= 0!");
+            this.remainingDuration = 0;
+        }
     }
 
     public String getOnClickInfo() {
@@ -333,7 +406,12 @@ public class ImageRenderer {
     }
 
     public void setElementAspectRatio(float elementAspectRatio) {
-        this.elementAspectRatio = elementAspectRatio;
+        if (elementAspectRatio >= 0) {
+            this.elementAspectRatio = elementAspectRatio;
+        } else {
+            System.out.println("elementAspectRatio cannot be < 0! ");
+            this.elementAspectRatio = 0;
+        }
     }
 
     public float getOpacity() {

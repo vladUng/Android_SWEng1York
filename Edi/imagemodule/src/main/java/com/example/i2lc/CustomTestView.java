@@ -11,8 +11,7 @@ import android.view.View;
 
 public class CustomTestView extends View {
 
-    String path = "/storage/emulated/0/DCIM/Camera/edi_v2.pg";
-    boolean bool;
+    String path = "/storage/emulated/0/DCIM/Camera/edi_v2.png";
 
     public CustomTestView(Context context) {
         super(context);
@@ -26,11 +25,11 @@ public class CustomTestView extends View {
         customImg.loadImage();
         customImg.setActualXpos(50.0f);
         customImg.setActualYpos(50.0f);
-        customImg.setActualWidth(400);
+        customImg.setActualWidth(500);
         customImg.setActualHeight(900);
         customImg.setAspectRatioLock(true);
-        customImg.setBorderWidth(5);
-        customImg.setBorderColor(Color.GREEN);
+        customImg.setBorderWidth(10);
+        customImg.setBorderColor(Color.BLACK);
         customImg.setOpacity(1f);
         customImg.onDraw(canvas);
         customImg.discardImage();

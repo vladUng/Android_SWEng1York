@@ -7,6 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
+
+import java.io.File;
 
 
 /**
@@ -19,7 +22,7 @@ public class ImageRenderer {
     private float yPosition;
     private float width;
     private float height;
-    private float actualWidth = 0.0f; //TODO Actual Width/height/pos in ints (cuz pixels...)
+    private float actualWidth = 0.0f;
     private float actualHeight = 0.0f;
     private float actualXpos;
     private float actualYpos;
@@ -43,31 +46,33 @@ public class ImageRenderer {
     private float opacity = 1.0f;
     private boolean clickable = false;
 
+    private static final String TAG = "ImageRenderer";
+
     public ImageRenderer() {
     }
 
     public ImageRenderer(float xPosition, float yPosition, float width, float height, int elementID, int layer, String path) {
-
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.width = width;
-        this.height = height;
-        this.elementID = elementID;
-        this.layer = layer;
-
-        if(isValidImageFile(path)) {
-            this.path = path;
-        } else{
-            System.out.println("File at path not a valid image file!");
+        setxPosition(xPosition);
+        setyPosition(yPosition);
+        setWidth(width);
+        setHeight(height);
+        setLayer(layer);
+        setPath(path);
+        if (elementID >= 0){
+            this.elementID = elementID;
+        } else {
+            Log.e(TAG, "elemendID must be >= 0");
+            this.elementID = 0;
         }
     }
 
     //Checks if file at specified path is a valid image file
     private boolean isValidImageFile (String path) {
+        File file = new File(path);
         String[] imageExtensions = new String[] {"jpg", "png", "gif", "jpeg"};
         boolean isValidImageFile = false;
         for (String extension : imageExtensions) {
-            if (path.endsWith(extension)) {
+            if (path.endsWith(extension) && file.exists()) {
                 isValidImageFile = true;
             }
         }
@@ -139,14 +144,13 @@ public class ImageRenderer {
         if(isValidImageFile(path)) {
             image = BitmapFactory.decodeFile(path);
         } else {
-            System.out.println("File at path not valid image file!");
+            Log.e(TAG , "Could not load image file!");
         }
     }
 
     public void discardImage(){
         image = null;
     }
-
 
     private void drawBorder(Canvas canvas) {
         int xPos = (int) actualXpos;
@@ -168,7 +172,12 @@ public class ImageRenderer {
     }
 
     public void setxPosition(float xPosition) {
-        this.xPosition = xPosition;
+        if(xPosition >= 0) {
+            this.xPosition = xPosition;
+        } else {
+            Log.e(TAG, "xPosition must be >= 0%");
+            this.xPosition = 0;
+        }
     }
 
     public float getyPosition() {
@@ -176,7 +185,12 @@ public class ImageRenderer {
     }
 
     public void setyPosition(float yPosition) {
-        this.yPosition = yPosition;
+        if(yPosition >= 0) {
+            this.yPosition = yPosition;
+        } else {
+            Log.e(TAG, "yPosition must be >= 0%");
+            this.yPosition = 0;
+        }
     }
 
     public float getWidth() {
@@ -184,11 +198,11 @@ public class ImageRenderer {
     }
 
     public void setWidth(float width) {
-        if(width > 0) {
+        if(width > 0.0f) {
             this.width = width;
         } else{
-            System.out.println("width cannot be <= 0");
-            this.width = 0;
+            Log.e(TAG,"width must be > 0%" );
+            this.width = 0.1f;
         }
     }
 
@@ -200,8 +214,8 @@ public class ImageRenderer {
         if(height > 0) {
             this.height = height;
         } else{
-            System.out.println("height cannot be <= 0");
-            this.height = 0;
+            Log.e(TAG,"height must be > 0%");
+            this.height = 0.1f;
         }
     }
 
@@ -213,8 +227,8 @@ public class ImageRenderer {
         if(actualWidth > 0) {
             this.actualWidth = actualWidth;
         } else {
-            System.out.println("actualWidth must be > 0!");
-            this.width = 0;
+            Log.e(TAG,"actualWidth must be > 0!");
+            this.actualWidth = 1;
         }
     }
 
@@ -226,8 +240,8 @@ public class ImageRenderer {
         if(actualHeight > 0) {
             this.actualHeight = actualHeight;
         } else{
-            System.out.println("actualHeight must be > 0");
-            this.actualHeight = 0;
+            Log.e(TAG,"actualHeight must be > 0");
+            this.actualHeight = 1;
         }
     }
 
@@ -256,7 +270,12 @@ public class ImageRenderer {
     }
 
     public void setLayer(int layer) {
-        this.layer = layer;
+        if(layer >= 0) {
+            this.layer = layer;
+        } else {
+            Log.e(TAG, "layer must be >= 0");
+            this.layer = 0;
+        }
     }
 
     public int getBorderWidth() {
@@ -267,7 +286,7 @@ public class ImageRenderer {
         if(borderWidth >= 0) {
             this.borderWidth = borderWidth;
         } else {
-            System.out.println("borderWidth must be >= 0");
+            Log.e(TAG,"borderWidth must be >= 0");
             this.borderWidth = 0;
         }
     }
@@ -296,7 +315,7 @@ public class ImageRenderer {
         if(isValidImageFile(path)) {
             this.path = path;
         } else{
-            System.out.println("File at path not a valid image file!");
+            Log.e(TAG,"File at path: " + path + " is not a valid image file!");
         }
     }
 

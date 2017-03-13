@@ -33,6 +33,6 @@ public class MainActivity extends AppCompatActivity {
         CustomTestView testView = new CustomTestView(this);
         testView.onDraw(testCanvas);
         setContentView(testView);
-       // testView.setBackgroundColor(Color.YELLOW);
+        //testView.setBackgroundColor(Color.BLUE);
     }
 }

@@ -23,15 +23,17 @@ public class CustomTestView extends View {
         super.onDraw(canvas);
         ImageRenderer customImg = new ImageRenderer(0.0f, 0.0f, 0.5f, 0.5f, 999, 0, path);
         customImg.loadImage();
-        customImg.setActualXpos(50.0f);
-        customImg.setActualYpos(50.0f);
+        customImg.setActualXpos(0.0f);
+        customImg.setActualYpos(0.0f);
         customImg.setActualWidth(500);
-        customImg.setActualHeight(900);
+        customImg.setActualHeight(500);
         customImg.setAspectRatioLock(true);
         customImg.setBorderWidth(10);
         customImg.setBorderColor(Color.BLACK);
         customImg.setOpacity(1f);
         customImg.onDraw(canvas);
         customImg.discardImage();
+        boolean bool = customImg.liesWithin(0, 500, 400, 500);
+        System.out.println("bla");
     }
 }

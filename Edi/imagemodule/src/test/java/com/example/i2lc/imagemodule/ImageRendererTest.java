@@ -18,7 +18,6 @@ public class ImageRendererTest {
     @Before
     public void setUp() throws Exception {
         testImage = new ImageRenderer(0.1f, 0.1f, 0.3f, 0.4f, 999, 123, "aPath");
-
         testImage.setActualXpos(10);
         testImage.setActualYpos(10);
         testImage.setActualHeight(300);

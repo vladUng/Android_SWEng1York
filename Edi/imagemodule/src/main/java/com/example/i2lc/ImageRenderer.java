@@ -1,6 +1,5 @@
 package com.example.i2lc;
 
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,16 +7,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
-
 import java.io.File;
 
-
 /**
- * Created by vlad on 04/03/2017.
+ * This class creates an image object, which stores information
+ * about the image and has the ability to draw the image onto a canvas.
  */
-
-public class ImageRenderer {
-
+public class ImageRenderer extends SlideElement{
     private float xPosition;
     private float yPosition;
     private float width;
@@ -48,9 +44,22 @@ public class ImageRenderer {
 
     private static final String TAG = "ImageRenderer";
 
+    /**
+     * Creates new ImageRenderer
+     */
     public ImageRenderer() {
     }
 
+    /**
+     * Creates new ImageRenderer, whose parameters are:
+     * @param xPosition the x position of the element in terms of percentage of the slide width
+     * @param yPosition the y position of the element in terms of percentage of the slide width
+     * @param width     the width of the element as percentage of the slide width
+     * @param height    the height of the element as percentage of the slide width
+     * @param elementID identification number of the element within the slide
+     * @param layer     draw order of the image
+     * @param path      path to image location
+     */
     public ImageRenderer(float xPosition, float yPosition, float width, float height, int elementID, int layer, String path) {
         setxPosition(xPosition);
         setyPosition(yPosition);
@@ -66,7 +75,11 @@ public class ImageRenderer {
         }
     }
 
-    //Checks if file at specified path is a valid image file
+    /**
+     * Checks if file at specified path is a valid image file.
+     * @param path  path to image file
+     * @return      true if file at path is a valid image file
+     */
     private boolean isValidImageFile (String path) {
         File file = new File(path);
         String[] imageExtensions = new String[] {"jpg", "png", "gif", "jpeg"};
@@ -79,7 +92,10 @@ public class ImageRenderer {
         return isValidImageFile;
     }
 
-    // Scales bitmap to desired width and height
+    /**
+     * Scales bitmap to desired width and height.
+     * Takes into account if aspect ratio is locked.
+     */
     private void scaleBitmap() {
         float imageWidth = image.getWidth();
         float imageHeight = image.getHeight();
@@ -103,6 +119,14 @@ public class ImageRenderer {
         image = Bitmap.createScaledBitmap(image, (int)imageWidth, (int)imageHeight, true);
     }
 
+    /**
+     * Draws image on the canvas
+     * within the bounds defined by actualWidth and actualHeight.
+     * Draws border of specified width nd color around the image.
+     * Displays error image if path is wrong or file at path is
+     * not a valid image file
+     * @param canvas canvas passed from SlideShow on which image is drawn
+     */
     public void onDraw(Canvas canvas) {
         Paint paint = new Paint();
         scaleBitmap(); //scale the current image bitmap
@@ -117,6 +141,13 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Checks if coordinates x, y lie within the bounds
+     * defined by actualWidth and actualHeight
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return  true if coorinates lie within the bounds
+     */
     public boolean intersects(int x, int y) {
         boolean withinBounds = false;
         if ((float) x <= actualWidth && (float) y <= actualHeight) {
@@ -125,12 +156,25 @@ public class ImageRenderer {
         return withinBounds;
     }
 
-    public Boolean liesWithin(int xPos, int yPos, int widthPixels, int heightPixels) {
+    /**
+     * Returns true if any part of this element lies within
+     * the box described by the parameters
+     * @param xPos         x coordinate
+     * @param yPos         y coordinate
+     * @param widthPixels  width in pixels
+     * @param heightPixels height in pixels
+     * @return true if element intersects box described by parameters
+     */
+    public boolean liesWithin(int xPos, int yPos, int widthPixels, int heightPixels) {
         Rect rect = new Rect(xPos, yPos, xPos + widthPixels, yPos + heightPixels);
         Rect imageRect = new Rect((int)actualXpos, (int)actualYpos,(int)(actualXpos+actualWidth), (int)(actualYpos+actualHeight));
-        return rect.contains(imageRect);
+        return rect.intersect(imageRect);
     }
 
+    /**
+     * Returns String onClickAction if its length is greater than 0.
+     * @return String onClickInfo otherwise
+     */
     public String onClick () {
         if(onClickAction.length() > 0) {
             return onClickAction;
@@ -140,6 +184,9 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Loads image from the specific path in device memory
+     */
     public void loadImage(){
         if(isValidImageFile(path)) {
             image = BitmapFactory.decodeFile(path);
@@ -148,6 +195,9 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Sets the image field to null
+     */
     public void discardImage(){
         image = null;
     }
@@ -166,11 +216,21 @@ public class ImageRenderer {
         canvas.drawRect(rect, paint);
     }
 
-    //Getters and setters
+    /**
+     * Gets position.
+     *
+     * @return the position
+     */
+//Getters and setters
     public float getxPosition() {
         return this.xPosition;
     }
 
+    /**
+     * Sets position.
+     *
+     * @param xPosition the x position
+     */
     public void setxPosition(float xPosition) {
         if(xPosition >= 0) {
             this.xPosition = xPosition;
@@ -180,10 +240,20 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets position.
+     *
+     * @return the position
+     */
     public float getyPosition() {
         return this.yPosition;
     }
 
+    /**
+     * Sets position.
+     *
+     * @param yPosition the y position
+     */
     public void setyPosition(float yPosition) {
         if(yPosition >= 0) {
             this.yPosition = yPosition;
@@ -193,10 +263,20 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets width.
+     *
+     * @return the width
+     */
     public float getWidth() {
         return this.width;
     }
 
+    /**
+     * Sets width.
+     *
+     * @param width the width
+     */
     public void setWidth(float width) {
         if(width > 0.0f) {
             this.width = width;
@@ -206,10 +286,20 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets height.
+     *
+     * @return the height
+     */
     public float getHeight() {
         return this.height;
     }
 
+    /**
+     * Sets height.
+     *
+     * @param height the height
+     */
     public void setHeight(float height) {
         if(height > 0) {
             this.height = height;
@@ -219,10 +309,20 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets actual width.
+     *
+     * @return the actual width
+     */
     public float getActualWidth() {
         return this.actualWidth;
     }
 
+    /**
+     * Sets actual width.
+     *
+     * @param actualWidth the actual width
+     */
     public void setActualWidth(float actualWidth) {
         if(actualWidth > 0) {
             this.actualWidth = actualWidth;
@@ -232,10 +332,20 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets actual height.
+     *
+     * @return the actual height
+     */
     public float getActualHeight() {
         return this.actualHeight;
     }
 
+    /**
+     * Sets actual height.
+     *
+     * @param actualHeight the actual height
+     */
     public void setActualHeight(float actualHeight) {
         if(actualHeight > 0) {
             this.actualHeight = actualHeight;
@@ -245,30 +355,65 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets actual xpos.
+     *
+     * @return the actual xpos
+     */
     public float getActualXpos() {
         return this.actualXpos;
     }
 
+    /**
+     * Sets actual xpos.
+     *
+     * @param actualXpos the actual xpos
+     */
     public void setActualXpos(float actualXpos) {
         this.actualXpos = actualXpos;
     }
 
+    /**
+     * Gets actual ypos.
+     *
+     * @return the actual ypos
+     */
     public float getActualYpos() {
         return this.actualYpos;
     }
 
+    /**
+     * Sets actual ypos.
+     *
+     * @param actualYpos the actual ypos
+     */
     public void setActualYpos(float actualYpos) {
         this.actualYpos = actualYpos;
     }
 
+    /**
+     * Gets element id.
+     *
+     * @return the element id
+     */
     public int getElementID() {
         return this.elementID;
     }
 
+    /**
+     * Gets layer.
+     *
+     * @return the layer
+     */
     public int getLayer() {
         return this.layer;
     }
 
+    /**
+     * Sets layer.
+     *
+     * @param layer the layer
+     */
     public void setLayer(int layer) {
         if(layer >= 0) {
             this.layer = layer;
@@ -278,10 +423,20 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets border width.
+     *
+     * @return the border width
+     */
     public int getBorderWidth() {
         return this.borderWidth;
     }
 
+    /**
+     * Sets border width.
+     *
+     * @param borderWidth the border width
+     */
     public void setBorderWidth(int borderWidth) {
         if(borderWidth >= 0) {
             this.borderWidth = borderWidth;
@@ -291,26 +446,56 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets border color.
+     *
+     * @return the border color
+     */
     public int getBorderColor() {
         return this.borderColor;
     }
 
+    /**
+     * Sets border color.
+     *
+     * @param borderColor the border color
+     */
     public void setBorderColor(int borderColor) {
         this.borderColor = borderColor;
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     public Bitmap getImage() {
         return this.image;
     }
 
+    /**
+     * Sets image.
+     *
+     * @param image the image
+     */
     public void setImage(Bitmap image) {
         this.image = image;
     }
 
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
     public String getPath() {
         return this.path;
     }
 
+    /**
+     * Sets path.
+     *
+     * @param path the path
+     */
     public void setPath(String path) {
         if(isValidImageFile(path)) {
             this.path = path;
@@ -319,19 +504,29 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Is visibility boolean.
+     *
+     * @return the boolean
+     */
     public boolean isVisibility() {
         return this.visibility;
     }
 
+    /**
+     * Sets visibility.
+     *
+     * @param visibility the visibility
+     */
     public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
 
-    public int getStartsequence() {
+    public int getStartSequence() {
         return this.startSequence;
     }
 
-    public void setStartsequence(int startSequence) {
+    public void setStartSequence(int startSequence) {
         if(startSequence >= 0) {
             this.startSequence = startSequence;
         } else {
@@ -354,10 +549,20 @@ public class ImageRenderer {
 
     }
 
+    /**
+     * Gets duration.
+     *
+     * @return the duration
+     */
     public float getDuration() {
         return this.duration;
     }
 
+    /**
+     * Sets duration.
+     *
+     * @param duration the duration
+     */
     public void setDuration(float duration) {
         if(duration >= 0) {
             this.duration = duration;
@@ -367,10 +572,20 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets remaining duration.
+     *
+     * @return the remaining duration
+     */
     public float getRemainingDuration() {
         return this.remainingDuration;
     }
 
+    /**
+     * Sets remaining duration.
+     *
+     * @param remainingDuration the remaining duration
+     */
     public void setRemainingDuration(float remainingDuration) {
         if (remainingDuration >= 0) {
             this.remainingDuration = remainingDuration;
@@ -380,50 +595,110 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets on click info.
+     *
+     * @return the on click info
+     */
     public String getOnClickInfo() {
         return this.onClickInfo;
     }
 
+    /**
+     * Sets on click info.
+     *
+     * @param onClickInfo the on click info
+     */
     public void setOnClickInfo(String onClickInfo) {
         this.onClickInfo = onClickInfo;
     }
 
+    /**
+     * Gets on click action.
+     *
+     * @return the on click action
+     */
     public String getOnClickAction() {
         return this.onClickAction;
     }
 
+    /**
+     * Sets on click action.
+     *
+     * @param onClickAction the on click action
+     */
     public void setOnClickAction(String onClickAction) {
         this.onClickAction = onClickAction;
     }
 
+    /**
+     * Gets on double click action.
+     *
+     * @return the on double click action
+     */
     public String getOnDoubleClickAction() {
         return this.onDoubleClickAction;
     }
 
+    /**
+     * Sets on double click action.
+     *
+     * @param onDoubleClickAction the on double click action
+     */
     public void setOnDoubleClickAction(String onDoubleClickAction) {
         this.onDoubleClickAction = onDoubleClickAction;
     }
 
+    /**
+     * Gets on long click action.
+     *
+     * @return the on long click action
+     */
     public String getOnLongClickAction() {
         return this.onLongClickAction;
     }
 
+    /**
+     * Sets on long click action.
+     *
+     * @param onLongClickAction the on long click action
+     */
     public void setOnLongClickAction(String onLongClickAction) {
         this.onLongClickAction = onLongClickAction;
     }
 
+    /**
+     * Is aspect ratio lock boolean.
+     *
+     * @return the boolean
+     */
     public boolean isAspectRatioLock() {
         return this.aspectRatioLock;
     }
 
+    /**
+     * Sets aspect ratio lock.
+     *
+     * @param aspectRatioLock the aspect ratio lock
+     */
     public void setAspectRatioLock(boolean aspectRatioLock) {
         this.aspectRatioLock = aspectRatioLock;
     }
 
+    /**
+     * Gets element aspect ratio.
+     *
+     * @return the element aspect ratio
+     */
     public float getElementAspectRatio() {
         return this.elementAspectRatio;
     }
 
+    /**
+     * Sets element aspect ratio.
+     *
+     * @param elementAspectRatio the element aspect ratio
+     */
     public void setElementAspectRatio(float elementAspectRatio) {
         if (elementAspectRatio >= 0) {
             this.elementAspectRatio = elementAspectRatio;
@@ -433,18 +708,38 @@ public class ImageRenderer {
         }
     }
 
+    /**
+     * Gets opacity.
+     *
+     * @return the opacity
+     */
     public float getOpacity() {
         return this.opacity;
     }
 
+    /**
+     * Sets opacity.
+     *
+     * @param opacity the opacity
+     */
     public void setOpacity(float opacity) {
         this.opacity = opacity;
     }
 
+    /**
+     * Gets clickable.
+     *
+     * @return the clickable
+     */
     public boolean getClickable() {
         return this.clickable;
     }
 
+    /**
+     * Sets clickable.
+     *
+     * @param clickable the clickable
+     */
     public void setClickable(boolean clickable) {
         this.clickable = clickable;
     }

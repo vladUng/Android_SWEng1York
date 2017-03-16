@@ -216,6 +216,7 @@ public class ImageRenderer extends SlideElement{
         canvas.drawRect(rect, paint);
     }
 
+
     /**
      * Gets position.
      *
@@ -635,8 +636,10 @@ public class ImageRenderer extends SlideElement{
      * Gets on double click action.
      *
      * @return the on double click action
+     * NOTE: It doesn't respect the naming convention as it was defined as an abstract in the
+     *     SlideElement class
      */
-    public String getOnDoubleClickAction() {
+    public String onDoubleClickAction() {
         return this.onDoubleClickAction;
     }
 
@@ -653,8 +656,10 @@ public class ImageRenderer extends SlideElement{
      * Gets on long click action.
      *
      * @return the on long click action
+     * NOTE: It doesn't respect the naming convention as it was defined as an abstract in the
+     *     SlideElement class
      */
-    public String getOnLongClickAction() {
+    public String onLongClickAction() {
         return this.onLongClickAction;
     }
 
@@ -730,8 +735,10 @@ public class ImageRenderer extends SlideElement{
      * Gets clickable.
      *
      * @return the clickable
+     *
+     *
      */
-    public boolean getClickable() {
+    public  boolean isClickable() {
         return this.clickable;
     }
 
@@ -739,6 +746,9 @@ public class ImageRenderer extends SlideElement{
      * Sets clickable.
      *
      * @param clickable the clickable
+     *
+     * NOTE: It doesn't respect the naming convention as it was defined as an abstract in the
+     *     SlideElement class
      */
     public void setClickable(boolean clickable) {
         this.clickable = clickable;

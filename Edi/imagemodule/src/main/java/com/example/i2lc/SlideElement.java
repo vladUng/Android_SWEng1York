@@ -19,10 +19,10 @@ public abstract class SlideElement {
     public abstract  boolean liesWithin(int x,int y,int width,int height);
     public abstract boolean intersects(int x,int y);
     public abstract String onClick();
-//    public abstract String onDoubleClickAction();
-//    public abstract String onLongClickAction();
-//    public abstract boolean isClickable();
-//    public abstract void setClickable(boolean clickable);
+    public abstract String onDoubleClickAction();
+    public abstract String onLongClickAction();
+    public abstract boolean isClickable();
+    public abstract void setClickable(boolean clickable);
 
 
 }

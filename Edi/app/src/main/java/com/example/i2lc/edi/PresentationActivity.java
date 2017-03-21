@@ -13,7 +13,7 @@ public class PresentationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_presentation);
 
         Intent intent = getIntent();
-        String username = intent.getStringExtra(LoInActivity.EXTRA_USERNAME);
+        String username = intent.getStringExtra(LogInActivity.EXTRA_USERNAME);
 
         EditText someText = (EditText) findViewById(R.id.someText);
         someText.setText(username);

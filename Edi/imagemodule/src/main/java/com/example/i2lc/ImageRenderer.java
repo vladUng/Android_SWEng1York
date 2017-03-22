@@ -9,11 +9,12 @@ import android.graphics.Rect;
 import android.util.Log;
 import java.io.File;
 
+
 /**
  * This class creates an image object, which stores information
  * about the image and has the ability to draw the image onto a canvas.
  */
-public class ImageRenderer extends SlideElement{
+public class ImageRenderer extends SlideElement {
     private float xPosition;
     private float yPosition;
     private float width;
@@ -133,11 +134,11 @@ public class ImageRenderer extends SlideElement{
         paint.setAlpha((int) (opacity * 255)); //set opacity
         drawBorder(canvas);
         if (isValidImageFile(path)) {
-            canvas.drawBitmap(image, actualXpos ,actualYpos , paint);
+            canvas.drawBitmap(image, 0 ,0 , paint);
         } else {
             paint.setColor(Color.RED);
-            canvas.drawText("Wrong path/Not a valid image file", actualXpos+2*borderWidth,
-                           actualYpos+2*borderWidth + paint.getTextSize(), paint);
+            canvas.drawText("Wrong path/Not a valid image file", 2*borderWidth,
+                    2*borderWidth + paint.getTextSize(), paint);
         }
     }
 
@@ -211,8 +212,7 @@ public class ImageRenderer extends SlideElement{
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(borderWidth);
         paint.setAlpha((int) (opacity * 255));
-        Rect rect = new Rect(xPos + borderWidth / 2, yPos + borderWidth / 2,
-                xPos + image.getWidth() - borderWidth / 2, yPos + image.getHeight() - borderWidth /  2);
+        Rect rect = new Rect(borderWidth/2, 0, (int)actualWidth, (int)actualHeight);
         canvas.drawRect(rect, paint);
     }
 
@@ -639,7 +639,7 @@ public class ImageRenderer extends SlideElement{
      * NOTE: It doesn't respect the naming convention as it was defined as an abstract in the
      *     SlideElement class
      */
-    public String onDoubleClickAction() {
+    public String getDoubleClickAction() {
         return this.onDoubleClickAction;
     }
 
@@ -659,7 +659,7 @@ public class ImageRenderer extends SlideElement{
      * NOTE: It doesn't respect the naming convention as it was defined as an abstract in the
      *     SlideElement class
      */
-    public String onLongClickAction() {
+    public String getLongClickAction() {
         return this.onLongClickAction;
     }
 
@@ -738,7 +738,7 @@ public class ImageRenderer extends SlideElement{
      *
      *
      */
-    public  boolean isClickable() {
+    public  boolean getClickable() {
         return this.clickable;
     }
 

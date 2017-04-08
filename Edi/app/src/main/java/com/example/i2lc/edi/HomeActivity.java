@@ -29,7 +29,7 @@ import java.util.List;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class MainActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity{
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity{
                 invalidateOptionsMenu();
             }
         };
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
     @Override

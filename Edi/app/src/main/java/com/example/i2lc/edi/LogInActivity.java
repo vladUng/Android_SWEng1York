@@ -19,7 +19,7 @@ public class LogInActivity extends AppCompatActivity {
     //called when the user clicks the log in button
     public  void logIn(View view) {
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         EditText editText = (EditText) findViewById(R.id.username);
         String username = editText.getText().toString();
         intent.putExtra(EXTRA_USERNAME, username);

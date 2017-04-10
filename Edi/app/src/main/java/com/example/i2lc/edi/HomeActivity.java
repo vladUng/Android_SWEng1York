@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -36,6 +37,7 @@ public class HomeActivity extends AppCompatActivity{
     private ListView listViewSliding;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,14 +49,17 @@ public class HomeActivity extends AppCompatActivity{
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         listSliding = new ArrayList<>();
         //Add item for sliding list
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp,"Settings"));
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_school_black_24dp, "About"));
+        listSliding.add(new ItemSlideMenu(R.drawable.ic_school_black_24dp,"Lessons"));
+        listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp, "Settings"));
         listSliding.add(new ItemSlideMenu(R.drawable.ic_launcher, "Android"));
         adapter = new SlidingMenuAdapter(this, listSliding);
         listViewSliding.setAdapter(adapter);
 
         //Display icon to open/ close sliding list
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
 
         //Set title
         setTitle(listSliding.get(0).getTitle());

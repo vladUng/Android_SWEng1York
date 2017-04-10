@@ -21,6 +21,13 @@
 
 
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            app:srcCompat="@drawable/edi_v2" />
+
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,11 +55,7 @@
             android:inputType="none"
             android:layout_gravity="center"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            app:srcCompat="@drawable/edi_v2" />
+
 
     </LinearLayout>
 </RelativeLayout>

@@ -10,18 +10,54 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.i2lc.edi.PresentationActivity">
 
-    <EditText
-        android:layout_width="wrap_content"
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_gravity="center"
+        android:background="@android:color/holo_blue_dark"
+        android:minHeight="65dp"
+        android:maxHeight="70dp"
+        android:progress="60"
+        android:progressBackgroundTint="@color/colorPrimaryDark"
+        android:progressTint="@android:color/holo_blue_bright"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/questionText"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_below="@id/progressBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/askButton"
+        style="@android:style/Widget.Button"
+        android:layout_width="@android:dimen/thumbnail_height"
+        android:layout_height="@android:dimen/notification_large_icon_height"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="56dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginTop="148dp"
-        android:id="@+id/someText"
-        tools:ignore="HardcodedText" />
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="17dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/colorPrimaryDark"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:drawableLeft="@drawable/question"
+        android:drawableStart="@drawable/question"
+        android:elevation="0dp"
+        android:fontFamily="monospace"
+        android:onClick="dispQuestionTextBox"
+        android:text="Ask"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
 </RelativeLayout>

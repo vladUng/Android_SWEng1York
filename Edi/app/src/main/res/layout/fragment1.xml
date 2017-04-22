@@ -50,10 +50,12 @@
                     android:text="@string/status"
                     android:layout_weight="1"/>
                 <Button
+                    android:id="@+id/btn1"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_gravity="bottom"
                     android:text="@string/join"
+                    android:onClick="joinPresentation"
                     android:background="@color/colorPrimary" />
             </LinearLayout>
 
@@ -63,7 +65,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/presentation1"
+                app:srcCompat="@drawable/ic_launcher"
                 android:background="@android:color/holo_orange_light"/>
         </LinearLayout>
 
@@ -118,7 +120,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/presentation2"
+                app:srcCompat="@drawable/ic_launcher"
                 android:background="@android:color/holo_orange_light"/>
         </LinearLayout>
 
@@ -172,7 +174,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/presentation3"
+                app:srcCompat="@drawable/ic_launcher"
                 android:background="@android:color/holo_orange_light"/>
         </LinearLayout>
 
@@ -228,7 +230,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/presentation1"
+                app:srcCompat="@drawable/ic_launcher"
                 android:background="@android:color/holo_orange_light"/>
         </LinearLayout>
 
@@ -282,7 +284,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/presentation2"
+                app:srcCompat="@drawable/ic_launcher"
                 android:background="@android:color/holo_orange_light"/>
         </LinearLayout>
 
@@ -336,7 +338,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/presentation3"
+                app:srcCompat="@drawable/ic_launcher"
                 android:background="@android:color/holo_orange_light"/>
         </LinearLayout>
 

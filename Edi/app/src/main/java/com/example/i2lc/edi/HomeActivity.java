@@ -4,6 +4,7 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.net.Uri;
 import android.widget.RelativeLayout;
 
 import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
@@ -30,7 +32,7 @@ import java.util.List;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragmentInteractionListener,Fragment2.OnFragmentInteractionListener,Fragment3.OnFragmentInteractionListener{
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -38,6 +40,7 @@ public class HomeActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ActionBar actionBar;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +61,6 @@ public class HomeActivity extends AppCompatActivity{
         //Display icon to open/ close sliding list
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
 
 
         //Set title
@@ -122,10 +124,15 @@ public class HomeActivity extends AppCompatActivity{
         actionBarDrawerToggle.syncState();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri){
+        //can be empty
+    }
+
     //Create method replace fragment
 
     private void replaceFragment(int pos){
-        Fragment fragment = null;
+        //Fragment fragment = null;
         switch(pos){
             case 0:
                 fragment = new Fragment1();
@@ -147,4 +154,15 @@ public class HomeActivity extends AppCompatActivity{
             transaction.commit();
         }
     }
+
+    public void joinPresentation(View view) {
+            Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
+            startActivity(intent);
+    }
+
+//    public void joinPresentation(View view) {
+//        Intent intent = new Intent(this, PresentationActivity.class);
+//        startActivity(intent);
+//    }
+
 }

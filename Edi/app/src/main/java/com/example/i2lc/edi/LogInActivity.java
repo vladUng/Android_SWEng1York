@@ -57,7 +57,7 @@ public class LogInActivity extends AppCompatActivity {
                     break;
             }
             //for debug
-            System.out.println("LoginSuccessfull: " + loginSuccessful + "\n userType:" + userType);
+            System.out.println("Login Successful: " + loginSuccessful + "\n userType:" + userType);
         } else {
             //for debug
             System.out.println("There was an error");
@@ -65,8 +65,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     //called when the user clicks the log in button
-    public  void logIn(View view) {
-
+    public void logIn(View view) {
         Intent intent = new Intent(this, HomeActivity.class);
         EditText editText = (EditText) findViewById(R.id.username);
         String username = editText.getText().toString();

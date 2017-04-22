@@ -2,14 +2,20 @@ package com.example.i2lc.edi.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
+
+//import static com.example.i2lc.edi.LogInActivity.EXTRA_USERNAME;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +25,7 @@ import com.example.i2lc.edi.R;
  * Use the {@link Fragment1#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment1 extends Fragment {
+public class Fragment1 extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,9 +37,12 @@ public class Fragment1 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+
+
     public Fragment1() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -67,15 +76,23 @@ public class Fragment1 extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment1, container, false);
+        Button button = (Button) rootView.findViewById(R.id.btn1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PresentationActivity.class);
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -108,4 +125,11 @@ public class Fragment1 extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void joinPresentation(View view) {
+        Intent intent = new Intent(this.getActivity(), PresentationActivity.class);
+        startActivity(intent);
+    }
+
+
 }

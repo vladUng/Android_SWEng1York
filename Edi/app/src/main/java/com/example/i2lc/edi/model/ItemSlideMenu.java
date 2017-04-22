@@ -1,7 +1,7 @@
 package com.example.i2lc.edi.model;
 
 /**
- * Created by Cosmin on 15/03/2017.
+ * Created by Cosmin Frateanu on 15/03/2017.
  */
 
 public class ItemSlideMenu {

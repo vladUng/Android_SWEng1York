@@ -1,7 +1,5 @@
 package com.example.i2lc.edi.backend;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URISyntaxException;
 import java.sql.Connection;
@@ -25,7 +23,7 @@ public class socketClient {
     private static final int LOGIN_TIMEOUT = 5;
     private static final int ADDITION_TIMEOUT = 5;
 
-    private Logger logger = LoggerFactory.getLogger(socketClient.class);
+    //private Logger logger = LoggerFactory.getLogger(socketClient.class);
     private String serverIPAddress;
 
     //TODO: These will be filled by actual values, for now they are temp and meaningless

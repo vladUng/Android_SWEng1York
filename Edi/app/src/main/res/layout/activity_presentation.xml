@@ -4,6 +4,7 @@
     android:id="@+id/activity_presentation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -20,8 +21,8 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="center"
         android:background="@android:color/holo_blue_dark"
-        android:minHeight="65dp"
         android:maxHeight="70dp"
+        android:minHeight="65dp"
         android:progress="60"
         android:progressBackgroundTint="@color/colorPrimaryDark"
         android:progressTint="@android:color/holo_blue_bright"
@@ -29,11 +30,16 @@
 
     <EditText
         android:id="@+id/questionText"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="130dp"
-        android:layout_below="@id/progressBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@id/progressBar"
+        android:background="@color/colorPrimaryDark"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="@dimen/activity_horizontal_margin"
         android:visibility="invisible" />
 
     <Button
@@ -53,11 +59,10 @@
         android:drawableStart="@drawable/question"
         android:elevation="0dp"
         android:fontFamily="monospace"
-        android:onClick="dispQuestionTextBox"
         android:text="Ask"
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold"
         android:visibility="visible" />
-
+    <!---->
 </RelativeLayout>

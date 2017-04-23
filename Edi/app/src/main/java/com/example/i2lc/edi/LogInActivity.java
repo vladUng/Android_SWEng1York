@@ -26,42 +26,42 @@ public class LogInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        //Database stuff
-        mySocketClient = new socketClient("db.amriksadhra.com", 8080);
-
-        //TODO move this to logiIN action & parse the expected values to it
-        ArrayList<String> userAuthResponse = new ArrayList<String>();
-        userAuthResponse = mySocketClient.userAuth(new UserAuth("userToLogin", "password"));
-
-        if (!userAuthResponse.contains("error")){
-            String authStatus = userAuthResponse.get(0);
-            String userType = userAuthResponse.get(1);
-
-            switch (userType) {
-                case "admin":
-                    loginSuccessful = true;
-                    break;
-                case "teacher":
-                    isTeacher = true;
-                    loginSuccessful = true;
-                    break;
-                case "student":
-                    loginSuccessful = true;
-                    break;
-                case "auth_fail":
-                    loginSuccessful = false;
-                    break;
-            }
-            //for debug
-            System.out.println("Login Successful: " + loginSuccessful + "\n userType:" + userType);
-        } else {
-            //for debug
-            System.out.println("There was an error");
-        }
+    //TODO: Commented all the user auth code below because it crashes the app
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
+//
+//        //Database stuff
+//        mySocketClient = new socketClient("db.amriksadhra.com", 8080);
+//
+//        //TODO move this to logiIN action & parse the expected values to it
+//        ArrayList<String> userAuthResponse = new ArrayList<String>();
+//        userAuthResponse = mySocketClient.userAuth(new UserAuth("userToLogin", "password"));
+//
+//        if (!userAuthResponse.contains("error")){
+//            String authStatus = userAuthResponse.get(0);
+//            String userType = userAuthResponse.get(1);
+//
+//            switch (userType) {
+//                case "admin":
+//                    loginSuccessful = true;
+//                    break;
+//                case "teacher":
+//                    isTeacher = true;
+//                    loginSuccessful = true;
+//                    break;
+//                case "student":
+//                    loginSuccessful = true;
+//                    break;
+//                case "auth_fail":
+//                    loginSuccessful = false;
+//                    break;
+//            }
+//            //for debug
+//            System.out.println("Login Successful: " + loginSuccessful + "\n userType:" + userType);
+//        } else {
+//            //for debug
+//            System.out.println("There was an error");
+//        }
     }
 
     //called when the user clicks the log in button

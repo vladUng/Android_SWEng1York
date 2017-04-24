@@ -24,49 +24,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
                 android:orientation="vertical"
-                android:background="@android:color/holo_orange_light"
-                android:paddingLeft="5dp"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:text="@string/title"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="@string/title" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:text="@string/author"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="@string/author" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:text="@string/date"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="@string/date" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:text="@string/status"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="@string/status" />
+
                 <Button
                     android:id="@+id/btn1"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_gravity="bottom"
-                    android:text="@string/join"
+                    android:background="@android:color/holo_green_dark"
                     android:onClick="joinPresentation"
-                    android:background="@color/colorPrimary" />
+                    android:text="@string/join" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/ic_launcher"
-                android:background="@android:color/holo_orange_light"/>
+                app:srcCompat="@drawable/ic_launcher" />
         </LinearLayout>
 
 
@@ -82,7 +86,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@android:color/holo_orange_light"
+                android:background="@color/colorPrimaryDark"
                 android:paddingLeft="5dp"
                 android:paddingBottom="5dp">
 
@@ -121,7 +125,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 app:srcCompat="@drawable/ic_launcher"
-                android:background="@android:color/holo_orange_light"/>
+                android:background="@color/colorPrimaryDark"/>
         </LinearLayout>
 
         <LinearLayout
@@ -136,7 +140,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@android:color/holo_orange_light"
+                android:background="@color/colorPrimaryDark"
                 android:paddingLeft="5dp"
                 android:paddingBottom="5dp">
 
@@ -175,7 +179,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 app:srcCompat="@drawable/ic_launcher"
-                android:background="@android:color/holo_orange_light"/>
+                android:background="@color/colorPrimaryDark"/>
         </LinearLayout>
 
 
@@ -191,7 +195,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@android:color/holo_orange_light"
+                android:background="@color/colorPrimaryDark"
                 android:paddingLeft="5dp"
                 android:paddingBottom="5dp">
 
@@ -231,115 +235,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 app:srcCompat="@drawable/ic_launcher"
-                android:background="@android:color/holo_orange_light"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:paddingTop="5dp"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@android:color/holo_orange_light"
-                android:paddingLeft="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/title"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/author"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/date"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/status"
-                    android:layout_weight="1"/>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_gravity="bottom"
-                    android:text="@string/join"
-                    android:background="@color/colorPrimary" />
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                app:srcCompat="@drawable/ic_launcher"
-                android:background="@android:color/holo_orange_light"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:paddingTop="5dp"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@android:color/holo_orange_light"
-                android:paddingLeft="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/title"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/author"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/date"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:text="@string/status"
-                    android:layout_weight="1"/>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_gravity="bottom"
-                    android:text="@string/join"
-                    android:background="@color/colorPrimary" />
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                app:srcCompat="@drawable/ic_launcher"
-                android:background="@android:color/holo_orange_light"/>
+                android:background="@color/colorPrimaryDark"/>
         </LinearLayout>
 
 

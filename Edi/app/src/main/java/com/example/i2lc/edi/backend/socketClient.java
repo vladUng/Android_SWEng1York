@@ -61,7 +61,6 @@ public class socketClient {
             DriverManager.setLoginTimeout(5);
             conn = DriverManager.getConnection(url, props);
 
-
             System.out.print("Successful connection from client to PostgreSQL database instance \n");
 
         } catch (SQLException e) {
@@ -80,7 +79,6 @@ public class socketClient {
         } catch (URISyntaxException e) {
             System.out.println("Couldn't create client port");
         }
-
 
         //Handling socket events
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
@@ -124,27 +122,51 @@ public class socketClient {
 
         ArrayList<String> retValue = new ArrayList<String>();
 
-        retValue.add("error");
-        retValue.add("error");
         Statement st = null;
+
         try {
             st = conn.createStatement();
 
-            StringBuilder query = new StringBuilder("SELECT (f).auth_result_return, (f).user_type_return FROM");
-            query.append("(SELECT edi.public.sp_authuser(");
-            query.append("'LoginName',");
-            query.append("'password') as f) AS x;");
+            //TODO This should be parsed as an argument or to automatically handle this
+            ArrayList<String> columns = new ArrayList<String>();
+            columns.add("user_id");
+            columns.add("user_type");
+            columns.add("username");
+            columns.add("first_name");
+            columns.add("last_name");
+            columns.add("email_address");
+            columns.add("active_presentation_id");
+
+            StringBuilder columnsSB = new StringBuilder();
+
+            //construct the SB from the columns passed
+            for (int idx=0; idx<columns.size()-1; idx++) {
+                columnsSB.append(" " + columns.get(idx) + ",");
+            }
+
+            //last element doesn't have a , at the end
+            columnsSB.append(" " + columns.get(columns.size()-1));
+
+            StringBuilder query = new StringBuilder("select" + columnsSB + " from ");
+            query.append("edi.public.sp_authuser(");
+            query.append("'" + toAuth.getUserToLogin() + "',");
+            query.append("'" + toAuth.getPassword() + "');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
-            retValue.clear();
-            while (queryResult.next()) {
-                String authStatus  = queryResult.getString("user_type_return");
-                String userType = queryResult.getString("auth_result_return");
+            String tmpString = new String();
 
-                System.out.println("\n\n auth status: " + authStatus + " userType: " + userType + "\n\n");
-                retValue.add(authStatus);
-                retValue.add(userType);
+            while (queryResult.next()) {
+
+                for (int idx=0; idx<columns.size(); idx++) {
+
+                    tmpString = queryResult.getString(columns.get(idx));
+
+                    if (tmpString != null) {
+                        System.out.println("For column " + columns.get(idx) + ", I got this:" + tmpString);
+                        retValue.add(tmpString);
+                    }
+                }
             }
 
             queryResult.close();

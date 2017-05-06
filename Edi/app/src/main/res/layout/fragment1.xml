@@ -70,7 +70,7 @@
                 android:background="@color/colorPrimaryDark"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/ic_launcher" />
+                app:srcCompat="@drawable/edi" />
         </LinearLayout>
 
 
@@ -124,7 +124,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/ic_launcher"
+                app:srcCompat="@drawable/edi"
                 android:background="@color/colorPrimaryDark"/>
         </LinearLayout>
 
@@ -178,7 +178,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/ic_launcher"
+                app:srcCompat="@drawable/edi"
                 android:background="@color/colorPrimaryDark"/>
         </LinearLayout>
 
@@ -234,7 +234,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:srcCompat="@drawable/ic_launcher"
+                app:srcCompat="@drawable/edi"
                 android:background="@color/colorPrimaryDark"/>
         </LinearLayout>
 

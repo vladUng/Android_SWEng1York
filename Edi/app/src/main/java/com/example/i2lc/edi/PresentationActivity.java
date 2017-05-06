@@ -42,7 +42,8 @@ public class PresentationActivity extends AppCompatActivity {
         animTranslate_l.setAnimationListener(new Animation.AnimationListener(){
             @Override
             public void onAnimationStart(Animation arg0) {
-                //askButton.setVisibility(askButton.getRootView().INVISIBLE);
+                askButton.setVisibility(askButton.getRootView().INVISIBLE);
+                askButton.setText("Ask");
             }
             @Override
             public void onAnimationRepeat(Animation arg0) {
@@ -50,15 +51,16 @@ public class PresentationActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation arg0) {
                 askButton.setX(askButton.getX()-450);
-                askButton.setText("Ask");
-                //askButton.setVisibility(askButton.getRootView().VISIBLE);
+
+                askButton.setVisibility(askButton.getRootView().VISIBLE);
             }
         });
 
         animTranslate_r.setAnimationListener(new Animation.AnimationListener(){
             @Override
             public void onAnimationStart(Animation arg0) {
-                //askButton.setVisibility(askButton.getRootView().INVISIBLE);
+                askButton.setVisibility(askButton.getRootView().INVISIBLE);
+                askButton.setText("Send");
             }
             @Override
             public void onAnimationRepeat(Animation arg0) {
@@ -66,8 +68,8 @@ public class PresentationActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation arg0) {
                 askButton.setX(askButton.getX()+450);
-                askButton.setText("Send");
-               // askButton.setVisibility(askButton.getRootView().VISIBLE);
+
+                askButton.setVisibility(askButton.getRootView().VISIBLE);
             }
         });
 

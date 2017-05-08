@@ -43,7 +43,7 @@ public class PresentationActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animation arg0) {
                 askButton.setVisibility(askButton.getRootView().INVISIBLE);
-                askButton.setText("Ask");
+                askButton.setText(" Ask  ");
             }
             @Override
             public void onAnimationRepeat(Animation arg0) {
@@ -60,7 +60,7 @@ public class PresentationActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animation arg0) {
                 askButton.setVisibility(askButton.getRootView().INVISIBLE);
-                askButton.setText("Send");
+                askButton.setText(" Send ");
             }
             @Override
             public void onAnimationRepeat(Animation arg0) {

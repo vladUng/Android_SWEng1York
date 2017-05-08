@@ -92,4 +92,9 @@ public class LogInActivity extends AppCompatActivity {
             throw new Exception();
         }
     }
+
+    public void signUp(View v){
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+    }
 }

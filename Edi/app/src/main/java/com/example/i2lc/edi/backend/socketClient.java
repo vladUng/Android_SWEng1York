@@ -33,7 +33,6 @@ public class socketClient {
     Socket socket;
     private Connection conn;
 
-
     public void main(String[] args) { new socketClient("db.amriksadhra.com", 8080); }
 
     public socketClient(String serverIP, int serverPort) {
@@ -115,9 +114,6 @@ public class socketClient {
     }
 
 
-    //handling the authentication request
-    //if successful returns the auth status and user type
-    //otherwise error,error
     public ArrayList<String> userAuth(UserAuth toAuth) {
 
         ArrayList<String> retValue = new ArrayList<String>();
@@ -181,6 +177,10 @@ public class socketClient {
         }
 
         return retValue;
+    }
+
+    public void getPresentations(UserAuth toAuth) {
+        //TODO add magic here too
     }
 
 

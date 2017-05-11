@@ -10,7 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.model.PresentationMod;
+
+import java.util.ArrayList;
 
 public class PresentationActivity extends AppCompatActivity {
     private PresentationMod presentation;
@@ -19,6 +22,8 @@ public class PresentationActivity extends AppCompatActivity {
     private Button askButton;
     private EditText editText;
     boolean isTextBoxVisible = true;
+
+    private ArrayList<Presentation> presentations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,5 +98,11 @@ public class PresentationActivity extends AppCompatActivity {
             editText.setVisibility(View.INVISIBLE);
             isTextBoxVisible = true;
         }
+    }
+
+    //Method that populates the presentation arraylist
+    private void getPresentations(String ID) {
+        //TODO the magic
+        ArrayList<Presentation> presentations;
     }
 }

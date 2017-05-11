@@ -41,6 +41,10 @@ public class LogInActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString();
 
         try {
+            //TODO delete these two lines, are used for convenience
+            username = "Teacher";
+            password = "password";
+
             tryLogin(username, password);
             intent.putExtra(EXTRA_USERNAME, username);
             startActivity(intent);

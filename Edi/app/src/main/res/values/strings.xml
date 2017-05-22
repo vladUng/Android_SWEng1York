@@ -7,7 +7,8 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="e_mail">E-mail Address</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_pres_frag">This is the main fragment</string>
+    <string name="interaction_frag">This is the interaction fragment</string>
     <string name="drawer_opened">Opened</string>
     <string name="drawer_closed">Closed</string>
     <string name="join">Join</string>
@@ -16,4 +17,5 @@
     <string name="date">Date: 03/06/2017</string>
     <string name="status">Status:</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="title_activity_pres">PresActivity</string>
 </resources>

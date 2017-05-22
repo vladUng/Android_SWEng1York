@@ -12,6 +12,9 @@ public class Presentation {
     protected int moduleID;
     protected URL xmlURL;
     protected boolean live;
+    //Add array of interactive elements
+    //TODO:Add total num of slides
+    //TODO:And current slide ID
 
     public Presentation(){
 

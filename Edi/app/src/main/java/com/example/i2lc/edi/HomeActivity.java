@@ -156,7 +156,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
     }
 
     public void joinPresentation(View view) {
-            Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
+            Intent intent = new Intent(fragment.getActivity(), PresActivity.class);
             startActivity(intent);
     }
 

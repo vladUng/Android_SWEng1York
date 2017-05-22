@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.i2lc.edi.presFragments.InteractiveElementFragment">
+    tools:context="com.example.i2lc.edi.presFragments.InteractionFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="@string/interaction_frag" />
 
 </FrameLayout>

@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
-import com.example.i2lc.edi.PresActivity;
 import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
 
@@ -81,7 +79,7 @@ public class Fragment1 extends Fragment{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PresActivity.class);
+                Intent intent = new Intent(getActivity(), PresentationActivity.class);
                 startActivity(intent);
             }
         });
@@ -128,7 +126,7 @@ public class Fragment1 extends Fragment{
     }
 
     public void joinPresentation(View view) {
-        Intent intent = new Intent(this.getActivity(), PresActivity.class);
+        Intent intent = new Intent(this.getActivity(), PresentationActivity.class);
         startActivity(intent);
     }
 

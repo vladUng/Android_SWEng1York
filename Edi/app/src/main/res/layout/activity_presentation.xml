@@ -47,6 +47,14 @@
         android:maxLines="1"
         android:padding="@dimen/activity_horizontal_margin"
         android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:text="Cancel"
+        android:visibility="invisible" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

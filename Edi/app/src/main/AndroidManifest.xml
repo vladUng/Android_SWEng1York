@@ -20,13 +20,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".PresentationActivity" />
+        <activity android:name=".InitialPresentationActivity" />
         <activity
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PresActivity"
+            android:name=".PresentationActivity"
             android:label="@string/title_activity_pres"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

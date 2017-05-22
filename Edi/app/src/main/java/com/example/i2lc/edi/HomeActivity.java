@@ -17,9 +17,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.net.Uri;
-import android.widget.RelativeLayout;
 
 import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
+import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.fragment.Fragment1;
 import com.example.i2lc.edi.fragment.Fragment2;
 import com.example.i2lc.edi.fragment.Fragment3;
@@ -156,12 +156,17 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
     }
 
     public void joinPresentation(View view) {
-            Intent intent = new Intent(fragment.getActivity(), PresActivity.class);
+            Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
             startActivity(intent);
     }
 
+    private void getPresentations(String ID) {
+        //TODO the magic
+        ArrayList<Presentation> presentations;
+    }
+
 //    public void joinPresentation(View view) {
-//        Intent intent = new Intent(this, PresentationActivity.class);
+//        Intent intent = new Intent(this, InitialPresentationActivity.class);
 //        startActivity(intent);
 //    }
 

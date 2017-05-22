@@ -8,8 +8,8 @@ public class PresentationMod {
     private String title = "Very Cool Title";
     private String author = "Joe Bloggs";
     private String date = "22/04/2017";
-    private int currentSlideNum = 0;
-    private int totalSlideNum = 0;
+    private int currentSlideNum = 50;//to remove init
+    private int totalSlideNum = 100;//to remove init
     private boolean isActive = false;
 
     public PresentationMod(){
@@ -20,6 +20,13 @@ public class PresentationMod {
         this.date = date;
     }
 
+    public int calculateProgress(){
+        int progress = 0;
+        if(totalSlideNum!=0) {
+            progress = currentSlideNum * 100 / totalSlideNum;
+        }
+        return progress;
+    }
     public String getTitle() {
         return title;
     }

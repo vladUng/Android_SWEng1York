@@ -8,8 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 
+import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
+import com.example.i2lc.edi.dbClasses.Question;
+import com.example.i2lc.edi.model.PresentationMod;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +36,14 @@ public class MainPresentationFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private PresentationMod presentation;
+    private Button askButton;
+    private Button cancelButton;
+    private EditText editText;
+    private ProgressBar progressBar;
+    private int progress;
+    private boolean buttonPressed = true;
+    private Question question;
 
     public MainPresentationFragment() {
         // Required empty public constructor
@@ -66,7 +80,29 @@ public class MainPresentationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_presentation, container, false);
+        View rootView = inflater.inflate(R.layout.activity_presentation, container, false);
+        PresentationActivity activity = (PresentationActivity) getActivity();
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        askButton = (Button) rootView.findViewById(R.id.askButton);
+        cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
+        editText = (EditText)rootView.findViewById(R.id.questionText);
+        //Set progress
+        progress = activity.getPresentation().calculateProgress();
+        progressBar.setProgress(progress);
+        //When button is pressed
+        askButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispQuestionTextBox(v);
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                cancelQuestion(v);
+            }
+        });
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,5 +142,30 @@ public class MainPresentationFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void dispQuestionTextBox(View view){
+        if(buttonPressed == false){
+            question = new Question();
+            question.setQuestionData(editText.getText().toString());
+            editText.setText("");
+            askButton.setText(" Ask  ");
+            editText.setVisibility(view.INVISIBLE);
+            cancelButton.setVisibility(view.INVISIBLE);
+            buttonPressed = true;
+            System.out.println(question.getQuestionData());
+        } else{
+            askButton.setText(" Send ");
+            cancelButton.setVisibility(view.VISIBLE);
+            editText.setVisibility(view.VISIBLE);
+            buttonPressed = false;
+        }
+    }
+    public void cancelQuestion(View view){
+        askButton.setText(" Ask  ");
+        editText.setVisibility(view.INVISIBLE);
+        editText.setText("");
+        cancelButton.setVisibility(view.INVISIBLE);
+        buttonPressed = true;
     }
 }

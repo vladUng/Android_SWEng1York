@@ -190,7 +190,10 @@ public class ImageRenderer extends SlideElement {
      */
     public void loadImage(){
         if(isValidImageFile(path)) {
-            image = BitmapFactory.decodeFile(path);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = false;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            image = BitmapFactory.decodeFile(path,options);
         } else {
             Log.e(TAG , "Could not load image file!");
         }

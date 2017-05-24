@@ -1,6 +1,8 @@
 package com.example.i2lc.edi.backend;
 
 
+import com.example.i2lc.edi.dbClasses.Module;
+
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,12 +20,12 @@ import io.socket.emitter.Emitter;
  * Created by vlad on 06/04/2017.
  */
 
-public class socketClient {
+public class SocketClient {
     //Timeout times for user addition/authorisation asynchronous functions
     private static final int LOGIN_TIMEOUT = 5;
     private static final int ADDITION_TIMEOUT = 5;
 
-    //private Logger logger = LoggerFactory.getLogger(socketClient.class);
+    //private Logger logger = LoggerFactory.getLogger(SocketClient.class);
     private String serverIPAddress;
 
     //TODO: These will be filled by actual values, for now they are temp and meaningless
@@ -31,14 +33,24 @@ public class socketClient {
     private int current_question_id = 1;
 
     Socket socket;
-    private Connection conn;
+    private Connection connection;
 
-    public void main(String[] args) { new socketClient("db.amriksadhra.com", 8080); }
+    //TODO delete this
+    private int sbSize;
+    private ArrayList<String> dummyFields;
 
-    public socketClient(String serverIP, int serverPort) {
+    public void main(String[] args) {
+        new SocketClient("db.amriksadhra.com", 8080);
+    }
+
+    public SocketClient(String serverIP, int serverPort) {
         serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", serverPort);
 
         connectToRemoteSocket();
+        connectToRemoteDB();
+    }
+
+    public SocketClient() {
         connectToRemoteDB();
     }
 
@@ -58,7 +70,7 @@ public class socketClient {
 
         try {
             DriverManager.setLoginTimeout(5);
-            conn = DriverManager.getConnection(url, props);
+            connection = DriverManager.getConnection(url, props);
 
             System.out.print("Successful connection from client to PostgreSQL database instance \n");
 
@@ -102,7 +114,7 @@ public class socketClient {
             public void call(Object... args) {
                 System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
             }
-        }).on("DB_Update", new Emitter.Listener()  {
+        }).on("DB_Update", new Emitter.Listener() {
 
             @Override
             public void call(Object... args) {
@@ -121,29 +133,13 @@ public class socketClient {
         Statement st = null;
 
         try {
-            st = conn.createStatement();
+            st = connection.createStatement();
 
-            //TODO This should be parsed as an argument or to automatically handle this
-            ArrayList<String> columns = new ArrayList<String>();
-            columns.add("user_id");
-            columns.add("user_type");
-            columns.add("username");
-            columns.add("first_name");
-            columns.add("last_name");
-            columns.add("email_address");
-            columns.add("active_presentation_id");
+            QueryFields queryFields = new QueryFields("User");
+            StringBuilder fieldsSB = queryFields.getSb();
+            ArrayList<String> fieldsList = queryFields.getFields();
 
-            StringBuilder columnsSB = new StringBuilder();
-
-            //construct the SB from the columns passed
-            for (int idx=0; idx<columns.size()-1; idx++) {
-                columnsSB.append(" " + columns.get(idx) + ",");
-            }
-
-            //last element doesn't have a , at the end
-            columnsSB.append(" " + columns.get(columns.size()-1));
-
-            StringBuilder query = new StringBuilder("select" + columnsSB + " from ");
+            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_authuser(");
             query.append("'" + toAuth.getUserToLogin() + "',");
             query.append("'" + toAuth.getPassword() + "');");
@@ -154,12 +150,11 @@ public class socketClient {
 
             while (queryResult.next()) {
 
-                for (int idx=0; idx<columns.size(); idx++) {
+                for (int idx = 0; idx < fieldsList.size(); idx++) {
 
-                    tmpString = queryResult.getString(columns.get(idx));
+                    tmpString = queryResult.getString(fieldsList.get(idx));
 
                     if (tmpString != null) {
-                        System.out.println("For column " + columns.get(idx) + ", I got this:" + tmpString);
                         retValue.add(tmpString);
                     }
                 }
@@ -167,6 +162,9 @@ public class socketClient {
 
             queryResult.close();
             st.close();
+
+            //close connection
+            connection.close();
         } catch (SQLException e) {
             System.out.print("SQL query is wrong" + e.toString());
             e.printStackTrace();
@@ -179,10 +177,58 @@ public class socketClient {
         return retValue;
     }
 
-    public void getPresentations(UserAuth toAuth) {
-        //TODO add magic here too
+    public ArrayList<Module> getModules(String forUserId) {
+
+        ArrayList<Module> retModules = new ArrayList<Module>();
+        Statement st = null;
+
+        try {
+            st = connection.createStatement();
+
+            QueryFields queryFields = new QueryFields("Module");
+            StringBuilder fieldsSB = queryFields.getSb();
+            ArrayList<String> fieldsList = queryFields.getFields();
+
+            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
+            query.append("edi.public.sp_getmodulesforuser(");
+            query.append("'" + forUserId + "');");
+
+            ResultSet queryResult = st.executeQuery(String.valueOf(query));
+
+            String tmpString = new String();
+            ArrayList<String> rowString = new ArrayList<String>();
+
+            while (queryResult.next()) {
+                rowString.clear();
+                for (int idx = 0; idx < fieldsList.size(); idx++) {
+
+                    tmpString = queryResult.getString(fieldsList.get(idx));
+
+                    if (tmpString != null) {
+                        rowString.add(tmpString);
+                    }
+                }
+
+                //int moduleID,  String moduleName, String subject, String description, String timeLastUpdate, String timeCreated
+                retModules.add(new Module(Integer.parseInt(rowString.get(0)), rowString.get(1), rowString.get(2),
+                        rowString.get(3), rowString.get(4), rowString.get(5)));
+            }
+
+            queryResult.close();
+            st.close();
+
+            //close connection
+            connection.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+        return retModules;
     }
-
-
 
 }

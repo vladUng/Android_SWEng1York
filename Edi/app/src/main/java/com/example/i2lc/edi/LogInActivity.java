@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.backend.UserAuth;
-import com.example.i2lc.edi.backend.socketClient;
 import com.example.i2lc.edi.dbClasses.User;
 
 import java.util.ArrayList;
@@ -17,9 +17,9 @@ import java.util.ArrayList;
 public class LogInActivity extends AppCompatActivity {
 
     //TODO Change this to user instead of String
-    public final static String EXTRA_USERNAME = "bla";
+    public final static String EXTRA_USERNAME = "username";
 
-    socketClient mySocketClient;
+    private SocketClient mySocketClient;
 
     private boolean loginSuccessful;
     private boolean isTeacher;
@@ -28,6 +28,7 @@ public class LogInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
     }
@@ -35,6 +36,7 @@ public class LogInActivity extends AppCompatActivity {
     //called when the user clicks the log in button
     public void logIn(View view) {
         Intent intent = new Intent(this, HomeActivity.class);
+
         EditText usernameEditText = (EditText) findViewById(R.id.username);
         EditText passwordEditText = (EditText) findViewById(R.id.password);
         String username = usernameEditText.getText().toString();
@@ -46,6 +48,7 @@ public class LogInActivity extends AppCompatActivity {
             password = "password";
 
             tryLogin(username, password);
+
             intent.putExtra(EXTRA_USERNAME, username);
             startActivity(intent);
         } catch (Exception e) {
@@ -66,10 +69,11 @@ public class LogInActivity extends AppCompatActivity {
                 StrictMode.setThreadPolicy(policy);
 
                 //connect client
-                mySocketClient = new socketClient("db.amriksadhra.com", 8080);
+                mySocketClient = new SocketClient("db.amriksadhra.com", 8080);
 
                 ArrayList<String> userAuthResponse = new ArrayList<String>();
                 userAuthResponse = mySocketClient.userAuth(new UserAuth(username, password));
+
 
                 if (!userAuthResponse.isEmpty()) {
                     //for debug
@@ -87,7 +91,7 @@ public class LogInActivity extends AppCompatActivity {
                 }
             } else {
                 //for debug
-                System.out.println("There was an error. SDK to old");
+                System.out.println("There was an error. SDK too old");
                 throw new Exception();
             }
         } else {
@@ -101,4 +105,5 @@ public class LogInActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
+
 }

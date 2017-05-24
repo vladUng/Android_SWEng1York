@@ -1,7 +1,5 @@
 package com.example.i2lc.edi.dbClasses;
 
-import java.util.Date;
-
 /**
  * Created by vlad on 11/05/2017.
  */
@@ -9,20 +7,23 @@ import java.util.Date;
 public class Module {
 
     protected int moduleID;
+    protected String moduleName;
+    protected String subject;
     protected String description;
     protected String timeLastUpdate; //let it be string for now, in DB is interval type
-    protected String moduleName;
-    protected Date timeCreated;
+    protected String timeCreated; //TODO revert this change
+
 
     public Module() {
 
     }
 
-    public Module(int moduleID, String description, String timeLastUpdate, String moduleName, Date timeCreated) {
+    public Module(int moduleID,  String moduleName, String subject, String description, String timeLastUpdate, String timeCreated) {
         this.moduleID = moduleID;
+        this.moduleName = moduleName;
+        this.subject = subject;
         this.description = description;
         this.timeLastUpdate = timeLastUpdate;
-        this.moduleName = moduleName;
         this.timeCreated = timeCreated;
     }
 
@@ -58,11 +59,19 @@ public class Module {
         this.moduleName = moduleName;
     }
 
-    public Date getTimeCreated() {
+    public String getTimeCreated() {
         return timeCreated;
     }
 
-    public void setTimeCreated(Date timeCreated) {
+    public void setTimeCreated(String timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

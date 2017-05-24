@@ -1,11 +1,13 @@
 package com.example.i2lc.edi;
 
 
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -16,10 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.net.Uri;
 
 import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
-import com.example.i2lc.edi.dbClasses.Presentation;
+import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.fragment.Fragment1;
 import com.example.i2lc.edi.fragment.Fragment2;
 import com.example.i2lc.edi.fragment.Fragment3;
@@ -32,7 +34,7 @@ import java.util.List;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragmentInteractionListener,Fragment2.OnFragmentInteractionListener,Fragment3.OnFragmentInteractionListener{
+public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, Fragment3.OnFragmentInteractionListener {
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -41,6 +43,8 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ActionBar actionBar;
     private Fragment fragment;
+
+    private ArrayList<Module> modules;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +56,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         listSliding = new ArrayList<>();
         //Add item for sliding list
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_school_black_24dp,"Lessons"));
+        listSliding.add(new ItemSlideMenu(R.drawable.ic_school_black_24dp, "Lessons"));
         listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp, "Settings"));
         listSliding.add(new ItemSlideMenu(R.drawable.ic_launcher, "Android"));
         adapter = new SlidingMenuAdapter(this, listSliding);
@@ -61,7 +65,6 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         //Display icon to open/ close sliding list
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
 
         //Set title
         setTitle(listSliding.get(0).getTitle());
@@ -75,9 +78,9 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
 
         //Handle on item click
 
-        listViewSliding.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listViewSliding.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Set title
                 setTitle(listSliding.get(position).getTitle());
                 //item selected
@@ -88,7 +91,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
                 drawerLayout.closeDrawer(listViewSliding);
             }
         });
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_opened, R.string.drawer_closed){
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_opened, R.string.drawer_closed) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -102,17 +105,27 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             }
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        try {
+            String userID = "1";
+            modules = new ArrayList<Module>();
+
+            getModules(userID);
+        } catch (Exception e) {
+            System.out.println("Bla bla bla it crashed");
+        }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -125,15 +138,15 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri){
+    public void onFragmentInteraction(Uri uri) {
         //can be empty
     }
 
     //Create method replace fragment
 
-    private void replaceFragment(int pos){
+    private void replaceFragment(int pos) {
         //Fragment fragment = null;
-        switch(pos){
+        switch (pos) {
             case 0:
                 fragment = new Fragment1();
                 break;
@@ -147,7 +160,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
                 fragment = new Fragment1();
                 break;
         }
-        if(null!=fragment){
+        if (null != fragment) {
             FragmentManager fragmentManager = getFragmentManager();
             android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.main_content, fragment);
@@ -156,14 +169,48 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
     }
 
     public void joinPresentation(View view) {
-            Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
-            startActivity(intent);
+        Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
+        startActivity(intent);
     }
 
-    private void getPresentations(String ID) {
-        //TODO the magic
-        ArrayList<Presentation> presentations;
+    private void getModules(String userID) throws Exception {
+
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+
+            //clear the modules first
+            modules.clear();
+            modules = socketClient.getModules(userID);
+
+            if (!modules.isEmpty()) {
+                //for debug
+                System.out.println("YAY I have all the modules for userID: " + userID);
+
+                Module dummyModule = new Module();
+                for (Module module: modules) {
+                    System.out.println("ID: " + module.getModuleID() + " Name: "+ module.getModuleName() + " Subject: " + module.getSubject() + " Description: "
+                            + module.getDescription());
+                }
+            } else {
+                //for debug
+                System.out.println("There was an error from getting he modules from server");
+                throw new Exception();
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
     }
+
+
 
 //    public void joinPresentation(View view) {
 //        Intent intent = new Intent(this, InitialPresentationActivity.class);

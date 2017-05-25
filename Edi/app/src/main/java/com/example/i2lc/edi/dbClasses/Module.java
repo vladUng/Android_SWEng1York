@@ -1,5 +1,7 @@
 package com.example.i2lc.edi.dbClasses;
 
+import java.util.ArrayList;
+
 /**
  * Created by vlad on 11/05/2017.
  */
@@ -12,6 +14,7 @@ public class Module {
     protected String description;
     protected String timeLastUpdate; //let it be string for now, in DB is interval type
     protected String timeCreated; //TODO revert this change
+    protected ArrayList<Presentation> presentations;
 
 
     public Module() {
@@ -73,5 +76,13 @@ public class Module {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public ArrayList<Presentation> getPresentations() {
+        return presentations;
+    }
+
+    public void setPresentations(ArrayList<Presentation> presentations) {
+        this.presentations = presentations;
     }
 }

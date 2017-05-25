@@ -12,6 +12,7 @@ public class Presentation {
     protected int moduleID;
     protected URL xmlURL;
     protected boolean live;
+    protected int currentSlideNumber;
     //Add array of interactive elements
     //TODO:Add total num of slides
     //TODO:And current slide ID
@@ -57,5 +58,13 @@ public class Presentation {
 
     public void setLive(boolean live) {
         this.live = live;
+    }
+
+    public int getCurrentSlideNumber() {
+        return currentSlideNumber;
+    }
+
+    public void setCurrentSlideNumber(int currentSlideNumber) {
+        this.currentSlideNumber = currentSlideNumber;
     }
 }

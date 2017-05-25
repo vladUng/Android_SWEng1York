@@ -2,8 +2,10 @@ package com.example.i2lc.edi.backend;
 
 
 import com.example.i2lc.edi.dbClasses.Module;
+import com.example.i2lc.edi.dbClasses.Presentation;
 
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -125,7 +127,6 @@ public class SocketClient {
         });
     }
 
-
     public ArrayList<String> userAuth(UserAuth toAuth) {
 
         ArrayList<String> retValue = new ArrayList<String>();
@@ -229,6 +230,61 @@ public class SocketClient {
         }
 
         return retModules;
+    }
+
+    public ArrayList<Presentation> getPresentation(String forUserId) {
+
+        ArrayList<Presentation> retPresentations = new ArrayList<Presentation>();
+        Statement st = null;
+
+        try {
+
+            st = connection.createStatement();
+
+            QueryFields queryFields = new QueryFields("Presentation");
+            StringBuilder fieldsSB = queryFields.getSb();
+            ArrayList<String> fieldsList = queryFields.getFields();
+
+            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
+            query.append("edi.public.sp_getpresentationsforuser(");
+            query.append("'" + forUserId + "');");
+
+            ResultSet queryResult = st.executeQuery(String.valueOf(query));
+
+            String tmpString = new String();
+            ArrayList<String> rowString = new ArrayList<String>();
+
+            while (queryResult.next()) {
+                rowString.clear();
+                for (int idx = 0; idx < fieldsList.size(); idx++) {
+
+                    tmpString = queryResult.getString(fieldsList.get(idx));
+
+                    if (tmpString != null) {
+                        rowString.add(tmpString);
+                    }
+                }
+
+                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live) {
+                retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
+                                        new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
+            }
+
+            queryResult.close();
+            st.close();
+
+            //close connection
+            connection.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+        return retPresentations;
     }
 
 }

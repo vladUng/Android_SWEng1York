@@ -38,8 +38,13 @@ public class QueryFields {
                 fields.add("time_last_updated");
                 fields.add("time_created");
                 break;
-
             case "Presentation":
+                fields.add("presentation_id");
+                fields.add("module_id");
+                fields.add("xml_url");
+                fields.add("live");
+                fields.add("current_slide_number");
+
                 break;
 
             case "InteractiveElement":

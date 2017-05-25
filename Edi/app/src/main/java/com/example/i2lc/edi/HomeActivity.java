@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.dbClasses.Module;
+import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.fragment.Fragment1;
 import com.example.i2lc.edi.fragment.Fragment2;
 import com.example.i2lc.edi.fragment.Fragment3;
@@ -45,6 +46,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
     private Fragment fragment;
 
     private ArrayList<Module> modules;
+    private ArrayList<Presentation> presentations;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,6 +113,9 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             modules = new ArrayList<Module>();
 
             getModules(userID);
+
+            presentations = new ArrayList<Presentation>();
+            getPresentation(userID);
         } catch (Exception e) {
             System.out.println("Bla bla bla it crashed");
         }
@@ -194,8 +199,8 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
                 System.out.println("YAY I have all the modules for userID: " + userID);
 
                 Module dummyModule = new Module();
-                for (Module module: modules) {
-                    System.out.println("ID: " + module.getModuleID() + " Name: "+ module.getModuleName() + " Subject: " + module.getSubject() + " Description: "
+                for (Module module : modules) {
+                    System.out.println("ID: " + module.getModuleID() + " Name: " + module.getModuleName() + " Subject: " + module.getSubject() + " Description: "
                             + module.getDescription());
                 }
             } else {
@@ -210,7 +215,41 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         }
     }
 
+    //TODO not sure if this is needed here
+    private void getPresentation(String userID) throws Exception {
 
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+
+            //clear the modules first
+            presentations.clear();
+            presentations = socketClient.getPresentation(userID);
+
+            if (!modules.isEmpty()) {
+                //for debug
+                System.out.println("YAY I have all the presentations for userID: " + userID);
+
+                for (Presentation presentation : presentations) {
+                    System.out.println("ID: " + presentation.getPresentationID() + " ModuleID: " + presentation.getModuleID() + " Subject: " + presentation.getXmlURL());
+                }
+            } else {
+                //for debug
+                System.out.println("There was an error from getting the presentations from server");
+                throw new Exception();
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
+    }
 
 //    public void joinPresentation(View view) {
 //        Intent intent = new Intent(this, InitialPresentationActivity.class);

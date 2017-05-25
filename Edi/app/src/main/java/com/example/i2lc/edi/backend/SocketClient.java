@@ -178,6 +178,7 @@ public class SocketClient {
         return retValue;
     }
 
+    //returns all the modules in which a user is involved including the presentations for each module
     public ArrayList<Module> getModules(String forUserId) {
 
         ArrayList<Module> retModules = new ArrayList<Module>();
@@ -199,6 +200,8 @@ public class SocketClient {
             String tmpString = new String();
             ArrayList<String> rowString = new ArrayList<String>();
 
+            ArrayList<Presentation> dummyPresentation = new ArrayList<Presentation>();
+            Module dummyModule = new Module();
             while (queryResult.next()) {
                 rowString.clear();
                 for (int idx = 0; idx < fieldsList.size(); idx++) {
@@ -211,8 +214,13 @@ public class SocketClient {
                 }
 
                 //int moduleID,  String moduleName, String subject, String description, String timeLastUpdate, String timeCreated
-                retModules.add(new Module(Integer.parseInt(rowString.get(0)), rowString.get(1), rowString.get(2),
-                        rowString.get(3), rowString.get(4), rowString.get(5)));
+                dummyModule = ( new Module(Integer.parseInt(rowString.get(0)), rowString.get(1), rowString.get(2),
+                        rowString.get(3), rowString.get(4), rowString.get(5)) );
+                retModules.add(dummyModule);
+
+                //gets all the presentations
+                dummyPresentation = getPresentationsForModuleId(String.valueOf(dummyModule.getModuleID()));
+                retModules.get(retModules.size()-1).setPresentations(dummyPresentation);
             }
 
             queryResult.close();
@@ -232,7 +240,7 @@ public class SocketClient {
         return retModules;
     }
 
-    public ArrayList<Presentation> getPresentation(String forUserId) {
+    public ArrayList<Presentation> getPresentationsForUserId(String userId) {
 
         ArrayList<Presentation> retPresentations = new ArrayList<Presentation>();
         Statement st = null;
@@ -247,7 +255,7 @@ public class SocketClient {
 
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getpresentationsforuser(");
-            query.append("'" + forUserId + "');");
+            query.append("'" + userId + "');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
@@ -275,6 +283,58 @@ public class SocketClient {
 
             //close connection
             connection.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+        return retPresentations;
+    }
+
+    public ArrayList<Presentation> getPresentationsForModuleId(String moduleId) {
+
+        ArrayList<Presentation> retPresentations = new ArrayList<Presentation>();
+        Statement st = null;
+
+        try {
+
+            st = connection.createStatement();
+
+            QueryFields queryFields = new QueryFields("Presentation");
+            StringBuilder fieldsSB = queryFields.getSb();
+            ArrayList<String> fieldsList = queryFields.getFields();
+
+            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
+            query.append("edi.public.sp_getpresentationsformodule(");
+            query.append("'" + moduleId + "');");
+
+            ResultSet queryResult = st.executeQuery(String.valueOf(query));
+
+            String tmpString = new String();
+            ArrayList<String> rowString = new ArrayList<String>();
+
+            while (queryResult.next()) {
+                rowString.clear();
+                for (int idx = 0; idx < fieldsList.size(); idx++) {
+
+                    tmpString = queryResult.getString(fieldsList.get(idx));
+
+                    if (tmpString != null) {
+                        rowString.add(tmpString);
+                    }
+                }
+
+                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live) {
+                retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
+                        new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
+            }
+
+            queryResult.close();
+            st.close();
         } catch (SQLException e) {
             System.out.print("SQL query is wrong" + e.toString());
             e.printStackTrace();

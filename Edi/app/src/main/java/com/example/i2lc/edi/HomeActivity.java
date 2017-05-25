@@ -113,9 +113,6 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             modules = new ArrayList<Module>();
 
             getModules(userID);
-
-            presentations = new ArrayList<Presentation>();
-            getPresentation(userID);
         } catch (Exception e) {
             System.out.println("Bla bla bla it crashed");
         }
@@ -178,6 +175,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         startActivity(intent);
     }
 
+    //populates the modules array list also it gets the info for the presentations
     private void getModules(String userID) throws Exception {
 
         int SDK_INT = Build.VERSION.SDK_INT;
@@ -215,8 +213,8 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         }
     }
 
-    //TODO not sure if this is needed here
-    private void getPresentation(String userID) throws Exception {
+    //TODO not needed here, but may be useful somewhere else
+    private void getPresentation(String forUserId) throws Exception {
 
         int SDK_INT = Build.VERSION.SDK_INT;
         // >SDK 8 support async operations
@@ -228,13 +226,13 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             //connect client
             SocketClient socketClient = new SocketClient();
 
-            //clear the modules first
+            //clear the presentation first
             presentations.clear();
-            presentations = socketClient.getPresentation(userID);
+            presentations = socketClient.getPresentationsForUserId(forUserId);
 
-            if (!modules.isEmpty()) {
+            if (!presentations.isEmpty()) {
                 //for debug
-                System.out.println("YAY I have all the presentations for userID: " + userID);
+                System.out.println("YAY I have all the presentations for userID: " + forUserId);
 
                 for (Presentation presentation : presentations) {
                     System.out.println("ID: " + presentation.getPresentationID() + " ModuleID: " + presentation.getModuleID() + " Subject: " + presentation.getXmlURL());

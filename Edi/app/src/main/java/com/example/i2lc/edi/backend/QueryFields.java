@@ -44,10 +44,16 @@ public class QueryFields {
                 fields.add("xml_url");
                 fields.add("live");
                 fields.add("current_slide_number");
-
                 break;
 
             case "InteractiveElement":
+                fields.add("interactive_element_id");
+                fields.add("presentation_id");
+                fields.add("interactive_element_data");
+                fields.add("type");
+                fields.add("live");
+                fields.add("slide_number");
+                fields.add("response_interval");
                 break;
 
             case "Interaction":

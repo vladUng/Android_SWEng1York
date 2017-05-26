@@ -1,6 +1,7 @@
 package com.example.i2lc.edi.backend;
 
 
+import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 
@@ -36,10 +37,6 @@ public class SocketClient {
 
     Socket socket;
     private Connection connection;
-
-    //TODO delete this
-    private int sbSize;
-    private ArrayList<String> dummyFields;
 
     public void main(String[] args) {
         new SocketClient("db.amriksadhra.com", 8080);
@@ -136,10 +133,12 @@ public class SocketClient {
         try {
             st = connection.createStatement();
 
+            //get the query fields for the sql statement
             QueryFields queryFields = new QueryFields("User");
             StringBuilder fieldsSB = queryFields.getSb();
             ArrayList<String> fieldsList = queryFields.getFields();
 
+            //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_authuser(");
             query.append("'" + toAuth.getUserToLogin() + "',");
@@ -149,12 +148,12 @@ public class SocketClient {
 
             String tmpString = new String();
 
+            //go through the query result
             while (queryResult.next()) {
 
+                //create an ArrayList of strings, that stores the fields from a row
                 for (int idx = 0; idx < fieldsList.size(); idx++) {
-
                     tmpString = queryResult.getString(fieldsList.get(idx));
-
                     if (tmpString != null) {
                         retValue.add(tmpString);
                     }
@@ -187,10 +186,12 @@ public class SocketClient {
         try {
             st = connection.createStatement();
 
+            //get the query fields for the sql statement
             QueryFields queryFields = new QueryFields("Module");
             StringBuilder fieldsSB = queryFields.getSb();
             ArrayList<String> fieldsList = queryFields.getFields();
 
+            //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getmodulesforuser(");
             query.append("'" + forUserId + "');");
@@ -202,25 +203,27 @@ public class SocketClient {
 
             ArrayList<Presentation> dummyPresentation = new ArrayList<Presentation>();
             Module dummyModule = new Module();
+
+            //go through the query result
             while (queryResult.next()) {
                 rowString.clear();
+
+                //create an ArrayList of strings, that stores the fields from a row
                 for (int idx = 0; idx < fieldsList.size(); idx++) {
-
                     tmpString = queryResult.getString(fieldsList.get(idx));
-
                     if (tmpString != null) {
                         rowString.add(tmpString);
                     }
                 }
 
                 //int moduleID,  String moduleName, String subject, String description, String timeLastUpdate, String timeCreated
-                dummyModule = ( new Module(Integer.parseInt(rowString.get(0)), rowString.get(1), rowString.get(2),
-                        rowString.get(3), rowString.get(4), rowString.get(5)) );
+                dummyModule = (new Module(Integer.parseInt(rowString.get(0)), rowString.get(1), rowString.get(2),
+                        rowString.get(3), rowString.get(4), rowString.get(5)));
                 retModules.add(dummyModule);
 
-                //gets all the presentations
+                //get all the presentations
                 dummyPresentation = getPresentationsForModuleId(String.valueOf(dummyModule.getModuleID()));
-                retModules.get(retModules.size()-1).setPresentations(dummyPresentation);
+                retModules.get(retModules.size() - 1).setPresentations(dummyPresentation);
             }
 
             queryResult.close();
@@ -249,10 +252,12 @@ public class SocketClient {
 
             st = connection.createStatement();
 
+            //get the query fields for the sql statement
             QueryFields queryFields = new QueryFields("Presentation");
             StringBuilder fieldsSB = queryFields.getSb();
             ArrayList<String> fieldsList = queryFields.getFields();
 
+            //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getpresentationsforuser(");
             query.append("'" + userId + "');");
@@ -262,20 +267,21 @@ public class SocketClient {
             String tmpString = new String();
             ArrayList<String> rowString = new ArrayList<String>();
 
+            //go through the query results
             while (queryResult.next()) {
                 rowString.clear();
+
+                //create an ArrayList of strings, that stores the fields from a row
                 for (int idx = 0; idx < fieldsList.size(); idx++) {
-
                     tmpString = queryResult.getString(fieldsList.get(idx));
-
                     if (tmpString != null) {
                         rowString.add(tmpString);
                     }
                 }
 
-                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live) {
+                //int presentationID, int moduleID, URL xmlURL, boolean live
                 retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
-                                        new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
+                        new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
             }
 
             queryResult.close();
@@ -304,10 +310,12 @@ public class SocketClient {
 
             st = connection.createStatement();
 
+            //get the query fields for the sql statement
             QueryFields queryFields = new QueryFields("Presentation");
             StringBuilder fieldsSB = queryFields.getSb();
             ArrayList<String> fieldsList = queryFields.getFields();
 
+            //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getpresentationsformodule(");
             query.append("'" + moduleId + "');");
@@ -317,18 +325,19 @@ public class SocketClient {
             String tmpString = new String();
             ArrayList<String> rowString = new ArrayList<String>();
 
+            //go through the query results
             while (queryResult.next()) {
                 rowString.clear();
+
+                //create an ArrayList of strings, that stores the fields from a row
                 for (int idx = 0; idx < fieldsList.size(); idx++) {
-
                     tmpString = queryResult.getString(fieldsList.get(idx));
-
                     if (tmpString != null) {
                         rowString.add(tmpString);
                     }
                 }
 
-                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live) {
+                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live)
                 retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
                         new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
             }
@@ -345,6 +354,63 @@ public class SocketClient {
         }
 
         return retPresentations;
+    }
+
+    public ArrayList<InteractiveElement> getInteractiveElements(String presentationID) {
+
+        ArrayList<InteractiveElement> retInteractiveElements = new ArrayList<InteractiveElement>();
+        Statement st = null;
+
+        try {
+
+            st = connection.createStatement();
+
+            //get the query fields for the sql statement
+            QueryFields queryFields = new QueryFields("InteractiveElement");
+            StringBuilder fieldsSB = queryFields.getSb();
+            ArrayList<String> fieldsList = queryFields.getFields();
+
+            //build the sql statement
+            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
+            query.append("edi.public.sp_getinteractiveelementsforpresentation(");
+            query.append("'" + presentationID + "');");
+
+            ResultSet queryResult = st.executeQuery(String.valueOf(query));
+
+            String tmpString = new String();
+            ArrayList<String> rowString = new ArrayList<String>();
+
+            //go through the query results
+            while (queryResult.next()) {
+                rowString.clear();
+
+                //create an ArrayList of strings, that stores the fields from a row
+                for (int idx = 0; idx < fieldsList.size(); idx++) {
+                    tmpString = queryResult.getString(fieldsList.get(idx));
+                    if (tmpString != null) {
+                        rowString.add(tmpString);
+                    }
+                }
+
+                // int interactiveElementID, int presentationID, String interactiveElementData,
+                // String type, boolean live, int slideNumber, String responsesInterval)
+                retInteractiveElements.add(new InteractiveElement(Integer.valueOf(rowString.get(0)), Integer.valueOf(rowString.get(1)),
+                                                rowString.get(2), rowString.get(3), Boolean.valueOf(rowString.get(4)),
+                                                Integer.valueOf(rowString.get(5)), rowString.get(6)));
+            }
+
+            queryResult.close();
+            st.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+        return retInteractiveElements;
     }
 
 }

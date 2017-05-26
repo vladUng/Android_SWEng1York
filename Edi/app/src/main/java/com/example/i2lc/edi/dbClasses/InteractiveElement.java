@@ -1,5 +1,7 @@
 package com.example.i2lc.edi.dbClasses;
 
+import java.util.ArrayList;
+
 /**
  * Created by vlad on 11/05/2017.
  */
@@ -11,14 +13,16 @@ public class InteractiveElement {
     protected String InteractiveElementData;
     protected String type;
     protected boolean live;
-    protected String responsesInterval; //let it be string for know
+    protected String responsesInterval; //TODO: let it be string for know
     protected int slideNumber;
+    protected ArrayList<Interaction> interactions;
 
     public InteractiveElement() {
 
     }
 
-    public InteractiveElement(int interactiveElementID, int presentationID, String interactiveElementData, String type, boolean live, String responsesInterval, int slideNumber) {
+    public InteractiveElement(int interactiveElementID, int presentationID, String interactiveElementData,
+                              String type, boolean live, int slideNumber, String responsesInterval) {
         this.interactiveElementID = interactiveElementID;
         this.presentationID = presentationID;
         InteractiveElementData = interactiveElementData;
@@ -82,5 +86,13 @@ public class InteractiveElement {
 
     public void setSlideNumber(int slideNumber) {
         this.slideNumber = slideNumber;
+    }
+
+    public ArrayList<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(ArrayList<Interaction> interactions) {
+        this.interactions = interactions;
     }
 }

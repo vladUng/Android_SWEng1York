@@ -16,7 +16,6 @@ public class Module {
     protected String timeCreated; //TODO revert this change
     protected ArrayList<Presentation> presentations;
 
-
     public Module() {
 
     }

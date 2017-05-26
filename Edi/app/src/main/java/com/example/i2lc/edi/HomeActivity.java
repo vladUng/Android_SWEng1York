@@ -21,8 +21,11 @@ import android.widget.ListView;
 
 import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
 import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.dbClasses.Interaction;
+import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
+import com.example.i2lc.edi.dbClasses.Question;
 import com.example.i2lc.edi.fragment.Fragment1;
 import com.example.i2lc.edi.fragment.Fragment2;
 import com.example.i2lc.edi.fragment.Fragment3;
@@ -47,6 +50,11 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
 
     private ArrayList<Module> modules;
     private ArrayList<Presentation> presentations;
+
+    //these are not needed in this activity
+    private ArrayList<InteractiveElement> interactiveElements;
+    private ArrayList<Interaction> interactions;
+    private ArrayList<Question> questions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,7 +120,9 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             String userID = "1";
             modules = new ArrayList<Module>();
 
-            getModules(userID);
+            interactiveElements = new ArrayList<InteractiveElement>();
+            getInteractiveElements("1");
+
         } catch (Exception e) {
             System.out.println("Bla bla bla it crashed");
         }
@@ -248,6 +258,47 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             throw new Exception();
         }
     }
+
+    //Method used, when user goes to a presentation and we need to know where on the presentation (slinde_number),
+    //the interactive elements are
+    private void getInteractiveElements(String presentationId) throws Exception {
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+
+            //clear the Interactive Elements first
+            interactiveElements.clear();
+            interactiveElements = socketClient.getInteractiveElements(presentationId);
+
+            if (!interactiveElements.isEmpty()) {
+                //for debug
+                System.out.println("YAY I have all the interactive elements for userID: " + presentationId);
+
+                InteractiveElement dummyInteractiveElement = new InteractiveElement();
+                for (InteractiveElement elem : interactiveElements) {
+                    System.out.println("ID: " + elem.getInteractiveElementID() + " Data: " + elem.getInteractiveElementData() + " Type: " + elem.getType() + " slide number: "
+                            + elem.getSlideNumber());
+                }
+            } else {
+                //for debug
+                System.out.println("There was an error from getting the interactive elements from server");
+                throw new Exception();
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
+    }
+
+
+
 
 //    public void joinPresentation(View view) {
 //        Intent intent = new Intent(this, InitialPresentationActivity.class);

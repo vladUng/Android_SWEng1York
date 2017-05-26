@@ -1,6 +1,7 @@
 package com.example.i2lc.edi.dbClasses;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by vlad on 11/05/2017.
@@ -13,7 +14,7 @@ public class Presentation {
     protected URL xmlURL;
     protected boolean live;
     protected int currentSlideNumber;
-    //Add array of interactive elements
+    protected ArrayList<InteractiveElement> interactiveElements;
     //TODO:Add total num of slides
     //TODO:And current slide ID
 
@@ -66,5 +67,13 @@ public class Presentation {
 
     public void setCurrentSlideNumber(int currentSlideNumber) {
         this.currentSlideNumber = currentSlideNumber;
+    }
+
+    public ArrayList<InteractiveElement> getInteractiveElements() {
+        return interactiveElements;
+    }
+
+    public void setInteractiveElements(ArrayList<InteractiveElement> interactiveElements) {
+        this.interactiveElements = interactiveElements;
     }
 }

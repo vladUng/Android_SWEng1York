@@ -1,5 +1,6 @@
 package com.example.i2lc.edi.dbClasses;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -12,15 +13,15 @@ public class Module {
     protected String moduleName;
     protected String subject;
     protected String description;
-    protected String timeLastUpdate; //let it be string for now, in DB is interval type
-    protected String timeCreated; //TODO revert this change
+    protected Timestamp timeLastUpdate; //let it be string for now, in DB is interval type
+    protected Timestamp timeCreated;
     protected ArrayList<Presentation> presentations;
 
     public Module() {
 
     }
 
-    public Module(int moduleID,  String moduleName, String subject, String description, String timeLastUpdate, String timeCreated) {
+    public Module(int moduleID,  String moduleName, String subject, String description, Timestamp timeLastUpdate, Timestamp timeCreated) {
         this.moduleID = moduleID;
         this.moduleName = moduleName;
         this.subject = subject;
@@ -45,11 +46,11 @@ public class Module {
         this.description = description;
     }
 
-    public String getTimeLastUpdate() {
+    public Timestamp getTimeLastUpdate() {
         return timeLastUpdate;
     }
 
-    public void setTimeLastUpdate(String timeLastUpdate) {
+    public void setTimeLastUpdate(Timestamp timeLastUpdate) {
         this.timeLastUpdate = timeLastUpdate;
     }
 
@@ -61,11 +62,11 @@ public class Module {
         this.moduleName = moduleName;
     }
 
-    public String getTimeCreated() {
+    public Timestamp getTimeCreated() {
         return timeCreated;
     }
 
-    public void setTimeCreated(String timeCreated) {
+    public void setTimeCreated(Timestamp timeCreated) {
         this.timeCreated = timeCreated;
     }
 

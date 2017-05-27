@@ -38,6 +38,7 @@ public class QueryFields {
                 fields.add("time_last_updated");
                 fields.add("time_created");
                 break;
+
             case "Presentation":
                 fields.add("presentation_id");
                 fields.add("module_id");
@@ -57,9 +58,21 @@ public class QueryFields {
                 break;
 
             case "Interaction":
+                fields.add("interaction_id");
+                fields.add("user_id");
+                fields.add("interactive_element_id");
+                fields.add("interaction_data");
+                fields.add("time_created");
                 break;
 
             case "Question":
+                fields.add("question_id");
+                fields.add("user_id");
+                fields.add("presentation_id");
+                fields.add("time_created");
+                fields.add("time_answered");
+                fields.add("question_data");
+                fields.add("slide_number");
                 break;
 
             case "Thumbnail":

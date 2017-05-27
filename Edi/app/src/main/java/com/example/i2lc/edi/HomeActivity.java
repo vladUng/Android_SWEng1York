@@ -118,10 +118,17 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
 
         try {
             String userID = "1";
-            modules = new ArrayList<Module>();
+            modules = new ArrayList<>();
+            getModules(userID);
 
-            interactiveElements = new ArrayList<InteractiveElement>();
+            interactiveElements = new ArrayList<>();
             getInteractiveElements("1");
+
+            interactions = new ArrayList<>();
+            getInteractions("1");
+
+              questions = new ArrayList<>();
+              getQuestions("1");
 
         } catch (Exception e) {
             System.out.println("Bla bla bla it crashed");
@@ -206,7 +213,6 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
                 //for debug
                 System.out.println("YAY I have all the modules for userID: " + userID);
 
-                Module dummyModule = new Module();
                 for (Module module : modules) {
                     System.out.println("ID: " + module.getModuleID() + " Name: " + module.getModuleName() + " Subject: " + module.getSubject() + " Description: "
                             + module.getDescription());
@@ -224,7 +230,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
     }
 
     //TODO not needed here, but may be useful somewhere else
-    private void getPresentation(String forUserId) throws Exception {
+    private void getPresentation(String forUserID) throws Exception {
 
         int SDK_INT = Build.VERSION.SDK_INT;
         // >SDK 8 support async operations
@@ -238,11 +244,11 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
 
             //clear the presentation first
             presentations.clear();
-            presentations = socketClient.getPresentationsForUserId(forUserId);
+            presentations = socketClient.getPresentationsForUserId(forUserID);
 
             if (!presentations.isEmpty()) {
                 //for debug
-                System.out.println("YAY I have all the presentations for userID: " + forUserId);
+                System.out.println("YAY I have all the presentations for userID: " + forUserID);
 
                 for (Presentation presentation : presentations) {
                     System.out.println("ID: " + presentation.getPresentationID() + " ModuleID: " + presentation.getModuleID() + " Subject: " + presentation.getXmlURL());
@@ -261,7 +267,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
 
     //Method used, when user goes to a presentation and we need to know where on the presentation (slinde_number),
     //the interactive elements are
-    private void getInteractiveElements(String presentationId) throws Exception {
+    private void getInteractiveElements(String presentationID) throws Exception {
         int SDK_INT = Build.VERSION.SDK_INT;
         // >SDK 8 support async operations
         if (SDK_INT > 8) {
@@ -274,11 +280,11 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
 
             //clear the Interactive Elements first
             interactiveElements.clear();
-            interactiveElements = socketClient.getInteractiveElements(presentationId);
+            interactiveElements = socketClient.getInteractiveElements(presentationID);
 
             if (!interactiveElements.isEmpty()) {
                 //for debug
-                System.out.println("YAY I have all the interactive elements for userID: " + presentationId);
+                System.out.println("YAY I have all the interactive elements for userID: " + presentationID);
 
                 InteractiveElement dummyInteractiveElement = new InteractiveElement();
                 for (InteractiveElement elem : interactiveElements) {
@@ -297,9 +303,77 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         }
     }
 
+    //TODO not needed here, but may be useful somewhere else
+    private void getInteractions(String interactiveElementID) throws Exception {
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
+            //connect client
+            SocketClient socketClient = new SocketClient();
 
+            //clear the Interactive Elements first
+            interactions.clear();
+            interactions = socketClient.getInteractions(interactiveElementID);
 
+            if (!interactions.isEmpty()) {
+                //for debug
+                System.out.println("YAY I have all the interactive elements for userID: " + interactiveElementID);
+
+                for (Interaction elem : interactions) {
+                    System.out.println("ID: " + elem.getInteractionID() + " Interactive Elem ID: " + elem.getInteractiveElementID()
+                            + " User: " + elem.getUserID() + " Time: " + elem.getTimeCreated());
+                }
+            } else {
+                //for debug
+                System.out.println("There was an error from getting the interactive elements from server");
+                throw new Exception();
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
+    }
+
+    //TODO not needed here, but may be useful somewhere else
+    private void getQuestions(String presentationID) throws Exception {
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+
+            //clear the Interactive Elements first
+            questions.clear();
+            questions = socketClient.getQuestions(presentationID);
+
+            if (!questions.isEmpty()) {
+                //for debug
+                System.out.println("YAY I have all the interactive elements for userID: " + presentationID);
+
+                for (Question  question: questions) {
+                    System.out.println("ID: " + question.getQuestionID() + " Presentation ID: " + question.getPresentationID()
+                            + " User: " + question.getUserID() + " Time: " + question.getDateCreated());
+                }
+            } else {
+                //for debug
+                System.out.println("There was an error from getting the interactive elements from server");
+                throw new Exception();
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
+    }
 //    public void joinPresentation(View view) {
 //        Intent intent = new Intent(this, InitialPresentationActivity.class);
 //        startActivity(intent);

@@ -1,6 +1,6 @@
 package com.example.i2lc.edi.dbClasses;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by vlad on 11/05/2017.
@@ -11,16 +11,17 @@ public class Interaction {
     protected int interactionID;
     protected int userID;
     protected int interactiveElementID;
-    protected Date timeCreated;
+    protected String interactionData;
+    protected Timestamp timeCreated;
 
     public Interaction() {
 
     }
-
-    public Interaction(int interactionID, int userID, int interactiveElementID, Date timeCreated) {
+    public Interaction(int interactionID, int userID, int interactiveElementID, String interactionData, Timestamp timeCreated) {
         this.interactionID = interactionID;
         this.userID = userID;
         this.interactiveElementID = interactiveElementID;
+        this.interactionData = interactionData;
         this.timeCreated = timeCreated;
     }
 
@@ -48,11 +49,19 @@ public class Interaction {
         this.interactiveElementID = interactiveElementID;
     }
 
-    public Date getTimeCreated() {
+    public Timestamp getTimeCreated() {
         return timeCreated;
     }
 
-    public void setTimeCreated(Date timeCreated) {
+    public void setTimeCreated(Timestamp timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public String getInteractionData() {
+        return interactionData;
+    }
+
+    public void setInteractionData(String interactionData) {
+        this.interactionData = interactionData;
     }
 }

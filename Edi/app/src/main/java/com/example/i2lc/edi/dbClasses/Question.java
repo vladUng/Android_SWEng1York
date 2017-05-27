@@ -1,6 +1,6 @@
 package com.example.i2lc.edi.dbClasses;
 
-import java.sql.Time;
+import java.sql.Timestamp;
 
 /**
  * Created by vlad on 11/05/2017.
@@ -11,7 +11,7 @@ public class Question {
     protected int questionID;
     protected int userID;
     protected int presentationID;
-    protected String dateCreated; //let it be string for now, in DB is interval type
+    protected Timestamp dateCreated; //let it be string for now, in DB is interval type
     protected String questionData;
     protected int slideNumber;
 
@@ -19,7 +19,7 @@ public class Question {
 
     }
 
-    public Question(int questionID, int userID, int presentationID, String dateCreated, String questionData, int slideNumber) {
+    public Question(int questionID, int userID, int presentationID, Timestamp dateCreated, String questionData, int slideNumber) {
         this.questionID = questionID;
         this.userID = userID;
         this.presentationID = presentationID;
@@ -52,11 +52,11 @@ public class Question {
         this.presentationID = presentationID;
     }
 
-    public String getDateCreated() {
+    public Timestamp getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(Timestamp dateCreated) {
         this.dateCreated = dateCreated;
     }
 

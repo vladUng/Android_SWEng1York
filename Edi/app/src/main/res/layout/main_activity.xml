@@ -10,10 +10,10 @@
         android:layout_height="match_parent"
         android:id="@+id/main_content"></RelativeLayout>
     <ListView
-        android:layout_width="300dp"
+        android:layout_width="150dp"
         android:layout_height="match_parent"
         android:id="@+id/lv_sliding_menu"
-        android:background="#b5ffbf"
+        android:background="@color/primary_light"
         android:choiceMode="singleChoice"
         android:layout_gravity="start"></ListView>
 

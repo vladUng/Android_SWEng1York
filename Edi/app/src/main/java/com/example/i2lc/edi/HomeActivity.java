@@ -66,9 +66,9 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         listSliding = new ArrayList<>();
         //Add item for sliding list
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_school_black_24dp, "Lessons"));
+        listSliding.add(new ItemSlideMenu(R.drawable.ic_school_black_24dp, "Live Presentations"));
         listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp, "Settings"));
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_launcher, "Android"));
+        listSliding.add(new ItemSlideMenu(R.drawable.ic_launcher, "User Details"));
         adapter = new SlidingMenuAdapter(this, listSliding);
         listViewSliding.setAdapter(adapter);
 

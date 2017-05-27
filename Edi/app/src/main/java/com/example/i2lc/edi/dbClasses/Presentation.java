@@ -12,12 +12,15 @@ public class Presentation {
     protected int presentationID;
     protected int moduleID;
     protected URL xmlURL;
-    protected boolean live;
     protected int currentSlideNumber;
     protected ArrayList<InteractiveElement> interactiveElements;
-    //TODO:Add total num of slides
-    //TODO:And current slide ID
-
+    protected int totalSlideNumber;
+    protected Thumbnail thumbnail;
+    private String title = "Very Cool Title"; //TODO remove initiliasations when finished
+    private String module=  "Design & Construction";
+    private String author = "Joe Bloggs";
+    private String date = "22/04/2017";
+    protected boolean live = true;
     public Presentation(){
 
     }
@@ -27,6 +30,7 @@ public class Presentation {
         this.moduleID = moduleID;
         this.xmlURL = xmlURL;
         this.live = live;
+        //TODO presentation thumbnail parsing in constructor
     }
 
     public int getPresentationID() {
@@ -67,6 +71,54 @@ public class Presentation {
 
     public void setCurrentSlideNumber(int currentSlideNumber) {
         this.currentSlideNumber = currentSlideNumber;
+    }
+
+    public int getTotalSlideNumber() {
+        return totalSlideNumber;
+    }
+
+    public void setTotalSlideNumber(int totalSlideNumber) {
+        this.totalSlideNumber = totalSlideNumber;
+    }
+
+    public Thumbnail getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public ArrayList<InteractiveElement> getInteractiveElements() {

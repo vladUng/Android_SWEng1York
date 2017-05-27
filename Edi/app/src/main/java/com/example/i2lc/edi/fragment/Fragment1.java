@@ -4,15 +4,24 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
+import com.example.i2lc.edi.adapter.PresentationItemAdapter;
+import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.dbClasses.Presentation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //import static com.example.i2lc.edi.LogInActivity.EXTRA_USERNAME;
 
@@ -35,6 +44,10 @@ public class Fragment1 extends Fragment{
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ArrayList<Presentation> presentationList;
+    private ListView listView;
+    private String userID = "1";
 
 
 
@@ -74,15 +87,21 @@ public class Fragment1 extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment1, container, false);
-        Button button = (Button) rootView.findViewById(R.id.btn1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PresentationActivity.class);
-                startActivity(intent);
-            }
-        });
+        View rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
+//        Button button = (Button) rootView.findViewById(R.id.btn1);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), PresentationActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+        getPresentation(userID);
+
+        listView = (ListView) rootView.findViewById(R.id.presentation_list);
+        PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList);
+        listView.setAdapter(adapter);
         return rootView;
     }
 
@@ -128,6 +147,40 @@ public class Fragment1 extends Fragment{
     public void joinPresentation(View view) {
         Intent intent = new Intent(this.getActivity(), PresentationActivity.class);
         startActivity(intent);
+    }
+
+    //TODO not needed here, but may be useful somewhere else
+    private void getPresentation(String forUserId){
+
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+
+            //clear the presentation first
+            //presentationList.clear();
+            presentationList = socketClient.getPresentationsForUserId(forUserId);
+
+            if (!presentationList.isEmpty()) {
+                //for debug
+                System.out.println("YAY I have all the presentations for userID: " + forUserId);
+
+                for (Presentation presentation : presentationList) {
+                    System.out.println("ID: " + presentation.getPresentationID() + " ModuleID: " + presentation.getModuleID() + " Subject: " + presentation.getXmlURL());
+                }
+            } else {
+                //for debug
+                System.out.println("There was an error from getting the presentations from server");
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+        }
     }
 
 

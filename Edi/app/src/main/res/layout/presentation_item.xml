@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dp"
+    android:maxHeight="100dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:background="@color/divider"
+        android:weightSum="2"
+        android:maxHeight="100dp">
+`
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/primary_light"
+            android:orientation="vertical"
+            android:weightSum="12"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/presentation_title"
+                android:layout_height="100dp"
+                android:layout_weight="2"
+                android:text="@string/title" />
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/presentation_author"
+                android:layout_height="100dp"
+                android:layout_weight="2"
+                android:text="Lecturer: Joe Bloggs" />
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/presentation_module"
+                android:layout_height="100dp"
+                android:layout_weight="2"
+                android:text="Design and Construction" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/presentation_date"
+                android:layout_height="100dp"
+                android:layout_weight="2"
+                android:text="@string/date" />
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/blank"
+                android:layout_height="100dp"
+                android:layout_weight="2"
+                android:text="" />
+            <Button
+                android:id="@+id/join_button"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="bottom"
+                android:layout_weight="2"
+                android:background="@color/colorAccent"
+                android:onClick="joinPresentation"
+                android:text="@string/join" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/presentation_thumbnail"
+            android:layout_weight="1"
+            android:background="@color/primary_light"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:srcCompat="@drawable/edi" />
+    </LinearLayout>
+
+</LinearLayout>

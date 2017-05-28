@@ -3,6 +3,7 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -31,8 +32,17 @@ import com.example.i2lc.edi.fragment.Fragment2;
 import com.example.i2lc.edi.fragment.Fragment3;
 import com.example.i2lc.edi.model.ItemSlideMenu;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Created by Cosmin on 15/03/2017.
@@ -121,14 +131,20 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             modules = new ArrayList<>();
             getModules(userID);
 
+            for (Module module: modules) {
+                for (Presentation presentation: module.getPresentations()) {
+                    downloadPresentation(presentation);
+                }
+            }
+
             interactiveElements = new ArrayList<>();
-            getInteractiveElements("1");
-
-            interactions = new ArrayList<>();
-            getInteractions("1");
-
-              questions = new ArrayList<>();
-              getQuestions("1");
+//            getInteractiveElements("1");
+//
+//            interactions = new ArrayList<>();
+//            getInteractions("1");
+//
+//              questions = new ArrayList<>();
+//              getQuestions("1");
 
         } catch (Exception e) {
             System.out.println("Bla bla bla it crashed");
@@ -374,9 +390,98 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             throw new Exception();
         }
     }
+
+    public void downloadPresentation(Presentation presentation) {
+
+        FileOutputStream fos;
+        String filename = "Presentation_" + presentation.getPresentationID();
+        try {
+            URL website = presentation.getXmlURL();
+            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+            fos = openFileOutput(filename + ".zip", Context.MODE_PRIVATE);
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+
+            System.out.println("Download succesfull");
+            rbc.close();
+            fos.close();
+        } catch(IOException e) {
+            System.out.println("Error:" + e);
+            e.printStackTrace();
+        }
+
+        unzipPresentation(filename, filename + "_folder", presentation);
+    }
+
+    public void unzipPresentation(String zipFile, String outputFolder, Presentation presentation) {
+        byte[] buffer = new byte[1024];
+        String basePath = getFilesDir().getAbsolutePath() + "/";
+
+        try {
+            //create output directory is not exists
+            File folder = new File(basePath + outputFolder);
+            if (!folder.exists()) {
+                 if ( !(folder.mkdirs())) {
+                     System.out.println("Unable to create folder" + folder.getName());
+                 }
+            }
+
+            //get the zip file content
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(basePath + zipFile));
+            //get the zipped file list entry
+            ZipEntry ze = zis.getNextEntry();
+
+            while (ze != null) {
+                String fileName = ze.getName();
+
+                //skip CSS files,folder and MAC_OSX files
+                if (fileName.contains("CSS") || fileName.contains("__MACOSX/") || fileName.contains(".DS_Store")) {
+                    ze = zis.getNextEntry();
+                    continue;
+                }
+
+                String tmpFileName = outputFolder + File.separator + fileName;
+                File newFile = new File( basePath + tmpFileName);
+
+                if (!tmpFileName.contains(".")) {
+                    if(!newFile.exists()) {
+                        if (!newFile.mkdir()) {
+                            System.out.println("Unable to create folder" + newFile.getName());
+                        }
+                    }
+                    ze = zis.getNextEntry();
+                    continue;
+                }
+
+                System.out.println("Unzipping to: " + newFile.getAbsoluteFile());
+
+                File dummyFile = new File(newFile.getAbsolutePath());
+                FileOutputStream fos = new FileOutputStream(dummyFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+
+            System.out.println("Yay zip succesfull");
+            zis.closeEntry();
+            zis.close();
+
+            //now that everything went well, save the path
+            presentation.setFolderPath(folder.getAbsolutePath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        //Cleanup downloaded zip file by deleting
+        new File(zipFile).delete();
+    }
+
 //    public void joinPresentation(View view) {
 //        Intent intent = new Intent(this, InitialPresentationActivity.class);
 //        startActivity(intent);
 //    }
-
 }

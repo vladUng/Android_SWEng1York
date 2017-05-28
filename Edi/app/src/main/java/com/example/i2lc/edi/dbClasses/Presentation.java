@@ -1,7 +1,5 @@
 package com.example.i2lc.edi.dbClasses;
 
-import android.content.res.XmlResourceParser;
-
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -23,6 +21,9 @@ public class Presentation {
     private String author = "Joe Bloggs";
     private String date = "22/04/2017";
     protected boolean live = true;
+    protected String folderPath;
+
+
     public Presentation(){
 
     }
@@ -34,6 +35,7 @@ public class Presentation {
         this.live = live;
         //TODO presentation thumbnail parsing in constructor
     }
+
 
     public int getPresentationID() {
         return presentationID;
@@ -129,5 +131,13 @@ public class Presentation {
 
     public void setInteractiveElements(ArrayList<InteractiveElement> interactiveElements) {
         this.interactiveElements = interactiveElements;
+    }
+
+    public String getFolderPath() {
+        return folderPath;
+    }
+
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
     }
 }

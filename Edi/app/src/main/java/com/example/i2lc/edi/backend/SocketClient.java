@@ -254,15 +254,25 @@ public class SocketClient {
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
+            String tmpString = new String();
+            ArrayList<String> rowString = new ArrayList<String>();
+
             //go through the query results
             while (queryResult.next()) {
-                //int presentationID, int moduleID, URL xmlURL, boolean live
-                retPresentations.add(new Presentation(queryResult.getInt(fieldsList.get(0)), queryResult.getInt(fieldsList.get(1)),
-                                queryResult.getURL(fieldsList.get(3)), queryResult.getBoolean(fieldsList.get(4))));
-            }
+                rowString.clear();
 
-            queryResult.close();
-            st.close();
+                //create an ArrayList of strings, that stores the fields from a row
+                for (int idx = 0; idx < fieldsList.size(); idx++) {
+                    tmpString = queryResult.getString(fieldsList.get(idx));
+                    if (tmpString != null) {
+                        rowString.add(tmpString);
+                    }
+                }
+
+                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live)
+                retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
+                        new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
+            }
 
             //close connection
             connection.close();

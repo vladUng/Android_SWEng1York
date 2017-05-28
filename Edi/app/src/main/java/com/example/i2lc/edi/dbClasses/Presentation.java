@@ -1,5 +1,7 @@
 package com.example.i2lc.edi.dbClasses;
 
+import android.content.res.XmlResourceParser;
+
 import java.net.URL;
 import java.util.ArrayList;
 

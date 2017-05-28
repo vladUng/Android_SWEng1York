@@ -18,8 +18,16 @@ import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.adapter.PresentationItemAdapter;
 import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
+import com.example.i2lc.edi.utilities.ParserXML;
+import com.example.i2lc.edi.utilities.XMLDOMParser;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,15 +54,14 @@ public class Fragment1 extends Fragment{
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Presentation> presentationList;
+    private ArrayList<Presentation> finalPresentationList;
+    private ArrayList<Module> modules;
     private ListView listView;
     private String userID = "1";
-
-
 
     public Fragment1() {
         // Required empty public constructor
     }
-
 
     /**
      * Use this factory method to create a new instance of
@@ -88,29 +95,26 @@ public class Fragment1 extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
-//        Button button = (Button) rootView.findViewById(R.id.btn1);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), PresentationActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        finalPresentationList = new ArrayList<Presentation>();
 
         getPresentation(userID);
+        getModules(userID);
 
+        for(int i = 0; i < presentationList.size();i++){
+            Presentation myPresentation = presentationList.get(i);
+            ParserXML parser = new ParserXML(rootView,myPresentation);
+            finalPresentationList.add(i,parser.parsePresentation());
+            myPresentation = finalPresentationList.get(i);
+            myPresentation.setModule(modules.get(myPresentation.getModuleID()).getModuleName());
+        }
+
+        //Create GUI
         listView = (ListView) rootView.findViewById(R.id.presentation_list);
         PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList);
         listView.setAdapter(adapter);
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
     @Override
     public void onAttach(Context context) {
@@ -176,6 +180,40 @@ public class Fragment1 extends Fragment{
             } else {
                 //for debug
                 System.out.println("There was an error from getting the presentations from server");
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+        }
+    }
+
+    private void getModules(String userID){
+
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+
+            //clear the modules first
+            //modules.clear();
+            modules = socketClient.getModules(userID);
+
+            if (!modules.isEmpty()) {
+                //for debug
+                System.out.println("YAY I have all the modules for userID: " + userID);
+
+                for (Module module : modules) {
+                    System.out.println("ID: " + module.getModuleID() + " Name: " + module.getModuleName() + " Subject: " + module.getSubject() + " Description: "
+                            + module.getDescription());
+                }
+            } else {
+                //for debug
+                System.out.println("There was an error from getting he modules from server");
             }
         } else {
             //for debug

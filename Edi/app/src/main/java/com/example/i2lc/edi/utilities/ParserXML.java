@@ -1,5 +1,6 @@
 package com.example.i2lc.edi.utilities;
 
+import android.renderscript.ScriptGroup;
 import android.view.View;
 
 import com.example.i2lc.edi.R;
@@ -7,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -21,14 +25,16 @@ public class ParserXML {
     //private DOMParser xmlParser;
     private Document xmlDocument;
     private String presentationXmlPath = "projectResources/sampleFiles/xml/i2lp_sample_xml.xmlml";
+    private File xmlFile;
     private Logger logger = LoggerFactory.getLogger(ParserXML.class);
-    private Presentation myPresentation;
+    private Presentation presentation;
     private ArrayList<String> faultsDetected = new ArrayList<>();
     private ArrayList<Presentation> presentationList;
 
-    public ParserXML(View rootView, Presentation myPresentation){// throws InvalidPathException {
+    public ParserXML(View rootView, Presentation presentation, File xmlFile){// throws InvalidPathException {
         this.presentationList = presentationList;
-        this.myPresentation = myPresentation;
+        this.presentation = presentation;
+        this.xmlFile = xmlFile;
 //         if (this.validateExtension(presentationXmlPath))
 //        {
             //this.presentationXmlPath = presentationXmlPath; //Set the path if valid
@@ -39,23 +45,29 @@ public class ParserXML {
 //        }
 
         XMLDOMParser parser = new XMLDOMParser();
-        InputStream stream = rootView.getContext().getResources().openRawResource(R.raw.i2lp_sample_xml);
+        //InputStream stream = rootView.getContext().getResources().openRawResource(R.raw.i2lp_sample_xml);
+        InputStream stream = null;
+        try {
+            stream = new FileInputStream(xmlFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         xmlDocument = parser.getDocument(stream);
 
     }
 
     public Presentation parsePresentation() {
-        //myPresentation = new Presentation();
+        //presentation = new Presentation();
 
         parseDocumentDetails();
         setTotalSlideNum();
 
 //        if (faultsDetected.size() > 0) {
-//            myPresentation.setXmlFaults(faultsDetected);
+//            presentation.setXmlFaults(faultsDetected);
 //        }
 //        logger.info("Presentation Parsed. Faults found: " + this.faultsDetected.size());
 
-        return myPresentation;
+        return presentation;
     }
 
 
@@ -85,13 +97,13 @@ public class ParserXML {
 
                     switch (elementName) {
                         case "title":
-                            myPresentation.setTitle(elementContent);
+                            presentation.setTitle(elementContent);
                             break;
                         case "author":
-                            myPresentation.setAuthor(elementContent);
+                            presentation.setAuthor(elementContent);
                             break;
 //                        case "description":
-//                            myPresentation.setDescription(elementContent);
+//                            presentation.setDescription(elementContent);
 //                            break;
                         default:
                             logger.warn("Document Detail Not Recognised! Name: " + elementName +
@@ -112,7 +124,7 @@ public class ParserXML {
     private void setTotalSlideNum(){
         //Find all elements named "slide"
         NodeList slideNodeList = xmlDocument.getElementsByTagName("slide");
-        myPresentation.setTotalSlideNumber(slideNodeList.getLength());
+        presentation.setTotalSlideNumber(slideNodeList.getLength());
     }
 
 

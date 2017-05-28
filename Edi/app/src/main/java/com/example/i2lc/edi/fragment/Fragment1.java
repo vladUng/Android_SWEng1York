@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +28,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 //import static com.example.i2lc.edi.LogInActivity.EXTRA_USERNAME;
 
@@ -100,12 +110,37 @@ public class Fragment1 extends Fragment{
         getPresentation(userID);
         getModules(userID);
 
+
         for(int i = 0; i < presentationList.size();i++){
-            Presentation myPresentation = presentationList.get(i);
-            ParserXML parser = new ParserXML(rootView,myPresentation);
-            finalPresentationList.add(i,parser.parsePresentation());
-            myPresentation = finalPresentationList.get(i);
-            myPresentation.setModule(modules.get(myPresentation.getModuleID()).getModuleName());
+            Presentation presentation = presentationList.get(i);
+            //download and set the folder path for presentation
+            if (i==2) {
+                System.out.println("adasd");
+            }
+            downloadPresentation(presentation, rootView.getContext());//TODO: this is where it crashes
+
+            //Create folder
+            File presentationFolder = new File(presentation.getFolderPath()); //
+            //Create list of files
+            File[] directoryListing = presentationFolder.listFiles();
+            if (directoryListing != null) {
+                for (File child : directoryListing) {
+                    if(child.getAbsolutePath().contains(".xml")){
+                        ParserXML parser = new ParserXML(rootView,presentation, child);
+                        finalPresentationList.add(i,parser.parsePresentation());
+                    } else if(child.isDirectory()){
+                        File[] thumbnails = child.listFiles();
+//                        if (thumbnails != null)  {
+//
+//                        }
+                    }
+                }
+            } else {
+                System.out.println("Folder doesn't exist/is empty!");
+            }
+
+            presentation = finalPresentationList.get(i);
+            presentation.setModule(modules.get(presentation.getModuleID()).getModuleName());
         }
 
         //Create GUI
@@ -219,6 +254,111 @@ public class Fragment1 extends Fragment{
             //for debug
             System.out.println("There was an error. SDK too old");
         }
+    }
+
+    public void downloadPresentation(Presentation presentation, Context c) {
+
+        FileOutputStream fos;
+        String filename = "Presentation_" + presentation.getPresentationID();
+        try {
+            URL website = presentation.getXmlURL();
+            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+            fos = c.openFileOutput(filename + ".zip", Context.MODE_PRIVATE);
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+
+            System.out.println("Download succesfull");
+            rbc.close();
+            fos.close();
+        } catch(IOException e) {
+            System.out.println("Error:" + e);
+            e.printStackTrace();
+        }
+
+        unzipPresentation(filename + ".zip", filename + "_folder", presentation, c);
+    }
+
+    public void unzipPresentation(String zipFile, String outputFolder, Presentation presentation, Context c) {
+        byte[] buffer = new byte[1024];
+        String basePath = c.getFilesDir().getAbsolutePath() + "/";
+
+        try {
+            //create output directory is not exists
+            File folder = new File(basePath + outputFolder);
+            if (!folder.exists()) {
+                if ( !(folder.mkdirs())) {
+                    System.out.println("Unable to create folder" + folder.getName());
+                }
+            }
+
+            //get the zip file content
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(basePath + zipFile));
+            //get the zipped file list entry
+            ZipEntry ze = zis.getNextEntry();
+
+            while (ze != null) {
+                String fileName = ze.getName();
+
+                //skip CSS files,folder and MAC_OSX files
+                if (fileName.contains("CSS") || fileName.contains("__MACOSX/") || fileName.contains(".DS_Store")) {
+                    ze = zis.getNextEntry();
+                    continue;
+                }
+
+                String tmpFileName = outputFolder + File.separator + fileName;
+                File newFile = new File( basePath + tmpFileName);
+
+                if (!tmpFileName.contains(".")) {
+                    if(!newFile.exists()) {
+                        if (!newFile.mkdir()) {
+                            System.out.println("Unable to create folder" + newFile.getName());
+                        }
+                    }
+                    ze = zis.getNextEntry();
+                    continue;
+                }
+
+                System.out.println("Unzipping to: " + newFile.getAbsoluteFile());
+
+                File dummyFile = new File(newFile.getAbsolutePath());
+                FileOutputStream fos = new FileOutputStream(dummyFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+
+            System.out.println("Yay zip succesfull");
+            zis.closeEntry();
+            zis.close();
+
+            //now that everything went well, save the path
+            presentation.setFolderPath(folder.getAbsolutePath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        //Cleanup downloaded zip file by deleting
+        new File(zipFile).delete();
+    }
+
+    /**
+     * Checks if file is a valid image file.
+     * @param file  file to check if image file
+     * @return      true if file at path is a valid image file
+     */
+    private boolean isValidImageFile (File file) {
+        String[] imageExtensions = new String[] {"jpg", "png", "gif", "jpeg"};
+        boolean isValidImageFile = false;
+        for (String extension : imageExtensions) {
+            if (file.getAbsolutePath().endsWith(extension) && file.exists()) {
+                isValidImageFile = true;
+            }
+        }
+        return isValidImageFile;
     }
 
 

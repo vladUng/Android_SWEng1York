@@ -409,7 +409,7 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
             e.printStackTrace();
         }
 
-        unzipPresentation(filename, filename + "_folder", presentation);
+        unzipPresentation(filename + ".zip", filename + "_folder", presentation);
     }
 
     public void unzipPresentation(String zipFile, String outputFolder, Presentation presentation) {

@@ -27,9 +27,9 @@ import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.Question;
-import com.example.i2lc.edi.fragment.Fragment1;
+import com.example.i2lc.edi.fragment.PresentationListFragment;
 import com.example.i2lc.edi.fragment.Fragment2;
-import com.example.i2lc.edi.fragment.Fragment3;
+import com.example.i2lc.edi.fragment.UserFragment;
 import com.example.i2lc.edi.model.ItemSlideMenu;
 
 import java.io.File;
@@ -48,7 +48,7 @@ import java.util.zip.ZipInputStream;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, Fragment3.OnFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener {
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -183,16 +183,16 @@ public class HomeActivity extends AppCompatActivity implements Fragment1.OnFragm
         //Fragment fragment = null;
         switch (pos) {
             case 0:
-                fragment = new Fragment1();
+                fragment = new PresentationListFragment();
                 break;
             case 1:
                 fragment = new Fragment2();
                 break;
             case 2:
-                fragment = new Fragment3();
+                fragment = new UserFragment();
                 break;
             default:
-                fragment = new Fragment1();
+                fragment = new PresentationListFragment();
                 break;
         }
         if (null != fragment) {

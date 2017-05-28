@@ -3,16 +3,15 @@ package com.example.i2lc.edi.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.os.StrictMode;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.i2lc.edi.PresentationActivity;
@@ -22,22 +21,15 @@ import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.utilities.ParserXML;
-import com.example.i2lc.edi.utilities.XMLDOMParser;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -46,12 +38,12 @@ import java.util.zip.ZipInputStream;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Fragment1.OnFragmentInteractionListener} interface
+ * {@link PresentationListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Fragment1#newInstance} factory method to
+ * Use the {@link PresentationListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment1 extends Fragment{
+public class PresentationListFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,8 +60,9 @@ public class Fragment1 extends Fragment{
     private ArrayList<Module> modules;
     private ListView listView;
     private String userID = "1";
+    private Bitmap presentationThumbnail;
 
-    public Fragment1() {
+    public PresentationListFragment() {
         // Required empty public constructor
     }
 
@@ -79,11 +72,11 @@ public class Fragment1 extends Fragment{
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment1.
+     * @return A new instance of fragment PresentationListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Fragment1 newInstance(String param1, String param2) {
-        Fragment1 fragment = new Fragment1();
+    public static PresentationListFragment newInstance(String param1, String param2) {
+        PresentationListFragment fragment = new PresentationListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -130,9 +123,9 @@ public class Fragment1 extends Fragment{
                         finalPresentationList.add(i,parser.parsePresentation());
                     } else if(child.isDirectory()){
                         File[] thumbnails = child.listFiles();
-//                        if (thumbnails != null)  {
-//
-//                        }
+                        if (thumbnails != null)  {
+                            finalPresentationList.get(i).setThumbnailPath(thumbnails[0].getAbsolutePath());
+                        }
                     }
                 }
             } else {
@@ -284,6 +277,7 @@ public class Fragment1 extends Fragment{
         try {
             //create output directory is not exists
             File folder = new File(basePath + outputFolder);
+
             if (!folder.exists()) {
                 if ( !(folder.mkdirs())) {
                     System.out.println("Unable to create folder" + folder.getName());
@@ -306,7 +300,9 @@ public class Fragment1 extends Fragment{
 
                 String tmpFileName = outputFolder + File.separator + fileName;
                 File newFile = new File( basePath + tmpFileName);
-
+                if(!newFile.exists()){
+                    break;
+                }
                 if (!tmpFileName.contains(".")) {
                     if(!newFile.exists()) {
                         if (!newFile.mkdir()) {
@@ -344,22 +340,5 @@ public class Fragment1 extends Fragment{
         //Cleanup downloaded zip file by deleting
         new File(zipFile).delete();
     }
-
-    /**
-     * Checks if file is a valid image file.
-     * @param file  file to check if image file
-     * @return      true if file at path is a valid image file
-     */
-    private boolean isValidImageFile (File file) {
-        String[] imageExtensions = new String[] {"jpg", "png", "gif", "jpeg"};
-        boolean isValidImageFile = false;
-        for (String extension : imageExtensions) {
-            if (file.getAbsolutePath().endsWith(extension) && file.exists()) {
-                isValidImageFile = true;
-            }
-        }
-        return isValidImageFile;
-    }
-
 
 }

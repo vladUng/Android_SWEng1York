@@ -102,9 +102,9 @@ public class ParserXML {
                         case "author":
                             presentation.setAuthor(elementContent);
                             break;
-//                        case "description":
-//                            presentation.setDescription(elementContent);
-//                            break;
+                        case "description":
+                            presentation.setDescription(elementContent);
+                            break;
                         default:
                             logger.warn("Document Detail Not Recognised! Name: " + elementName +
                                     ", Value: " + elementContent + ", and XML-Type: " + documentDetailsElementNode.getNodeType());

@@ -16,12 +16,14 @@ public class Presentation {
     protected ArrayList<InteractiveElement> interactiveElements;
     protected int totalSlideNumber;
     protected Thumbnail thumbnail;
-    private String title = "Very Cool Title"; //TODO remove initiliasations when finished
-    private String module=  "Design & Construction";
-    private String author = "Joe Bloggs";
-    private String date = "22/04/2017";
+    protected String title = "N/A"; //TODO remove initiliasations when finished
+    protected String module=  "N/A";
+    protected String author = "N/A";
+    protected String description = "N/A";
     protected boolean live = true;
     protected String folderPath;
+    protected String thumbnailPath;
+
 
 
     public Presentation(){
@@ -117,12 +119,20 @@ public class Presentation {
         this.module = module;
     }
 
-    public String getDate() {
-        return date;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getThumbnailPath() {
+        return thumbnailPath;
+    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
     }
 
     public ArrayList<InteractiveElement> getInteractiveElements() {

@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,7 @@ import com.example.i2lc.edi.presFragments.MainPresentationFragment;
 public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener {
     private Fragment fragment;
     private PresentationMod presentation;
-    boolean interactionAvailable = true;
+    boolean interactionAvailable = false;
     private ProgressBar progressBar;
     private int progress;
     private Button askButton;
@@ -80,6 +81,16 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 
     public PresentationMod getPresentation(){
         return this.presentation;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

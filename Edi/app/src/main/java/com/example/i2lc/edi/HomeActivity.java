@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
 import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.backend.Utils;
 import com.example.i2lc.edi.dbClasses.Interaction;
 import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -44,6 +46,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 /**
  * Created by Cosmin on 15/03/2017.
@@ -60,12 +66,17 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     private Fragment fragment;
 
     private ArrayList<Module> modules;
-    private ArrayList<Presentation> presentations;
+    private ArrayList<Presentation> livePresentations = new ArrayList<>();
 
-    //these are not needed in this activity
+    //these are not needed in this activity, are used for debugging
     private ArrayList<InteractiveElement> interactiveElements;
     private ArrayList<Interaction> interactions;
     private ArrayList<Question> questions;
+    private ArrayList<Presentation> presentations;
+
+    //for establishing connection
+    private Socket socket;
+    private String serverIPAddress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -325,7 +336,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         }
     }
 
-
     private void sendQuestion(int userID, int presentationID, String questionData, int slideNumber) throws Exception {
         int SDK_INT = Build.VERSION.SDK_INT;
         // >SDK 8 support async operations
@@ -377,7 +387,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
             throw new Exception();
         }
     }
-
 
     //TODO not needed here, but may be useful somewhere else
     private void getInteractions(String interactiveElementID) throws Exception {
@@ -544,7 +553,94 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         new File(zipFile).delete();
     }
 
-//    public void joinPresentation(View view) {
+    //server stuff
+
+
+    //better to do the connection here, because we can directly triggered the UI
+    public void connectToRemoteSocket() {
+        //Alert tester that connection is being attempted
+        System.out.println("Client: Attempting Connection to " + serverIPAddress);
+
+        try {
+            socket = IO.socket(serverIPAddress);
+        } catch (URISyntaxException e) {
+            System.out.println("Couldn't create client port");
+        }
+
+        //Handling socket events
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Connected to socket");
+            }
+
+        });
+
+        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
+            }
+        });
+
+        socket.on("DB_Update", new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Client knows DB has updated:  " + args[0]);
+                updateLocalTables(args[0]);
+            }
+
+        });
+
+        socket.connect();
+    }
+
+    public void updateLocalTables(Object tableToUpdate) {
+
+        System.out.println("Table: " + (String)tableToUpdate + " has been updated on the server");
+        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
+        switch ((String) tableToUpdate) {
+            case "presentations":
+                //go back to homeActivity, if the presentation is not liver anymore
+                SocketClient mySocketClient = new SocketClient();
+
+                ArrayList<Module> modules = mySocketClient.getModules("1");
+
+                livePresentations.clear();
+
+                for(Module module: modules) {
+                    for (Presentation presentation : module.getPresentations()){
+                        if(presentation.isLive()) {
+                            livePresentations.add(presentation);
+                            System.out.println(" Presentation: " + presentation.getPresentationID() + "is live");
+                        }
+                    }
+                }
+                break;
+            default:
+                System.out.println("Other table than interactive_elements was updated");
+                break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        //connect client
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        socket.disconnect(); //to avoid having issues with other instances of socketClient
+        super.onPause();
+    }
+
+    //    public void joinPresentation(View view) {
 //        Intent intent = new Intent(this, InitialPresentationActivity.class);
 //        startActivity(intent);
 //    }

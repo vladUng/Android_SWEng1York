@@ -2,16 +2,13 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -64,12 +61,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-        //TODO add code, so that the teacher is notified when the current user joins the presentation
-
-        //connect client
-        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
-        connectToRemoteSocket();
 
         setContentView(R.layout.activity_pres);
 
@@ -230,11 +221,23 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         }
     }
 
+    @Override
+    protected void onResume() {
+
+        //TODO add code, so that the teacher is notified when the current user joins the presentation
+
+        //connect client
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
+
+        super.onResume();
+    }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         socket.disconnect();
-        super.onDestroy();
+
+        super.onPause();
     }
 
     public Presentation getCurrentPresentation() {

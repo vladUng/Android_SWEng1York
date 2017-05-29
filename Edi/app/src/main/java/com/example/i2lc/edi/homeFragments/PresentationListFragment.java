@@ -1,4 +1,4 @@
-package com.example.i2lc.edi.fragment;
+package com.example.i2lc.edi.homeFragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -115,6 +115,7 @@ public class PresentationListFragment extends Fragment{
             File[] directoryListing = presentationFolder.listFiles();
             if (directoryListing != null) {
                 for (File child : directoryListing) {
+                    //Check if file in directory is an xml file
                     if(child.getAbsolutePath().contains(".xml")){
                         ParserXML parser = new ParserXML(rootView,presentation, child);
                         finalPresentationList.add(i,parser.parsePresentation());

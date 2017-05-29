@@ -2,11 +2,16 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -16,8 +21,8 @@ import com.example.i2lc.edi.backend.Utils;
 import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.model.PresentationMod;
-import com.example.i2lc.edi.presFragments.InteractionFragment;
-import com.example.i2lc.edi.presFragments.MainPresentationFragment;
+import com.example.i2lc.edi.presentationFragments.InteractionFragment;
+import com.example.i2lc.edi.presentationFragments.MainPresentationFragment;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -36,6 +41,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     private int progress;
     private Button askButton;
     private EditText editText;
+    private boolean questionEnabled = true;
 
     private Presentation currentPresentation;
 
@@ -123,6 +129,32 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void sendInteraction(int userID, int interactiveElementID, String interactionData) throws Exception {
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+            String status = socketClient.postInteraction(userID, interactiveElementID, interactionData);
+
+            if (status.equals("success")) {
+                //for debug
+                System.out.println("YAY the question was successfully sent");
+            } else {
+                //for debug
+                System.out.println("There was an error sending the question to server: " + status);
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
     }
 
     //better to do the connection here, because we can directly triggered the UI

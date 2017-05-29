@@ -1,5 +1,10 @@
 package com.example.i2lc.edi.dbClasses;
 
+import android.os.Build;
+import android.os.StrictMode;
+
+import com.example.i2lc.edi.backend.SocketClient;
+
 import java.sql.Timestamp;
 
 /**
@@ -24,6 +29,12 @@ public class Question {
         this.userID = userID;
         this.presentationID = presentationID;
         this.dateCreated = dateCreated;
+        this.questionData = questionData;
+        this.slideNumber = slideNumber;
+    }
+    public Question(int userID, int presentationID, String questionData, int slideNumber){
+        this.userID = userID;
+        this.presentationID = presentationID;
         this.questionData = questionData;
         this.slideNumber = slideNumber;
     }
@@ -74,5 +85,31 @@ public class Question {
 
     public void setSlideNumber(int slideNumber) {
         this.slideNumber = slideNumber;
+    }
+
+    public void sendQuestion() throws Exception {
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+            Boolean success = socketClient.postQuestion(userID,presentationID, questionData, slideNumber);
+
+            if (success) {
+                //for debug
+                System.out.println("YAY the question was successfully sent");
+            } else {
+                //for debug
+                System.out.println("There was an error sending the question to server");
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
     }
 }

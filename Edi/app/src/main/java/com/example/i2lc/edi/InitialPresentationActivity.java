@@ -1,7 +1,6 @@
 package com.example.i2lc.edi;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,8 +11,6 @@ import android.widget.ProgressBar;
 
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.model.PresentationMod;
-import com.example.i2lc.edi.presFragments.InteractionFragment;
-import com.example.i2lc.edi.presFragments.MainPresentationFragment;
 
 import java.util.ArrayList;
 

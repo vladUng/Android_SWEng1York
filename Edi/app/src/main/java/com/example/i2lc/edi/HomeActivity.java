@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
 import com.example.i2lc.edi.backend.SocketClient;
@@ -27,9 +28,9 @@ import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.Question;
-import com.example.i2lc.edi.fragment.PresentationListFragment;
-import com.example.i2lc.edi.fragment.Fragment2;
-import com.example.i2lc.edi.fragment.UserFragment;
+import com.example.i2lc.edi.homeFragments.PresentationListFragment;
+import com.example.i2lc.edi.homeFragments.Fragment2;
+import com.example.i2lc.edi.homeFragments.UserFragment;
 import com.example.i2lc.edi.model.ItemSlideMenu;
 
 import java.io.File;
@@ -70,6 +71,8 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        Toast.makeText(this, "You have successfully logged in!", Toast.LENGTH_LONG).show();
 
         //Intro Component
         listViewSliding = (ListView) findViewById(R.id.lv_sliding_menu);

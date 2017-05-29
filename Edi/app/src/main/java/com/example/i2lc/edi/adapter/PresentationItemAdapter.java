@@ -24,6 +24,7 @@ import java.util.List;
 public class PresentationItemAdapter extends BaseAdapter{
     private Context context;
     private List<Presentation> presentationList;
+    private List<Presentation> sortedPresentationList;
 
     public PresentationItemAdapter(Context context, List<Presentation> presentationList) {
         this.context = context;
@@ -70,8 +71,12 @@ public class PresentationItemAdapter extends BaseAdapter{
             holder.presentationDescription = (TextView) convertView.findViewById(R.id.presentation_description);
             holder.presentationThumbnail = (ImageView) convertView.findViewById(R.id.presentation_thumbnail);
             holder.joinButton = (Button) convertView.findViewById(R.id.join_button);
+            holder.joinButton.setTag(position);
 
             Presentation presentation = presentationList.get(position);
+            if(presentation.isLive() == true){
+                holder.joinButton.setBackgroundResource(R.color.liveColor);
+            }
 
             holder.presentationTitle.setText("Title: "+ presentation.getTitle());
             holder.presentationDescription.setText("Description: "+ presentation.getDescription());

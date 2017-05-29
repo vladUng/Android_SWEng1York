@@ -1,4 +1,4 @@
-package com.example.i2lc.edi.fragment;
+package com.example.i2lc.edi.homeFragments;
 
 import android.app.Fragment;
 import android.content.Context;

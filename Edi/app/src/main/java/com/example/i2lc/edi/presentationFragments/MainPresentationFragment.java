@@ -1,19 +1,25 @@
-package com.example.i2lc.edi.presFragments;
+package com.example.i2lc.edi.presentationFragments;
 
 import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.os.CountDownTimer;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
+import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.Question;
 import com.example.i2lc.edi.model.PresentationMod;
 
@@ -30,13 +36,15 @@ public class MainPresentationFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int QUESTION_DISABLE_TIME =  30000;
+    private static final int TICK_TIME =  1000;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private PresentationMod presentation;
+    private Presentation presentation;
     private Button askButton;
     private Button cancelButton;
     private EditText editText;
@@ -44,6 +52,7 @@ public class MainPresentationFragment extends Fragment {
     private int progress;
     private boolean buttonPressed = true;
     private Question question;
+    private boolean questionEnabled = true;
 
     public MainPresentationFragment() {
         // Required empty public constructor
@@ -146,14 +155,36 @@ public class MainPresentationFragment extends Fragment {
 
     public void dispQuestionTextBox(View view){
         if(buttonPressed == false){
-            question = new Question();
-            question.setQuestionData(editText.getText().toString());
-            editText.setText("");
-            askButton.setText(" Ask  ");
-            editText.setVisibility(view.INVISIBLE);
-            cancelButton.setVisibility(view.INVISIBLE);
-            buttonPressed = true;
-            System.out.println(question.getQuestionData());
+            question = new Question(1,1,"", 5);//TODO: remove this and link with the actual presentation data
+            try {
+                if(questionEnabled == true) {
+                    if (editText.getText().toString().length() > 3) {
+                        question.setQuestionData(editText.getText().toString());
+                        question.sendQuestion();
+                        editText.setText("");
+                        askButton.setText(" Ask  ");
+                        editText.setVisibility(view.INVISIBLE);
+                        cancelButton.setVisibility(view.INVISIBLE);
+                        buttonPressed = true;
+                        Toast.makeText(getActivity(), "Your question has been sent!", Toast.LENGTH_LONG).show();
+                        System.out.println(question.getQuestionData());
+                        new CountDownTimer(QUESTION_DISABLE_TIME, TICK_TIME) {
+                            public void onTick(long millisUntilFinished) {
+                                questionEnabled = false;
+                            }
+                            public void onFinish() {
+                                questionEnabled = true;
+                            }
+                        }.start();
+                    } else {
+                        Toast.makeText(getActivity(), "Please write a question first", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "Please wait for 30s to send new question", Toast.LENGTH_LONG).show();
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         } else{
             askButton.setText(" Send ");
             cancelButton.setVisibility(view.VISIBLE);
@@ -168,4 +199,6 @@ public class MainPresentationFragment extends Fragment {
         cancelButton.setVisibility(view.INVISIBLE);
         buttonPressed = true;
     }
+
+
 }

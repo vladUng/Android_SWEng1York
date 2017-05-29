@@ -15,6 +15,7 @@ import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.dbClasses.Presentation;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +24,20 @@ import java.util.List;
 
 public class PresentationItemAdapter extends BaseAdapter{
     private Context context;
-    private List<Presentation> presentationList;
-    private List<Presentation> sortedPresentationList;
+    private ArrayList<Presentation> presentationList;
+    private ArrayList<Presentation> sortedPresentationList;
 
     public PresentationItemAdapter(Context context, List<Presentation> presentationList) {
         this.context = context;
-        this.presentationList = presentationList;
+        int j = 0;
+        sortedPresentationList = new ArrayList<Presentation>();
+        for(int i = 0; i < presentationList.size();i++){
+            if(presentationList.get(i).isLive()==true){
+                sortedPresentationList.add(j,presentationList.get(i));
+                j++;
+            }
+        }
+        this.presentationList = sortedPresentationList;
     }
 
     @Override

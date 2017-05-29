@@ -535,7 +535,7 @@ public class SocketClient {
     }
 
     public String postInteraction(int userID, int interactiveElementID, String interactionData) {
-        String retString = new String();
+        String retString = "failure";
 
 
         Statement st = null;
@@ -555,19 +555,17 @@ public class SocketClient {
             //Call stored procedure on database
             ResultSet rs = statement.executeQuery();
 
-            String status = "failure";
-
             while (rs.next()) {
-                status = rs.getString(1);
+                retString = rs.getString(1);
             }
-///TODO Continue dev here
-            if (status.equals("success")){
-                retString = "BLA BLA BLA";
+
+
+            if (retString.equals("success")){
                 System.out.print("Successfully added question to question queue.");
-            } else if (status.equals("failure: Interaction already exists")) {
-                System.out.println("The i");
+            } else if (retString.equals("failure: Interaction already exists")) {
+                System.out.println(retString);
             }
-            else System.out.print("Unable to add question: " + status);
+            else System.out.print("Unable to add question: " + retString);
 
             statement.close();
             connection.close();

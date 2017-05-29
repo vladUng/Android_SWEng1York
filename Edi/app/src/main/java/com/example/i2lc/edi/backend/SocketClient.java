@@ -31,7 +31,6 @@ public class SocketClient {
     private static final int LOGIN_TIMEOUT = 5;
     private static final int ADDITION_TIMEOUT = 5;
 
-    //private Logger logger = LoggerFactory.getLogger(SocketClient.class);
     private String serverIPAddress;
 
     //TODO: These will be filled by actual values, for now they are temp and meaningless
@@ -98,33 +97,62 @@ public class SocketClient {
 
             @Override
             public void call(Object... args) {
-                //TODO understand this part. I think this is used when you want to send some data to the server (?)
-                socket.emit("foo", "hi");
-                socket.disconnect();
+               System.out.println("Connected to socket");
             }
 
-        }).on("event", new Emitter.Listener() {
+        });
 
-            @Override
-            public void call(Object... args) {
-                System.out.println("Client connected! Spitting bars.");
-            }
-
-        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
 
             @Override
             public void call(Object... args) {
                 System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
             }
-        }).on("DB_Update", new Emitter.Listener() {
+        });
+
+        socket.on("DB_Update", new Emitter.Listener() {
 
             @Override
             public void call(Object... args) {
-
                 System.out.println("Client knows DB has updated:  " + args[0]);
-                //TODO add the code to deal with this scenario
+                updateLocalTables(args[0]);
             }
+
         });
+
+        socket.connect();
+    }
+
+    public void disconnect(){
+        socket.disconnect();
+    }
+
+    public void updateLocalTables(Object tableToUpdate) {
+
+        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
+        switch ((String) tableToUpdate) {
+            case "interactions":
+                break;
+
+            case "interactive_elements":
+                break;
+
+            case "users":
+                break;
+
+            case "presentations":
+                //Update presentation list whilst no presentation is live
+                break;
+
+            case "jnct_users_modules":
+                break;
+
+            case "modules":
+                break;
+
+            case "questions":
+                break;
+        }
     }
 
     public ArrayList<String> userAuth(UserAuth toAuth) {

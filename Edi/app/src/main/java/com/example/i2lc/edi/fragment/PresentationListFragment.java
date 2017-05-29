@@ -124,8 +124,8 @@ public class PresentationListFragment extends Fragment{
                             String thumbnailPath;
                             for(File thumbnail : thumbnails) {
                                 thumbnailPath = thumbnail.getAbsolutePath();
-                                if(thumbnail.isHidden() == false && thumbnailPath.contains("slide0")){
-                                    finalPresentationList.get(i).setThumbnailPath(thumbnailPath);
+                                if(thumbnail.isHidden() == false && thumbnailPath.contains("slide0") ){
+                                    presentationList.get(i).setThumbnailPath(thumbnailPath);
                                 }
                             }
                         }

@@ -19,8 +19,6 @@ public class LogInActivity extends AppCompatActivity {
     //TODO Change this to user instead of String
     public final static String EXTRA_USERNAME = "username";
 
-    private SocketClient mySocketClient;
-
     private boolean loginSuccessful;
     private boolean isTeacher;
 
@@ -69,7 +67,8 @@ public class LogInActivity extends AppCompatActivity {
                 StrictMode.setThreadPolicy(policy);
 
                 //connect client
-                mySocketClient = new SocketClient("db.amriksadhra.com", 8080);
+                SocketClient mySocketClient;
+                mySocketClient = new SocketClient();
 
                 ArrayList<String> userAuthResponse = new ArrayList<String>();
                 userAuthResponse = mySocketClient.userAuth(new UserAuth(username, password));
@@ -105,5 +104,4 @@ public class LogInActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
-
 }

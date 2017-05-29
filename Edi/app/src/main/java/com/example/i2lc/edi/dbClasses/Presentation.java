@@ -35,6 +35,23 @@ public class Presentation {
         this.live = live;
     }
 
+    public InteractiveElement getLiveElement() {
+
+//        int index;
+//        for(index = 0; index < interactiveElements.size() - 1; index++) {
+//            if (interactiveElements.get(index).isLive()) {
+//                return index;
+//            }
+//        }
+        for(InteractiveElement interactiveElement: interactiveElements){
+            if (interactiveElement.isLive()) {
+                return interactiveElement;
+            }
+        }
+        //if there isn't any
+        return null;
+    }
+
 
     public int getPresentationID() {
         return presentationID;

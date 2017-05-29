@@ -2,23 +2,31 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.backend.Utils;
+import com.example.i2lc.edi.dbClasses.InteractiveElement;
+import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.model.PresentationMod;
 import com.example.i2lc.edi.presFragments.InteractionFragment;
 import com.example.i2lc.edi.presFragments.MainPresentationFragment;
+
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener {
     private Fragment fragment;
@@ -29,9 +37,34 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     private Button askButton;
     private EditText editText;
 
+    private Presentation currentPresentation;
+
+    //if null, no interactive Element
+    private InteractiveElement liveElement;
+
+    //for establishing connection
+    private Socket socket;
+    private String serverIPAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO delete this, is just for testing
+        try {
+            currentPresentation = new Presentation(1,1, new URL("http://www.amriksadhra.com/Edi/sampleinput_69.zip"), true);
+            SocketClient mySocketClient = new SocketClient();
+            currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        //TODO add code, so that the teacher is notified when the current user joins the presentation
+
+        //connect client
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
+
         setContentView(R.layout.activity_pres);
 
         presentation = new PresentationMod();
@@ -44,7 +77,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         if(interactionAvailable){
             runInteraction();
         }
-
     }
 
     private void runInteraction(){
@@ -93,4 +125,91 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         return super.onKeyDown(keyCode, event);
     }
 
+    //better to do the connection here, because we can directly triggered the UI
+    public void connectToRemoteSocket() {
+        //Alert tester that connection is being attempted
+        System.out.println("Client: Attempting Connection to " + serverIPAddress);
+
+        try {
+            socket = IO.socket(serverIPAddress);
+        } catch (URISyntaxException e) {
+            System.out.println("Couldn't create client port");
+        }
+
+        //Handling socket events
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Connected to socket");
+            }
+
+        });
+
+        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
+            }
+        });
+
+        socket.on("DB_Update", new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Client knows DB has updated:  " + args[0]);
+                updateLocalTables(args[0]);
+            }
+
+        });
+
+        socket.connect();
+    }
+
+    public void updateLocalTables(Object tableToUpdate) {
+
+        System.out.println("Table: " + (String)tableToUpdate + " has been updated on the server");
+        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
+        switch ((String) tableToUpdate) {
+            case "interactive_elements":
+                try {
+                    SocketClient mySocketClient = new SocketClient();
+
+                    ArrayList<InteractiveElement> interactiveElements = new ArrayList<>();
+                    currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
+                    liveElement = currentPresentation.getLiveElement();
+
+                    if (liveElement != null) {
+                        replaceFragment();
+                    }
+                } catch (Exception e) {
+                    System.out.println("Ooops! There was a problem");
+                    e.printStackTrace();
+                }
+
+                break;
+            case "presentations":
+                //go back to homeActivity, if the presentation is not liver anymore
+                break;
+            default:
+                System.out.println("Other table than interactive_elements was updated");
+                break;
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        socket.disconnect();
+        super.onDestroy();
+    }
+
+    public Presentation getCurrentPresentation() {
+        return currentPresentation;
+    }
+
+    public void setCurrentPresentation(Presentation currentPresentation) {
+        this.currentPresentation = currentPresentation;
+    }
 }

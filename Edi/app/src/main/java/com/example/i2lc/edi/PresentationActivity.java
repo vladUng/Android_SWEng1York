@@ -200,11 +200,16 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                     SocketClient mySocketClient = new SocketClient();
 
                     ArrayList<InteractiveElement> interactiveElements = new ArrayList<>();
-                    currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
-                    liveElement = currentPresentation.getLiveElement();
+                    interactiveElements = mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID()));
 
-                    if (liveElement != null) {
-                        replaceFragment();
+                    //update just when the interactive elements are different than null
+                    if(interactiveElements != null) {
+                        currentPresentation.setInteractiveElements(interactiveElements);
+                        liveElement = currentPresentation.getLiveElement();
+
+                        if (liveElement != null) {
+                            replaceFragment();
+                        }
                     }
                 } catch (Exception e) {
                     System.out.println("Ooops! There was a problem");

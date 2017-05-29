@@ -7,8 +7,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.adapter.PresentationItemAdapter;
+import com.example.i2lc.edi.backend.DecompressFast;
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
@@ -31,6 +32,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
 //import static com.example.i2lc.edi.LogInActivity.EXTRA_USERNAME;
@@ -137,7 +139,9 @@ public class PresentationListFragment extends Fragment{
             }
 
             presentation = finalPresentationList.get(i);
-            presentation.setModule(modules.get(presentation.getModuleID()).getModuleName());
+
+         //TODO Vlad talk with Cosmin about this line and ask what it is meant to do, because is crashing at the moment
+//            presentation.setModule(modules.get(presentation.getModuleID()).getModuleName());
         }
 
         //Create GUI
@@ -271,7 +275,30 @@ public class PresentationListFragment extends Fragment{
             e.printStackTrace();
         }
 
-        unzipPresentation(filename + ".zip", filename + "_folder", presentation, c);
+        //unzipPresentation(filename + ".zip", filename + "_folder", presentation, c);
+        String basePath = c.getFilesDir().getAbsolutePath() + "/";
+        String zipFileName = basePath + filename + ".zip";
+        String zipFolder =  basePath + filename +"_folder/";
+//        DecompressFast df = new DecompressFast(zipFile, zipFolder);
+
+        try {
+            File destinationFolder = new File(zipFolder);
+//            if(!destinationFolder.exists()) {
+//                destinationFolder.mkdirs();
+//            }
+
+//            File zipFile = new File(zipFolder, zipFileName);
+//            if(!zipFile.exists()) {
+//                zipFile.mkdirs();
+//            }
+            DecompressFast.unzip(new File(zipFileName),destinationFolder);
+            System.out.println("Extracted to \n"+ zipFolder);
+            presentation.setFolderPath(destinationFolder.getAbsolutePath());
+        } catch (ZipException e) {
+            Log.e("Problems with zip", e.getMessage());
+        } catch (IOException e) {
+            Log.e("We got a problem", e.getMessage());
+        }
     }
 
     public void unzipPresentation(String zipFile, String outputFolder, Presentation presentation, Context c) {
@@ -304,9 +331,14 @@ public class PresentationListFragment extends Fragment{
 
                 String tmpFileName = outputFolder + File.separator + fileName;
                 File newFile = new File( basePath + tmpFileName);
-                if(!newFile.exists()){
-                    break;
+//                if(!newFile.exists()){
+//                    break;
+//                }
+
+                if(ze.isDirectory()) {
+                   newFile.mkdirs();
                 }
+
                 if (!tmpFileName.contains(".")) {
                     if(!newFile.exists()) {
                         if (!newFile.mkdir()) {

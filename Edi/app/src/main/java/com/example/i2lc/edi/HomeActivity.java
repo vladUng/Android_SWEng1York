@@ -130,13 +130,13 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
             String userID = "1";
             modules = new ArrayList<>();
             getModules(userID);
-
-            for (Module module: modules) {
-                for (Presentation presentation: module.getPresentations()) {
-                    downloadPresentation(presentation);
-                }
-            }
-
+//
+//            for (Module module: modules) {
+//                for (Presentation presentation: module.getPresentations()) {
+//                    downloadPresentation(presentation);
+//                }
+//            }
+//
             interactiveElements = new ArrayList<>();
 //            getInteractiveElements("1");
 //
@@ -319,6 +319,36 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         }
     }
 
+
+    private void sendQuestion(int userID, int presentationID, String questionData, int slideNumber) throws Exception {
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+            Boolean success = socketClient.postQuestion(userID,presentationID, questionData, slideNumber);
+
+            if (success) {
+                //for debug
+                System.out.println("YAY the question was successfully sent");
+            } else {
+                //for debug
+                System.out.println("There was an error sending the question to server");
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+            throw new Exception();
+        }
+    }
+
+
+
+
     //TODO not needed here, but may be useful somewhere else
     private void getInteractions(String interactiveElementID) throws Exception {
         int SDK_INT = Build.VERSION.SDK_INT;
@@ -393,23 +423,27 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     public void downloadPresentation(Presentation presentation) {
 
-        FileOutputStream fos;
-        String filename = "Presentation_" + presentation.getPresentationID();
-        try {
-            URL website = presentation.getXmlURL();
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-            fos = openFileOutput(filename + ".zip", Context.MODE_PRIVATE);
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        //the path if is set only when a succesfull unzip is made
+        if (presentation.getFolderPath() != null) {
 
-            System.out.println("Download succesfull");
-            rbc.close();
-            fos.close();
-        } catch(IOException e) {
-            System.out.println("Error:" + e);
-            e.printStackTrace();
+            FileOutputStream fos;
+            String filename = "Presentation_" + presentation.getPresentationID();
+            try {
+                URL website = presentation.getXmlURL();
+                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+                fos = openFileOutput(filename + ".zip", Context.MODE_PRIVATE);
+                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+
+                System.out.println("Download succesfull");
+                rbc.close();
+                fos.close();
+            } catch (IOException e) {
+                System.out.println("Error:" + e);
+                e.printStackTrace();
+            }
+
+            unzipPresentation(filename + ".zip", filename + "_folder", presentation);
         }
-
-        unzipPresentation(filename + ".zip", filename + "_folder", presentation);
     }
 
     public void unzipPresentation(String zipFile, String outputFolder, Presentation presentation) {
@@ -434,7 +468,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 String fileName = ze.getName();
 
                 //skip CSS files,folder and MAC_OSX files
-                if (fileName.contains("CSS") || fileName.contains("__MACOSX/") || fileName.contains(".DS_Store")) {
+                if (fileName.contains("CSS") || fileName.contains("__MACOSX/") || fileName.contains("/.DS_Store")) {
                     ze = zis.getNextEntry();
                     continue;
                 }

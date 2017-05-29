@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -270,8 +271,12 @@ public class SocketClient {
                 }
 
                 //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live)
+                Boolean isLive = false;
+                if (rowString.get(3).contains("t")) {
+                    isLive = true;
+                }
                 retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
-                        new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
+                        new URL(rowString.get(2)), isLive));
             }
 
             //close connection
@@ -325,8 +330,12 @@ public class SocketClient {
                 }
 
                 //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live)
+                Boolean isLive = false;
+                if (rowString.get(3).contains("t")) {
+                    isLive = true;
+                }
                 retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
-                        new URL(rowString.get(2)), Boolean.valueOf(rowString.get(3))));
+                        new URL(rowString.get(2)), isLive));
             }
 
             queryResult.close();
@@ -478,4 +487,100 @@ public class SocketClient {
         return retQuestions;
     }
 
+    public boolean postQuestion(int userID, int presentationID, String questionData, int slideNumber) {
+        Boolean retStatus = false;
+
+        Statement st = null;
+
+        try {
+
+            st = connection.createStatement();
+
+
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_addquestion_to_questionqueue(?, ?, ?, ?);");
+
+            //Fill prepared statements to avoid SQL injection
+            statement.setInt(1, userID);
+            statement.setInt(2, presentationID);
+            statement.setString(3, questionData);
+            statement.setInt(4, slideNumber);
+
+            //Call stored procedure on database
+            ResultSet rs = statement.executeQuery();
+
+            String status = "failure";
+
+            while (rs.next()) {
+                status = rs.getString(1);
+            }
+
+            if (status.equals("success")){
+                retStatus = true;
+                System.out.print("Successfully added question to question queue.");
+            }
+            else System.out.print("Unable to add question: " + status);
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+        return retStatus;
+    }
+
+    public String postInteraction(int userID, int interactiveElementID, String interactionData) {
+        String retString = new String();
+
+
+        Statement st = null;
+
+        try {
+
+            st = connection.createStatement();
+
+
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_addinteraction_to_interactiveelemnt(?, ?, ?);");
+
+            //Fill prepared statements to avoid SQL injection
+            statement.setInt(1, userID);
+            statement.setInt(2, interactiveElementID);
+            statement.setString(3, interactionData);
+
+            //Call stored procedure on database
+            ResultSet rs = statement.executeQuery();
+
+            String status = "failure";
+
+            while (rs.next()) {
+                status = rs.getString(1);
+            }
+///TODO Continue dev here
+            if (status.equals("success")){
+                retString = "BLA BLA BLA";
+                System.out.print("Successfully added question to question queue.");
+            } else if (status.equals("failure: Interaction already exists")) {
+                System.out.println("The i");
+            }
+            else System.out.print("Unable to add question: " + status);
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+
+        return retString;
+    }
 }

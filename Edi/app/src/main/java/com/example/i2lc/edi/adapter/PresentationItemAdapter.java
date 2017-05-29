@@ -67,7 +67,7 @@ public class PresentationItemAdapter extends BaseAdapter{
             holder.presentationTitle = (TextView) convertView.findViewById(R.id.presentation_title);
             holder.presentationAuthor = (TextView) convertView.findViewById(R.id.presentation_author);
             holder.presentationModule = (TextView) convertView.findViewById(R.id.presentation_module);
-            holder.presentationDescription = (TextView) convertView.findViewById(R.id.presentation_date);
+            holder.presentationDescription = (TextView) convertView.findViewById(R.id.presentation_description);
             holder.presentationThumbnail = (ImageView) convertView.findViewById(R.id.presentation_thumbnail);
             holder.joinButton = (Button) convertView.findViewById(R.id.join_button);
 

@@ -16,15 +16,13 @@ public class Presentation {
     protected ArrayList<InteractiveElement> interactiveElements;
     protected int totalSlideNumber;
     protected Thumbnail thumbnail;
-    protected String title = "N/A"; //TODO remove initiliasations when finished
+    protected String title = "N/A";
     protected String module=  "N/A";
     protected String author = "N/A";
     protected String description = "N/A";
-    protected boolean live = true;
+    protected boolean live = true; //TODO remove initiliasations when finished
     protected String folderPath;
     protected String thumbnailPath;
-
-
 
     public Presentation(){
 
@@ -35,7 +33,6 @@ public class Presentation {
         this.moduleID = moduleID;
         this.xmlURL = xmlURL;
         this.live = live;
-        //TODO presentation thumbnail parsing in constructor
     }
 
 

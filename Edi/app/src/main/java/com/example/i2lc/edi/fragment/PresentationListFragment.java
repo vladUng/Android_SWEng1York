@@ -107,9 +107,6 @@ public class PresentationListFragment extends Fragment{
         for(int i = 0; i < presentationList.size();i++){
             Presentation presentation = presentationList.get(i);
             //download and set the folder path for presentation
-            if (i==2) {
-                System.out.println("adasd");
-            }
             downloadPresentation(presentation, rootView.getContext());//TODO: this is where it crashes
 
             //Create folder
@@ -124,7 +121,13 @@ public class PresentationListFragment extends Fragment{
                     } else if(child.isDirectory()){
                         File[] thumbnails = child.listFiles();
                         if (thumbnails != null)  {
-                            finalPresentationList.get(i).setThumbnailPath(thumbnails[0].getAbsolutePath());
+                            String thumbnailPath;
+                            for(File thumbnail : thumbnails) {
+                                thumbnailPath = thumbnail.getAbsolutePath();
+                                if(thumbnail.isHidden() == false && thumbnailPath.contains("slide0")){
+                                    finalPresentationList.get(i).setThumbnailPath(thumbnailPath);
+                                }
+                            }
                         }
                     }
                 }

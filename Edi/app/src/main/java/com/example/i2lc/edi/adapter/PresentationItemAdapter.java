@@ -27,17 +27,17 @@ public class PresentationItemAdapter extends BaseAdapter{
     private ArrayList<Presentation> presentationList;
     private ArrayList<Presentation> sortedPresentationList;
 
-    public PresentationItemAdapter(Context context, List<Presentation> presentationList) {
+    public PresentationItemAdapter(Context context, ArrayList<Presentation> presentationList) {
         this.context = context;
         int j = 0;
-        sortedPresentationList = new ArrayList<Presentation>();
-        for(int i = 0; i < presentationList.size();i++){
-            if(presentationList.get(i).isLive()==true){
-                sortedPresentationList.add(j,presentationList.get(i));
-                j++;
-            }
-        }
-        this.presentationList = sortedPresentationList;
+//        sortedPresentationList = new ArrayList<Presentation>();
+//        for(int i = 0; i < presentationList.size();i++){
+//            if(presentationList.get(i).isLive()==true){
+//                sortedPresentationList.add(j,presentationList.get(i));
+//                j++;
+//            }
+//        }
+        this.presentationList = presentationList;
     }
 
     @Override

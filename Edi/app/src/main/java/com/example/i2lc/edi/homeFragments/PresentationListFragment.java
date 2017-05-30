@@ -108,35 +108,41 @@ public class PresentationListFragment extends Fragment{
 
         for(Module module: modules) {
             for (Presentation presentation : module.getPresentations()) {
-                //Presentation presentation = presentationList.get(i);
-                //download and set the folder path for presentation
-                downloadPresentation(presentation, rootView.getContext());//TODO: this is where it crashes
+                if(presentation.isLive() == true) {
+                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
+                    downloadPresentation(presentation, rootView.getContext());
 
-                //Create folder
-                File presentationFolder = new File(presentation.getFolderPath()); //
-                //Create list of files
-                File[] directoryListing = presentationFolder.listFiles();
-                if (directoryListing != null) {
-                    for (File child : directoryListing) {
-                        //Check if file in directory is an xml file
-                        if (child.getAbsolutePath().contains(".xml")) {
-                            ParserXML parser = new ParserXML(rootView, presentation, child);
-                            presentationList.add(parser.parsePresentation());
-                        } else if (child.isDirectory()) {
-                            File[] thumbnails = child.listFiles();
-                            if (thumbnails != null) {
-                                String thumbnailPath;
-                                for (File thumbnail : thumbnails) {
-                                    thumbnailPath = thumbnail.getAbsolutePath();
-                                    if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
-                                        presentationList.get(presentationList.size() - 1).setThumbnailPath(thumbnailPath);
+                    //Create folder
+                    File presentationFolder = new File(presentation.getFolderPath()); //
+                    //Create list of files
+                    File[] directoryListing = presentationFolder.listFiles();
+                    if (directoryListing != null) {
+                        for (File child : directoryListing) {
+                            //Check if file in directory is an xml file
+                            if (child.getAbsolutePath().contains(".xml")) {
+                                ParserXML parser = new ParserXML(rootView, presentation, child);
+                                presentationList.add(parser.parsePresentation());
+                            }
+                        }
+                        for (File child: directoryListing){
+                            if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
+                                File[] thumbnails = child.listFiles();
+                                if (thumbnails != null) {
+                                    String thumbnailPath;
+                                    for (File thumbnail : thumbnails) {
+                                        thumbnailPath = thumbnail.getAbsolutePath();
+                                        if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
+                                            presentationList.get(presentationList.size() - 1).setThumbnailPath(thumbnailPath);
+                                        }
                                     }
                                 }
                             }
                         }
+                    } else {
+                        System.out.println("Folder doesn't exist/is empty!");
                     }
-                } else {
-                    System.out.println("Folder doesn't exist/is empty!");
+                }else{
+                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
                 }
 
 //                presentation = finalPresentationList.get(i);

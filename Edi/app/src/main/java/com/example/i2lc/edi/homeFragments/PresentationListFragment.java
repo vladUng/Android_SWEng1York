@@ -23,17 +23,15 @@ import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.utilities.ParserXML;
 
+import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
-import java.util.zip.ZipInputStream;
 
 //import static com.example.i2lc.edi.LogInActivity.EXTRA_USERNAME;
 
@@ -144,11 +142,6 @@ public class PresentationListFragment extends Fragment{
                 }else{
                     System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
                 }
-
-//                presentation = finalPresentationList.get(i);
-//
-//                //TODO Vlad talk with Cosmin about this line and ask what it is meant to do, because is crashing at the moment
-//                presentation.setModule(modules.get(presentation.getModuleID()).getModuleName());
             }
         }
 
@@ -267,38 +260,37 @@ public class PresentationListFragment extends Fragment{
 
     public void downloadPresentation(Presentation presentation, Context c) {
 
-        FileOutputStream fos;
         String filename = "Presentation_" + presentation.getPresentationID();
-        try {
-            URL website = presentation.getXmlURL();
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-            fos = c.openFileOutput(filename + ".zip", Context.MODE_PRIVATE);
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        String basePath = c.getFilesDir().getAbsolutePath() + "/";
 
-            System.out.println("Download succesfull");
-            rbc.close();
-            fos.close();
-        } catch(IOException e) {
-            System.out.println("Error:" + e);
-            e.printStackTrace();
+        try {
+            URL u = presentation.getXmlURL();
+            InputStream is = u.openStream();
+
+            DataInputStream dis = new DataInputStream(is);
+
+            byte[] buffer = new byte[1024];
+            int length;
+
+            FileOutputStream fos = new FileOutputStream(new File(basePath+ "/" + filename + ".zip"));
+            while ((length = dis.read(buffer))>0) {
+                fos.write(buffer, 0, length);
+            }
+
+        } catch (MalformedURLException mue) {
+            Log.e("SYNC getUpdate", "malformed url error", mue);
+        } catch (IOException ioe) {
+            Log.e("SYNC getUpdate", "io error", ioe);
+        } catch (SecurityException se) {
+            Log.e("SYNC getUpdate", "security error", se);
         }
 
-        //unzipPresentation(filename + ".zip", filename + "_folder", presentation, c);
-        String basePath = c.getFilesDir().getAbsolutePath() + "/";
         String zipFileName = basePath + filename + ".zip";
         String zipFolder =  basePath + filename +"_folder/";
-//        DecompressFast df = new DecompressFast(zipFile, zipFolder);
 
         try {
             File destinationFolder = new File(zipFolder);
-//            if(!destinationFolder.exists()) {
-//                destinationFolder.mkdirs();
-//            }
 
-//            File zipFile = new File(zipFolder, zipFileName);
-//            if(!zipFile.exists()) {
-//                zipFile.mkdirs();
-//            }
             DecompressFast.unzip(new File(zipFileName),destinationFolder);
             System.out.println("Extracted to \n"+ zipFolder);
             presentation.setFolderPath(destinationFolder.getAbsolutePath());
@@ -308,81 +300,4 @@ public class PresentationListFragment extends Fragment{
             Log.e("We got a problem", e.getMessage());
         }
     }
-
-    public void unzipPresentation(String zipFile, String outputFolder, Presentation presentation, Context c) {
-        byte[] buffer = new byte[1024];
-        String basePath = c.getFilesDir().getAbsolutePath() + "/";
-
-        try {
-            //create output directory is not exists
-            File folder = new File(basePath + outputFolder);
-
-            if (!folder.exists()) {
-                if ( !(folder.mkdirs())) {
-                    System.out.println("Unable to create folder" + folder.getName());
-                }
-            }
-
-            //get the zip file content
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(basePath + zipFile));
-            //get the zipped file list entry
-            ZipEntry ze = zis.getNextEntry();
-
-            while (ze != null) {
-                String fileName = ze.getName();
-
-                //skip CSS files,folder and MAC_OSX files
-                if (fileName.contains("CSS") || fileName.contains("__MACOSX/") || fileName.contains(".DS_Store")) {
-                    ze = zis.getNextEntry();
-                    continue;
-                }
-
-                String tmpFileName = outputFolder + File.separator + fileName;
-                File newFile = new File( basePath + tmpFileName);
-//                if(!newFile.exists()){
-//                    break;
-//                }
-
-                if(ze.isDirectory()) {
-                   newFile.mkdirs();
-                }
-
-                if (!tmpFileName.contains(".")) {
-                    if(!newFile.exists()) {
-                        if (!newFile.mkdir()) {
-                            System.out.println("Unable to create folder" + newFile.getName());
-                        }
-                    }
-                    ze = zis.getNextEntry();
-                    continue;
-                }
-
-                System.out.println("Unzipping to: " + newFile.getAbsoluteFile());
-
-                File dummyFile = new File(newFile.getAbsolutePath());
-                FileOutputStream fos = new FileOutputStream(dummyFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-                ze = zis.getNextEntry();
-            }
-
-            System.out.println("Yay zip succesfull");
-            zis.closeEntry();
-            zis.close();
-
-            //now that everything went well, save the path
-            presentation.setFolderPath(folder.getAbsolutePath());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        //Cleanup downloaded zip file by deleting
-        new File(zipFile).delete();
-    }
-
 }

@@ -18,6 +18,7 @@ import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.backend.Utils;
 import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Presentation;
+import com.example.i2lc.edi.dbClasses.User;
 import com.example.i2lc.edi.model.PresentationMod;
 import com.example.i2lc.edi.presentationFragments.InteractionFragment;
 import com.example.i2lc.edi.presentationFragments.MainPresentationFragment;
@@ -31,7 +32,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface {
+public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface{
     private Fragment fragment;
     private PresentationMod presentation;
     boolean interactionAvailable = false;
@@ -40,6 +41,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     private Button askButton;
     private EditText editText;
     private boolean questionEnabled = true;
+    private User user;
 
     private Presentation currentPresentation;
 
@@ -59,6 +61,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 //            currentPresentation = new Presentation(1,1, new URL("http://www.amriksadhra.com/Edi/sampleinput_69.zip"), true);
             Intent intent = getIntent();
             currentPresentation = (Presentation) intent.getExtras().getParcelable("presentation");
+            user = (User) intent.getExtras().getParcelable("user");
             System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
             SocketClient mySocketClient = new SocketClient();
             currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
@@ -295,6 +298,10 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     @Override
     public Presentation getLivePresentation() {
         return currentPresentation;
+    }
+    @Override
+    public User getUserInterface() {
+        return user;
     }
 
 }

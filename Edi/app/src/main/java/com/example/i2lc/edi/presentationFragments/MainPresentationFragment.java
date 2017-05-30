@@ -22,6 +22,7 @@ import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.Question;
+import com.example.i2lc.edi.dbClasses.User;
 import com.example.i2lc.edi.model.PresentationMod;
 
 /**
@@ -55,6 +56,8 @@ public class MainPresentationFragment extends Fragment {
     private Question question;
     private boolean questionEnabled = true;
     private GetPresentationInterface presentationInterface;
+    private GetUserInterface userInterface;
+    private User user;
 
     public MainPresentationFragment() {
         // Required empty public constructor
@@ -94,15 +97,22 @@ public class MainPresentationFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_presentation, container, false);
         PresentationActivity activity = (PresentationActivity) getActivity();
         TextView testText = (TextView) rootView.findViewById(R.id.testData);
+        TextView progressBarText = (TextView) rootView.findViewById(R.id.progressBarText);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         askButton = (Button) rootView.findViewById(R.id.askButton);
         cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
         editText = (EditText)rootView.findViewById(R.id.questionText);
+
         //Set progress
         if(presentationInterface != null){
             presentation = presentationInterface.getLivePresentation();
         }
-        progress = activity.getPresentation().calculateProgress();
+        if(userInterface != null){
+            user = userInterface.getUserInterface();
+        }
+        progressBarText.setText("Slide " + Integer.toString(presentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(presentation.getTotalSlideNumber() + 1));
+        progress = presentation.calculateProgress();
+        //
         progressBar.setProgress(progress);
         //When button is pressed
         askButton.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +128,7 @@ public class MainPresentationFragment extends Fragment {
             }
         });
         //Display test Data
-        testText.setText("Pres ID: " + Integer.toString(presentation.getPresentationID())+ " Module ID: " + Integer.toString(presentation.getModuleID()) + " Module: " +presentation.getModule());
+        testText.setText("User ID:" + Integer.toString(user.getUserID()) + "Pres ID: " + Integer.toString(presentation.getPresentationID())+ " Module ID: " + Integer.toString(presentation.getModuleID()) + " Module: " +presentation.getModule());
         return rootView;
     }
 
@@ -130,6 +140,9 @@ public class MainPresentationFragment extends Fragment {
 //    }
     public interface GetPresentationInterface{
         Presentation getLivePresentation();
+    }
+    public interface GetUserInterface{
+        User getUserInterface();
     }
     @Override
     public void onAttach(Context context) {
@@ -144,7 +157,13 @@ public class MainPresentationFragment extends Fragment {
         try{
             presentationInterface = (GetPresentationInterface) context;
         }catch (ClassCastException e){
-            throw new ClassCastException(context.toString() + "must implement GetDataInteface");
+            throw new ClassCastException(context.toString() + "must implement GetDataInterface");
+        }
+
+        try{
+            userInterface = (GetUserInterface) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement GetUserInterface");
         }
     }
 
@@ -171,7 +190,7 @@ public class MainPresentationFragment extends Fragment {
 
     public void dispQuestionTextBox(View view){
         if(buttonPressed == false){
-            question = new Question(1,presentation.getPresentationID(),"",presentation.getCurrentSlideNumber());//TODO: remove this and link with the actual presentation data
+            question = new Question(user.getUserID(),presentation.getPresentationID(),"",presentation.getCurrentSlideNumber());
             try {
                 if(questionEnabled == true) {
                     if (editText.getText().toString().length() > 3) {

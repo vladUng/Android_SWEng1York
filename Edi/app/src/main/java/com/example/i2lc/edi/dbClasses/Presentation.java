@@ -137,6 +137,13 @@ public class Presentation implements Parcelable{
 //    public void setThumbnail(Thumbnail thumbnail) {
 //        this.thumbnail = thumbnail;
 //    }
+    public int calculateProgress(){
+        int progress = 0;
+        if(totalSlideNumber!=0) {
+            progress = (currentSlideNumber + 1) * 100 / (totalSlideNumber + 1);
+        }
+        return progress;
+    }
 
     public String getTitle() {
         return title;

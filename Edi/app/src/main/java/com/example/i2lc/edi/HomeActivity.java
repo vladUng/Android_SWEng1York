@@ -3,6 +3,7 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.Question;
+import com.example.i2lc.edi.dbClasses.User;
 import com.example.i2lc.edi.homeFragments.PresentationListFragment;
 import com.example.i2lc.edi.homeFragments.Fragment2;
 import com.example.i2lc.edi.homeFragments.UserFragment;
@@ -55,7 +57,7 @@ import io.socket.emitter.Emitter;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface {
+public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface{
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -78,11 +80,14 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     //for establishing connection
     private Socket socket;
     private String serverIPAddress;
-    private String userID = "1";
+    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        user = (User) intent.getExtras().getParcelable("user");
+        System.out.println("USER WITH ID = " + Integer.toString(user.getUserID()) + "just logged in.");
         setContentView(R.layout.main_activity);
 
         livePresentations = new ArrayList<Presentation>();
@@ -90,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         //getPresentation(userID);
 
         try {
-            getModules(userID);
+            getModules(Integer.toString(user.getUserID()));
             for(Module module: modules) {
                 for (Presentation presentation : module.getPresentations()) {
                     if(presentation.isLive() == true) {
@@ -654,5 +659,9 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     @Override
     public ArrayList<Presentation> getLivePresentationList() {
         return livePresentations;
+    }
+    @Override
+    public User getUserInterface() {
+        return user;
     }
 }

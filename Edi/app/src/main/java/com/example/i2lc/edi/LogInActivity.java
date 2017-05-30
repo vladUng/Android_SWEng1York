@@ -22,7 +22,7 @@ public class LogInActivity extends AppCompatActivity {
     private boolean loginSuccessful;
     private boolean isTeacher;
 
-    private User userLogged = new User();
+    private User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,21 +33,18 @@ public class LogInActivity extends AppCompatActivity {
 
     //called when the user clicks the log in button
     public void logIn(View view) {
-        Intent intent = new Intent(this, HomeActivity.class);
-
         EditText usernameEditText = (EditText) findViewById(R.id.username);
         EditText passwordEditText = (EditText) findViewById(R.id.password);
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
         try {
-            //TODO delete these two lines, are used for convenience
-            username = "Teacher";
+            username = "Teacher"; //TODO: Remove username and password on finish
             password = "password";
-
             tryLogin(username, password);
-
-            intent.putExtra(EXTRA_USERNAME, username);
+            System.out.print("USER WITH ID = " + Integer.toString(user.getUserID()) + " IS LOGGING IN");
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("user", user);
             startActivity(intent);
         } catch (Exception e) {
             System.out.print("Error while performing login operation");
@@ -77,15 +74,14 @@ public class LogInActivity extends AppCompatActivity {
                 if (!userAuthResponse.isEmpty()) {
                     //for debug
                     System.out.println("Login Successful");
-
                     //construct User obj
-                    userLogged = new User(Integer.parseInt(userAuthResponse.get(0)), userAuthResponse.get(1), userAuthResponse.get(2),
+                    user = new User(Integer.parseInt(userAuthResponse.get(0)), userAuthResponse.get(1), userAuthResponse.get(2),
                             userAuthResponse.get(3), userAuthResponse.get(4), userAuthResponse.get(5));
 
-                    System.out.println("I got a User: " + userLogged);
+                    System.out.print("I got a User: " + user.getUsername());
                 } else {
                     //for debug
-                    System.out.println("There was an error from getting the user details from servers");
+                    System.out.print("There was an error from getting the user details from servers");
                     throw new Exception();
                 }
             } else {

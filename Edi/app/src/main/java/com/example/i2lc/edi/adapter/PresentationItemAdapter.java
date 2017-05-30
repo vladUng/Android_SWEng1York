@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.dbClasses.Presentation;
+import com.example.i2lc.edi.dbClasses.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,10 +30,12 @@ public class PresentationItemAdapter extends BaseAdapter{
     private ArrayList<Presentation> presentationList;
     private ArrayList<Presentation> sortedPresentationList;
     private ViewHolder holder;
+    private User user;
 
-    public PresentationItemAdapter(Context context, ArrayList<Presentation> presentationList) {
+    public PresentationItemAdapter(Context context, ArrayList<Presentation> presentationList, User user) {
         this.context = context;
         this.presentationList = presentationList;
+        this.user = user;
     }
 
     @Override
@@ -85,6 +88,7 @@ public class PresentationItemAdapter extends BaseAdapter{
                     int position=(Integer)arg0.getTag();
                     Intent intent = new Intent(context, PresentationActivity.class);
                     intent.putExtra("presentation", presentationList.get(position));
+                    intent.putExtra("user", user);
                     context.startActivity(intent);
                     System.out.println("Joined Presentation ID: " + Integer.toString(presentationList.get(position).getPresentationID()));
                 }

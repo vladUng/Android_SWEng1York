@@ -22,6 +22,8 @@ import com.example.i2lc.edi.backend.DecompressFast;
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
+import com.example.i2lc.edi.dbClasses.User;
+import com.example.i2lc.edi.presentationFragments.MainPresentationFragment;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -63,6 +65,8 @@ public class PresentationListFragment extends Fragment{
     private Bitmap presentationThumbnail;
     private GetPresentationListInterface presentationListInterface;
     private Button joinButton;
+    private GetUserInterface userInterface;
+    private User user;
 
 
     public PresentationListFragment() {
@@ -149,14 +153,16 @@ public class PresentationListFragment extends Fragment{
         if(presentationListInterface != null){
             presentationList = presentationListInterface.getLivePresentationList();
         }
+        if(userInterface != null){
+            user = userInterface.getUserInterface();
+        }
         //Create GUI
         listView = (ListView) rootView.findViewById(R.id.presentation_list);
-        PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList);
+        PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
         listView.setAdapter(adapter);
 //        in
         return rootView;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -167,11 +173,15 @@ public class PresentationListFragment extends Fragment{
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
         try{
             presentationListInterface = (GetPresentationListInterface) context;
         }catch (ClassCastException e){
             throw new ClassCastException(context.toString() + "must implement GetDataInteface");
+        }
+        try{
+            userInterface = (GetUserInterface) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement GetUserInterface");
         }
     }
 
@@ -207,6 +217,10 @@ public class PresentationListFragment extends Fragment{
     public interface GetPresentationListInterface {
         ArrayList<Presentation> getLivePresentationList();
     }
+    public interface GetUserInterface{
+        User getUserInterface();
+    }
+
 
     public void joinPresentation(View view) {
         Intent intent = new Intent(this.getActivity(), PresentationActivity.class);

@@ -25,9 +25,16 @@
         android:maxHeight="80dp"
         android:minHeight="65dp"
         android:progress="60"
-        android:progressBackgroundTint="@color/colorPrimaryDark"
+        android:progressBackgroundTint="@android:color/holo_blue_dark"
         android:progressTint="@color/colorAccent"
-        android:visibility="visible" />
+        android:visibility="visible"/>
+    <TextView
+        android:id="@+id/progressBarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

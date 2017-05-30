@@ -1,5 +1,8 @@
 package com.example.i2lc.edi.dbClasses;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -7,7 +10,7 @@ import java.util.ArrayList;
  * Created by vlad on 11/05/2017.
  */
 
-public class Presentation {
+public class Presentation implements Parcelable{
 
     protected int presentationID;
     protected int moduleID;
@@ -15,7 +18,7 @@ public class Presentation {
     protected int currentSlideNumber;
     protected ArrayList<InteractiveElement> interactiveElements;
     protected int totalSlideNumber;
-    protected Thumbnail thumbnail;
+    //protected Thumbnail thumbnail;
     protected String title = "N/A";
     protected String module=  "N/A";
     protected String author = "N/A";
@@ -34,6 +37,32 @@ public class Presentation {
         this.xmlURL = xmlURL;
         this.live = live;
     }
+
+    protected Presentation(Parcel in) {
+        presentationID = in.readInt();
+        moduleID = in.readInt();
+        currentSlideNumber = in.readInt();
+        totalSlideNumber = in.readInt();
+        title = in.readString();
+        module = in.readString();
+        author = in.readString();
+        description = in.readString();
+        live = in.readByte() != 0;
+        folderPath = in.readString();
+        thumbnailPath = in.readString();
+    }
+
+    public static final Creator<Presentation> CREATOR = new Creator<Presentation>() {
+        @Override
+        public Presentation createFromParcel(Parcel in) {
+            return new Presentation(in);
+        }
+
+        @Override
+        public Presentation[] newArray(int size) {
+            return new Presentation[size];
+        }
+    };
 
     public InteractiveElement getLiveElement() {
 
@@ -101,13 +130,13 @@ public class Presentation {
         this.totalSlideNumber = totalSlideNumber;
     }
 
-    public Thumbnail getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(Thumbnail thumbnail) {
-        this.thumbnail = thumbnail;
-    }
+//    public Thumbnail getThumbnail() {
+//        return thumbnail;
+//    }
+//
+//    public void setThumbnail(Thumbnail thumbnail) {
+//        this.thumbnail = thumbnail;
+//    }
 
     public String getTitle() {
         return title;
@@ -163,5 +192,25 @@ public class Presentation {
 
     public void setFolderPath(String folderPath) {
         this.folderPath = folderPath;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(presentationID);
+        dest.writeInt(moduleID);
+        dest.writeInt(currentSlideNumber);
+        dest.writeInt(totalSlideNumber);
+        dest.writeString(title);
+        dest.writeString(module);
+        dest.writeString(author);
+        dest.writeString(description);
+        dest.writeByte((byte) (live ? 1 : 0));
+        dest.writeString(folderPath);
+        dest.writeString(thumbnailPath);
     }
 }

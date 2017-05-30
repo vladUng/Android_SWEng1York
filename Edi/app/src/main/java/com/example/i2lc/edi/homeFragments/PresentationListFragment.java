@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.i2lc.edi.PresentationActivity;
@@ -21,7 +22,6 @@ import com.example.i2lc.edi.backend.DecompressFast;
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
-import com.example.i2lc.edi.utilities.ParserXML;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -61,7 +61,8 @@ public class PresentationListFragment extends Fragment{
     private ListView listView;
     private String userID = "1";
     private Bitmap presentationThumbnail;
-    private GetDataInterface sGetDataInterface;
+    private GetPresentationListInterface presentationListInterface;
+    private Button joinButton;
 
 
     public PresentationListFragment() {
@@ -100,6 +101,7 @@ public class PresentationListFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
+        View itemView = inflater.inflate(R.layout.presentation_item, container, false);
 //        presentationList = new ArrayList<Presentation>();
 //        //getPresentation(userID);
 //        getModules(userID);
@@ -144,13 +146,14 @@ public class PresentationListFragment extends Fragment{
 //            }
 //        }
 
-        if(sGetDataInterface != null){
-            presentationList = sGetDataInterface.getDataList();
+        if(presentationListInterface != null){
+            presentationList = presentationListInterface.getLivePresentationList();
         }
         //Create GUI
         listView = (ListView) rootView.findViewById(R.id.presentation_list);
         PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList);
         listView.setAdapter(adapter);
+//        in
         return rootView;
     }
 
@@ -166,7 +169,7 @@ public class PresentationListFragment extends Fragment{
         }
 
         try{
-            sGetDataInterface = (GetDataInterface) context;
+            presentationListInterface = (GetPresentationListInterface) context;
         }catch (ClassCastException e){
             throw new ClassCastException(context.toString() + "must implement GetDataInteface");
         }
@@ -175,8 +178,8 @@ public class PresentationListFragment extends Fragment{
     @Override
     public void onResume(){
         super.onResume();
-        if(sGetDataInterface != null){
-            presentationList = sGetDataInterface.getDataList();
+        if(presentationListInterface != null){
+            presentationList = presentationListInterface.getLivePresentationList();
         }
     }
 
@@ -201,8 +204,8 @@ public class PresentationListFragment extends Fragment{
         void onFragmentInteraction(Uri uri);
     }
 
-    public interface GetDataInterface{
-        ArrayList<Presentation> getDataList();
+    public interface GetPresentationListInterface {
+        ArrayList<Presentation> getLivePresentationList();
     }
 
     public void joinPresentation(View view) {

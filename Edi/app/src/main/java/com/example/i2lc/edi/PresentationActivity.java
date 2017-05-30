@@ -2,6 +2,7 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener {
+public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface {
     private Fragment fragment;
     private PresentationMod presentation;
     boolean interactionAvailable = false;
@@ -54,13 +55,16 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         super.onCreate(savedInstanceState);
 
         //TODO delete this, is just for testing
-        try {
-            currentPresentation = new Presentation(1,1, new URL("http://www.amriksadhra.com/Edi/sampleinput_69.zip"), true);
+//        try {
+//            currentPresentation = new Presentation(1,1, new URL("http://www.amriksadhra.com/Edi/sampleinput_69.zip"), true);
+            Intent intent = getIntent();
+            currentPresentation = (Presentation) intent.getExtras().getParcelable("presentation");
+            System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
             SocketClient mySocketClient = new SocketClient();
             currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
 
         setContentView(R.layout.activity_pres);
 
@@ -249,7 +253,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
             if (isInPresentation) {
                  status = socketClient.toggleUserActivePresentation(currentPresentation.getPresentationID(), Integer.valueOf("14"));
             } else {
-                status = socketClient.toggleUserActivePresentation(0, Integer.valueOf("14"));
+                status = socketClient.toggleUserActivePresentation(0, Integer.valueOf("1"));
             }
 
             if (status) {
@@ -287,4 +291,10 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 
         super.onStop();
     }
+
+    @Override
+    public Presentation getLivePresentation() {
+        return currentPresentation;
+    }
+
 }

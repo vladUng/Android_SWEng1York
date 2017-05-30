@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.i2lc.edi.PresentationActivity;
@@ -53,6 +54,7 @@ public class MainPresentationFragment extends Fragment {
     private boolean buttonPressed = true;
     private Question question;
     private boolean questionEnabled = true;
+    private GetPresentationInterface presentationInterface;
 
     public MainPresentationFragment() {
         // Required empty public constructor
@@ -91,11 +93,15 @@ public class MainPresentationFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.activity_presentation, container, false);
         PresentationActivity activity = (PresentationActivity) getActivity();
+        TextView testText = (TextView) rootView.findViewById(R.id.testData);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         askButton = (Button) rootView.findViewById(R.id.askButton);
         cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
         editText = (EditText)rootView.findViewById(R.id.questionText);
         //Set progress
+        if(presentationInterface != null){
+            presentation = presentationInterface.getLivePresentation();
+        }
         progress = activity.getPresentation().calculateProgress();
         progressBar.setProgress(progress);
         //When button is pressed
@@ -111,6 +117,8 @@ public class MainPresentationFragment extends Fragment {
                 cancelQuestion(v);
             }
         });
+        //Display test Data
+        testText.setText("Pres ID: " + Integer.toString(presentation.getPresentationID())+ " Module ID: " + Integer.toString(presentation.getModuleID()) + " Module: " +presentation.getModule());
         return rootView;
     }
 
@@ -120,7 +128,9 @@ public class MainPresentationFragment extends Fragment {
 //            mListener.onFragmentInteraction(uri);
 //        }
 //    }
-
+    public interface GetPresentationInterface{
+        Presentation getLivePresentation();
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -129,6 +139,12 @@ public class MainPresentationFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+
+        try{
+            presentationInterface = (GetPresentationInterface) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement GetDataInteface");
         }
     }
 
@@ -155,7 +171,7 @@ public class MainPresentationFragment extends Fragment {
 
     public void dispQuestionTextBox(View view){
         if(buttonPressed == false){
-            question = new Question(1,1,"", 5);//TODO: remove this and link with the actual presentation data
+            question = new Question(1,presentation.getPresentationID(),"",presentation.getCurrentSlideNumber());//TODO: remove this and link with the actual presentation data
             try {
                 if(questionEnabled == true) {
                     if (editText.getText().toString().length() > 3) {

@@ -2,6 +2,7 @@ package com.example.i2lc.edi.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.dbClasses.Presentation;
 
@@ -26,17 +28,10 @@ public class PresentationItemAdapter extends BaseAdapter{
     private Context context;
     private ArrayList<Presentation> presentationList;
     private ArrayList<Presentation> sortedPresentationList;
+    private ViewHolder holder;
 
     public PresentationItemAdapter(Context context, ArrayList<Presentation> presentationList) {
         this.context = context;
-        int j = 0;
-//        sortedPresentationList = new ArrayList<Presentation>();
-//        for(int i = 0; i < presentationList.size();i++){
-//            if(presentationList.get(i).isLive()==true){
-//                sortedPresentationList.add(j,presentationList.get(i));
-//                j++;
-//            }
-//        }
         this.presentationList = presentationList;
     }
 
@@ -67,7 +62,7 @@ public class PresentationItemAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        holder = null;
 
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if(convertView == null){
@@ -79,13 +74,24 @@ public class PresentationItemAdapter extends BaseAdapter{
             holder.presentationModule = (TextView) convertView.findViewById(R.id.presentation_module);
             holder.presentationDescription = (TextView) convertView.findViewById(R.id.presentation_description);
             holder.presentationThumbnail = (ImageView) convertView.findViewById(R.id.presentation_thumbnail);
-            holder.joinButton = (Button) convertView.findViewById(R.id.join_button);
+            holder.joinButton = (Button) convertView.findViewById(R.id.joinButton);
             holder.joinButton.setTag(position);
+            holder.joinButton.setBackgroundResource(R.color.liveColor);
+
+
+            holder.joinButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    int position=(Integer)arg0.getTag();
+                    Intent intent = new Intent(context, PresentationActivity.class);
+                    intent.putExtra("presentation", presentationList.get(position));
+                    context.startActivity(intent);
+                    System.out.println("Joined Presentation ID: " + Integer.toString(presentationList.get(position).getPresentationID()));
+                }
+            });
+
 
             Presentation presentation = presentationList.get(position);
-            if(presentation.isLive() == true){
-                holder.joinButton.setBackgroundResource(R.color.liveColor);
-            }
 
             holder.presentationTitle.setText("Title: "+ presentation.getTitle());
             holder.presentationDescription.setText("Description: "+ presentation.getDescription());

@@ -3,8 +3,6 @@ package com.example.i2lc.edi;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,21 +37,15 @@ import com.example.i2lc.edi.utilities.ParserXML;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
-import java.util.zip.ZipInputStream;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -63,7 +55,7 @@ import io.socket.emitter.Emitter;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetDataInterface {
+public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface {
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -284,10 +276,11 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     public ArrayList<Presentation> getLivePresentations(){
         return livePresentations;
     }
-    public void joinPresentation(View view) {
-        Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
-        startActivity(intent);
-    }
+//    public void joinPresentation(View view) {
+//        Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
+//        intent.putExtra("presentation", livePresentations);
+//        startActivity(intent);
+//    }
 
     //populates the modules array list also it gets the info for the presentations
     private void getModules(String userID) throws Exception {
@@ -659,7 +652,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 //    }
 
     @Override
-    public ArrayList<Presentation> getDataList() {
+    public ArrayList<Presentation> getLivePresentationList() {
         return livePresentations;
     }
 }

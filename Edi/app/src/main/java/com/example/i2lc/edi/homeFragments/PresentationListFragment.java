@@ -100,48 +100,50 @@ public class PresentationListFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
-        finalPresentationList = new ArrayList<Presentation>();
+        presentationList = new ArrayList<Presentation>();
 
-        getPresentation(userID);
+        //getPresentation(userID);
         getModules(userID);
 
 
-        for(int i = 0; i < presentationList.size();i++){
-            Presentation presentation = presentationList.get(i);
-            //download and set the folder path for presentation
-            downloadPresentation(presentation, rootView.getContext());//TODO: this is where it crashes
+        for(Module module: modules) {
+            for (Presentation presentation : module.getPresentations()) {
+                //Presentation presentation = presentationList.get(i);
+                //download and set the folder path for presentation
+                downloadPresentation(presentation, rootView.getContext());//TODO: this is where it crashes
 
-            //Create folder
-            File presentationFolder = new File(presentation.getFolderPath()); //
-            //Create list of files
-            File[] directoryListing = presentationFolder.listFiles();
-            if (directoryListing != null) {
-                for (File child : directoryListing) {
-                    //Check if file in directory is an xml file
-                    if(child.getAbsolutePath().contains(".xml")){
-                        ParserXML parser = new ParserXML(rootView,presentation, child);
-                        finalPresentationList.add(i,parser.parsePresentation());
-                    } else if(child.isDirectory()){
-                        File[] thumbnails = child.listFiles();
-                        if (thumbnails != null)  {
-                            String thumbnailPath;
-                            for(File thumbnail : thumbnails) {
-                                thumbnailPath = thumbnail.getAbsolutePath();
-                                if(thumbnail.isHidden() == false && thumbnailPath.contains("slide0") ){
-                                    presentationList.get(i).setThumbnailPath(thumbnailPath);
+                //Create folder
+                File presentationFolder = new File(presentation.getFolderPath()); //
+                //Create list of files
+                File[] directoryListing = presentationFolder.listFiles();
+                if (directoryListing != null) {
+                    for (File child : directoryListing) {
+                        //Check if file in directory is an xml file
+                        if (child.getAbsolutePath().contains(".xml")) {
+                            ParserXML parser = new ParserXML(rootView, presentation, child);
+                            presentationList.add(parser.parsePresentation());
+                        } else if (child.isDirectory()) {
+                            File[] thumbnails = child.listFiles();
+                            if (thumbnails != null) {
+                                String thumbnailPath;
+                                for (File thumbnail : thumbnails) {
+                                    thumbnailPath = thumbnail.getAbsolutePath();
+                                    if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
+                                        presentationList.get(presentationList.size() - 1).setThumbnailPath(thumbnailPath);
+                                    }
                                 }
                             }
                         }
                     }
+                } else {
+                    System.out.println("Folder doesn't exist/is empty!");
                 }
-            } else {
-                System.out.println("Folder doesn't exist/is empty!");
+
+//                presentation = finalPresentationList.get(i);
+//
+//                //TODO Vlad talk with Cosmin about this line and ask what it is meant to do, because is crashing at the moment
+//                presentation.setModule(modules.get(presentation.getModuleID()).getModuleName());
             }
-
-            presentation = finalPresentationList.get(i);
-
-         //TODO Vlad talk with Cosmin about this line and ask what it is meant to do, because is crashing at the moment
-//            presentation.setModule(modules.get(presentation.getModuleID()).getModuleName());
         }
 
         //Create GUI

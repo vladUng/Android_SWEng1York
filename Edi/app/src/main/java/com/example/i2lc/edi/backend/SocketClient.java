@@ -602,9 +602,15 @@ public class SocketClient {
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE users SET active_presentation_id = ? WHERE user_id = ?;");
 
-            //Fill prepared statements to avoid SQL injection
-            statement.setInt(1, presentationID);
-            statement.setInt(2, userID);
+            //If set to no presentation
+            if (presentationID == 0) {
+                statement.setNull(1, 0);
+                statement.setInt(2, userID);
+            } else {
+                //Fill prepared statements to avoid SQL injection
+                statement.setInt(1, presentationID);
+                statement.setInt(2, userID);
+            }
 
             retStatus = statement.execute();
 

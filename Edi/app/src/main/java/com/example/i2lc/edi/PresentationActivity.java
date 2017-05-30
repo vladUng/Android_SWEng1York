@@ -226,30 +226,65 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         }
     }
 
-    @Override
-    protected void onResume() {
-
-        //TODO add code, so that the teacher is notified when the current user joins the presentation
-
-        //connect client
-        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
-        connectToRemoteSocket();
-
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        socket.disconnect();
-
-        super.onPause();
-    }
-
     public Presentation getCurrentPresentation() {
         return currentPresentation;
     }
 
     public void setCurrentPresentation(Presentation currentPresentation) {
         this.currentPresentation = currentPresentation;
+    }
+
+    private void setUserActiveStatus(Boolean isInPresentation) {
+
+        int SDK_INT = Build.VERSION.SDK_INT;
+        // >SDK 8 support async operations
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            //connect client
+            SocketClient socketClient = new SocketClient();
+            boolean status;
+            if (isInPresentation) {
+                 status = socketClient.toggleUserActivePresentation(currentPresentation.getPresentationID(), Integer.valueOf("14"));
+            } else {
+                status = socketClient.toggleUserActivePresentation(0, Integer.valueOf("14"));
+            }
+
+            if (status) {
+                //for debug
+                System.out.println("YAY the user status has been toggled");
+            } else {
+                //for debug
+                System.out.println("There was an error ");
+            }
+        } else {
+            //for debug
+            System.out.println("There was an error. SDK too old");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+
+        //connect client
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
+
+        //set user active
+        setUserActiveStatus(true);
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        socket.disconnect();
+
+        //set user inactive
+        setUserActiveStatus(false);
+
+        super.onStop();
     }
 }

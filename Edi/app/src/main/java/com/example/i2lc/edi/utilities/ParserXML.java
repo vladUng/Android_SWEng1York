@@ -31,7 +31,7 @@ public class ParserXML {
     private ArrayList<String> faultsDetected = new ArrayList<>();
     private ArrayList<Presentation> presentationList;
 
-    public ParserXML(View rootView, Presentation presentation, File xmlFile){// throws InvalidPathException {
+    public ParserXML(Presentation presentation, File xmlFile){// throws InvalidPathException {
         this.presentationList = presentationList;
         this.presentation = presentation;
         this.xmlFile = xmlFile;

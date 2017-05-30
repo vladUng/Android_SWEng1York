@@ -61,6 +61,8 @@ public class PresentationListFragment extends Fragment{
     private ListView listView;
     private String userID = "1";
     private Bitmap presentationThumbnail;
+    private GetDataInterface sGetDataInterface;
+
 
     public PresentationListFragment() {
         // Required empty public constructor
@@ -98,53 +100,53 @@ public class PresentationListFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
-        presentationList = new ArrayList<Presentation>();
+//        presentationList = new ArrayList<Presentation>();
+//        //getPresentation(userID);
+//        getModules(userID);
+//        for(Module module: modules) {
+//            for (Presentation presentation : module.getPresentations()) {
+//                if(presentation.isLive() == true) {
+//                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
+//                    downloadPresentation(presentation, rootView.getContext());
+//
+//                    //Create folder
+//                    File presentationFolder = new File(presentation.getFolderPath()); //
+//                    //Create list of files
+//                    File[] directoryListing = presentationFolder.listFiles();
+//                    if (directoryListing != null) {
+//                        for (File child : directoryListing) {
+//                            //Check if file in directory is an xml file
+//                            if (child.getAbsolutePath().contains(".xml")) {
+//                                ParserXML parser = new ParserXML(presentation, child);
+//                                presentationList.add(parser.parsePresentation());
+//                            }
+//                        }
+//                        for (File child: directoryListing){
+//                            if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
+//                                File[] thumbnails = child.listFiles();
+//                                if (thumbnails != null) {
+//                                    String thumbnailPath;
+//                                    for (File thumbnail : thumbnails) {
+//                                        thumbnailPath = thumbnail.getAbsolutePath();
+//                                        if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
+//                                            presentationList.get(presentationList.size() - 1).setThumbnailPath(thumbnailPath);
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        System.out.println("Folder doesn't exist/is empty!");
+//                    }
+//                }else{
+//                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
+//                }
+//            }
+//        }
 
-        //getPresentation(userID);
-        getModules(userID);
-
-
-        for(Module module: modules) {
-            for (Presentation presentation : module.getPresentations()) {
-                if(presentation.isLive() == true) {
-                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
-                    downloadPresentation(presentation, rootView.getContext());
-
-                    //Create folder
-                    File presentationFolder = new File(presentation.getFolderPath()); //
-                    //Create list of files
-                    File[] directoryListing = presentationFolder.listFiles();
-                    if (directoryListing != null) {
-                        for (File child : directoryListing) {
-                            //Check if file in directory is an xml file
-                            if (child.getAbsolutePath().contains(".xml")) {
-                                ParserXML parser = new ParserXML(rootView, presentation, child);
-                                presentationList.add(parser.parsePresentation());
-                            }
-                        }
-                        for (File child: directoryListing){
-                            if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
-                                File[] thumbnails = child.listFiles();
-                                if (thumbnails != null) {
-                                    String thumbnailPath;
-                                    for (File thumbnail : thumbnails) {
-                                        thumbnailPath = thumbnail.getAbsolutePath();
-                                        if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
-                                            presentationList.get(presentationList.size() - 1).setThumbnailPath(thumbnailPath);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        System.out.println("Folder doesn't exist/is empty!");
-                    }
-                }else{
-                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
-                }
-            }
+        if(sGetDataInterface != null){
+            presentationList = sGetDataInterface.getDataList();
         }
-
         //Create GUI
         listView = (ListView) rootView.findViewById(R.id.presentation_list);
         PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList);
@@ -161,6 +163,20 @@ public class PresentationListFragment extends Fragment{
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+
+        try{
+            sGetDataInterface = (GetDataInterface) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement GetDataInteface");
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(sGetDataInterface != null){
+            presentationList = sGetDataInterface.getDataList();
         }
     }
 
@@ -183,6 +199,10 @@ public class PresentationListFragment extends Fragment{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public interface GetDataInterface{
+        ArrayList<Presentation> getDataList();
     }
 
     public void joinPresentation(View view) {

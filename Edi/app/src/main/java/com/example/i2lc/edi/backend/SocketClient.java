@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 import io.socket.client.IO;
@@ -27,15 +28,8 @@ import io.socket.emitter.Emitter;
  */
 
 public class SocketClient {
-    //Timeout times for user addition/authorisation asynchronous functions
-    private static final int LOGIN_TIMEOUT = 5;
-    private static final int ADDITION_TIMEOUT = 5;
-
     private String serverIPAddress;
 
-    //TODO: These will be filled by actual values, for now they are temp and meaningless
-    private int current_presentation_id = 1;
-    private int current_question_id = 1;
 
     Socket socket;
     private Connection connection;
@@ -106,7 +100,7 @@ public class SocketClient {
 
             @Override
             public void call(Object... args) {
-                System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
+                System.out.println("For some reason the client is disconnected from the server. Some more info:" + Arrays.toString(args));
             }
         });
 
@@ -157,9 +151,9 @@ public class SocketClient {
 
     public ArrayList<String> userAuth(UserAuth toAuth) {
 
-        ArrayList<String> retValue = new ArrayList<String>();
+        ArrayList<String> retValue = new ArrayList<>();
 
-        Statement st = null;
+        Statement st;
 
         try {
             st = connection.createStatement();
@@ -172,12 +166,12 @@ public class SocketClient {
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_authuser(");
-            query.append("'" + toAuth.getUserToLogin() + "',");
-            query.append("'" + toAuth.getPassword() + "');");
+            query.append("'").append(toAuth.getUserToLogin()).append("',");
+            query.append("'").append(toAuth.getPassword()).append("');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
-            String tmpString = new String();
+            String tmpString;
 
             //go through the query result
             while (queryResult.next()) {
@@ -211,8 +205,8 @@ public class SocketClient {
     //returns all the modules in which a user is involved including the presentations for each module
     public ArrayList<Module> getModules(String forUserId) {
 
-        ArrayList<Module> retModules = new ArrayList<Module>();
-        Statement st = null;
+        ArrayList<Module> retModules = new ArrayList<>();
+        Statement st;
 
         try {
             st = connection.createStatement();
@@ -229,8 +223,8 @@ public class SocketClient {
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
-            ArrayList<Presentation> dummyPresentation = new ArrayList<Presentation>();
-            Module dummyModule = new Module();
+            ArrayList<Presentation> dummyPresentation;
+            Module dummyModule;
 
             //go through the query result
             while (queryResult.next()) {
@@ -264,8 +258,8 @@ public class SocketClient {
 
     public ArrayList<Presentation> getPresentationsForUserId(String userID) {
 
-        ArrayList<Presentation> retPresentations = new ArrayList<Presentation>();
-        Statement st = null;
+        ArrayList<Presentation> retPresentations = new ArrayList<>();
+        Statement st;
 
         try {
 
@@ -283,8 +277,8 @@ public class SocketClient {
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
-            String tmpString = new String();
-            ArrayList<String> rowString = new ArrayList<String>();
+            String tmpString;
+            ArrayList<String> rowString = new ArrayList<>();
 
             //go through the query results
             while (queryResult.next()) {
@@ -323,8 +317,8 @@ public class SocketClient {
 
     public ArrayList<Presentation> getPresentationsForModuleId(String moduleID) {
 
-        ArrayList<Presentation> retPresentations = new ArrayList<Presentation>();
-        Statement st = null;
+        ArrayList<Presentation> retPresentations = new ArrayList<>();
+        Statement st;
 
         try {
 
@@ -338,12 +332,12 @@ public class SocketClient {
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getpresentationsformodule(");
-            query.append("'" + moduleID + "');");
+            query.append("'").append(moduleID).append("');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
-            String tmpString = new String();
-            ArrayList<String> rowString = new ArrayList<String>();
+            String tmpString;
+            ArrayList<String> rowString = new ArrayList<>();
 
             //go through the query results
             while (queryResult.next()) {
@@ -382,8 +376,8 @@ public class SocketClient {
 
     public ArrayList<InteractiveElement> getInteractiveElements(String presentationID) {
 
-        ArrayList<InteractiveElement> retInteractiveElements = new ArrayList<InteractiveElement>();
-        Statement st = null;
+        ArrayList<InteractiveElement> retInteractiveElements = new ArrayList<>();
+        Statement st;
 
         try {
 
@@ -397,7 +391,7 @@ public class SocketClient {
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getinteractiveelementsforpresentation(");
-            query.append("'" + presentationID + "');");
+            query.append("'").append(presentationID).append("');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
@@ -429,8 +423,8 @@ public class SocketClient {
     //Needed on the Java Client -- accidentally did it here
     public ArrayList<Interaction> getInteractions(String interactiveElementID) {
 
-        ArrayList<Interaction> retInteractions = new ArrayList<Interaction>();
-        Statement st = null;
+        ArrayList<Interaction> retInteractions = new ArrayList<>();
+        Statement st;
 
         try {
 
@@ -444,7 +438,7 @@ public class SocketClient {
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getinteractionsforinteractiveelement(");
-            query.append("'" + interactiveElementID + "');");
+            query.append("'").append(interactiveElementID).append("');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
@@ -473,8 +467,8 @@ public class SocketClient {
 
     //Needed on the Java Client -- accidentally did it here
     public ArrayList<Question> getQuestions(String presentationID) {
-        ArrayList<Question> retQuestions = new ArrayList<Question>();
-        Statement st = null;
+        ArrayList<Question> retQuestions = new ArrayList<>();
+        Statement st;
 
         try {
 
@@ -488,7 +482,7 @@ public class SocketClient {
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
             query.append("edi.public.sp_getquestionsforpresentation(");
-            query.append("'" + presentationID + "');");
+            query.append("'").append(presentationID).append("');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
 
@@ -518,13 +512,7 @@ public class SocketClient {
     public boolean postQuestion(int userID, int presentationID, String questionData, int slideNumber) {
         Boolean retStatus = false;
 
-        Statement st = null;
-
         try {
-
-            st = connection.createStatement();
-
-
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_addquestion_to_questionqueue(?, ?, ?, ?);");
 
             //Fill prepared statements to avoid SQL injection
@@ -565,14 +553,7 @@ public class SocketClient {
     public String postInteraction(int userID, int interactiveElementID, String interactionData) {
         String retString = "failure";
 
-
-        Statement st = null;
-
         try {
-
-            st = connection.createStatement();
-
-
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_addinteraction_to_interactiveelemnt(?, ?, ?);");
 
             //Fill prepared statements to avoid SQL injection
@@ -588,12 +569,17 @@ public class SocketClient {
             }
 
 
-            if (retString.equals("success")){
-                System.out.print("Successfully added question to question queue.");
-            } else if (retString.equals("failure: Interaction already exists")) {
-                System.out.println(retString);
+            switch (retString) {
+                case "success":
+                    System.out.print("Successfully added question to question queue.");
+                    break;
+                case "failure: Interaction already exists":
+                    System.out.println(retString);
+                    break;
+                default:
+                    System.out.print("Unable to add question: " + retString);
+                    break;
             }
-            else System.out.print("Unable to add question: " + retString);
 
             statement.close();
             connection.close();
@@ -606,7 +592,39 @@ public class SocketClient {
             e.printStackTrace();
         }
 
-
         return retString;
     }
+
+    //set presentationID to 0, to toggle off
+    public boolean toggleUserActivePresentation(int presentationID, int userID){
+        Boolean retStatus;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET active_presentation_id = ? WHERE user_id = ?;");
+
+            //Fill prepared statements to avoid SQL injection
+            statement.setInt(1, presentationID);
+            statement.setInt(2, userID);
+
+            retStatus = statement.execute();
+
+            if (retStatus) {
+                System.out.println("Unable to set active presentation for user.");
+            } else {
+                System.out.println("User: " + userID + " is now active in presentation: " + presentationID);
+            }
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/midnightBlue"
     tools:context="com.example.i2lc.edi.LogInActivity">
 
     <LinearLayout
@@ -18,7 +19,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:weightSum="6">
+        android:weightSum="6"
+        android:background="@color/icons">
 
 
         <ImageView
@@ -27,39 +29,59 @@
             android:layout_weight="3"
             app:srcCompat="@drawable/edi" />
 
-
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:inputType="text|textPersonName"
-            android:id="@+id/username"
-            android:hint="@string/username"
-            android:imeOptions="actionNext"
-            android:layout_weight="0.5"/>
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/username_password_margin"
+            android:paddingRight="@dimen/username_password_margin"
+            android:orientation="vertical"
+            android:weightSum="2">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:inputType="text|textPersonName"
+                android:id="@+id/username"
+                android:hint="@string/username"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/secondary_text"
+                android:imeOptions="actionNext"
+                android:layout_weight="1"/>
 
-        <EditText
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:inputType="textWebPassword"
+                android:id="@+id/password"
+                android:imeOptions="actionDone"
+                android:hint="@string/password"
+                android:textColorHint="@color/secondary_text"
+                android:textColor="@color/primary_text"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:inputType="textWebPassword"
-            android:id="@+id/password"
-            android:imeOptions="actionDone"
-            android:hint="@string/password"
-            android:layout_weight="0.5"/>
-
+            android:layout_weight="0.2"/>
         <Button
             android:id="@+id/logIn"
-            android:layout_width="wrap_content"
+            android:layout_width="142dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:background="@color/colorAccent"
+            android:layout_weight="0.50"
+            android:background="@color/liveColor"
+            android:elevation="0dp"
             android:inputType="none"
             android:onClick="logIn"
             android:text="@string/log_in" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="0.8"/>
 
         <Button
             android:layout_width="wrap_content"

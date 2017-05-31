@@ -11,70 +11,77 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="horizontal"
-        android:background="@color/divider"
-        android:weightSum="2"
+        android:background="@color/midnightBlue"
+        android:weightSum="20"
         android:maxHeight="100dp">
 `
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:background="@color/primary_light"
             android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/small_margin"
             android:weightSum="12"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp">
+            android:paddingRight="4dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:id="@+id/presentation_title"
-                android:layout_height="100dp"
+                android:layout_height="0dp"
                 android:layout_weight="2"
+                android:textColor="@color/primary_text"
                 android:text="@string/title" />
             <TextView
                 android:layout_width="match_parent"
                 android:id="@+id/presentation_author"
-                android:layout_height="100dp"
+                android:layout_height="0dp"
                 android:layout_weight="2"
+                android:textColor="@color/primary_text"
                 android:text="Lecturer: Joe Bloggs" />
             <TextView
                 android:layout_width="match_parent"
                 android:id="@+id/presentation_module"
-                android:layout_height="100dp"
+                android:layout_height="0dp"
                 android:layout_weight="2"
+                android:textColor="@color/primary_text"
                 android:text="Design and Construction" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:id="@+id/presentation_description"
-                android:layout_height="100dp"
+                android:layout_height="0dp"
                 android:layout_weight="2"
+                android:textColor="@color/primary_text"
                 android:text="@string/description" />
             <TextView
                 android:layout_width="match_parent"
                 android:id="@+id/blank"
-                android:layout_height="100dp"
-                android:layout_weight="2"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:text="" />
             <Button
                 android:id="@+id/joinButton"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="bottom"
-                android:layout_weight="2"
+                android:layout_width="130dp"
+                android:gravity="center"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="2.71"
                 android:background="@color/colorAccent"
                 android:text="@string/join" />
         </LinearLayout>
 
+
         <ImageView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/presentation_thumbnail"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:background="@color/primary_light"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="@dimen/small_margin"
             app:srcCompat="@drawable/edi" />
     </LinearLayout>
 

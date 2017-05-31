@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.backend.UserAuth;
@@ -48,6 +49,7 @@ public class LogInActivity extends AppCompatActivity {
             startActivity(intent);
         } catch (Exception e) {
             System.out.print("Error while performing login operation");
+            Toast.makeText(this, "Username/Password Incorrect", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.i2lc.edi.R;
+import com.example.i2lc.edi.dbClasses.Interaction;
+import com.example.i2lc.edi.dbClasses.InteractiveElement;
+import com.example.i2lc.edi.dbClasses.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,10 +37,11 @@ public class InteractionFragment extends Fragment {
     private Button sendButton;
     private EditText editText;
     private String answer;
-
-
-
     private OnFragmentInteractionListener mListener;
+    private GetInteractiveElementInterface interactiveElementInterface;
+    private MainPresentationFragment.GetUserInterface userInterface;
+    private User user;
+    private InteractiveElement liveElement;
 
     public InteractionFragment() {
         // Required empty public constructor
@@ -73,6 +77,12 @@ public class InteractionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(interactiveElementInterface != null){
+            liveElement = interactiveElementInterface.getInteractiveElementInterface();
+        }
+        if(userInterface != null){
+            user = userInterface.getUserInterface();
+        }
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_interaction, container, false);
         sendButton = (Button) rootView.findViewById(R.id.sendAnswer);
@@ -82,9 +92,22 @@ public class InteractionFragment extends Fragment {
             public void onClick(View v) {
                 answer = editText.getText().toString();
                 System.out.println(answer);
+                Interaction interaction = new Interaction(user.getUserID(),liveElement.getInteractiveElementID(),answer);
+                try {
+                    interaction.sendInteraction();
+                } catch (Exception e) {
+                    System.out.println("Sending Interaction Failed");
+                    e.printStackTrace();                }
             }
         });
         return rootView;
+    }
+
+    public interface GetInteractiveElementInterface{
+        InteractiveElement getInteractiveElementInterface();
+    }
+    public interface GetUserInterface{
+        User getUserInterface();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -102,6 +125,16 @@ public class InteractionFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+        try{
+            interactiveElementInterface = (InteractionFragment.GetInteractiveElementInterface) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement GetInteractiveElementInterface");
+        }
+        try{
+            userInterface = (MainPresentationFragment.GetUserInterface) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement GetUserInterface");
         }
     }
 

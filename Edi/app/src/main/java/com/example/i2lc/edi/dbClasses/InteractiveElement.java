@@ -16,7 +16,7 @@ public class InteractiveElement {
     protected boolean live;
     protected Date responsesInterval;
     protected int slideNumber;
-    protected ArrayList<Interaction> interactions;
+    //protected ArrayList<Interaction> interactions;
 
     public InteractiveElement() {
 
@@ -89,11 +89,11 @@ public class InteractiveElement {
         this.slideNumber = slideNumber;
     }
 
-    public ArrayList<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    public void setInteractions(ArrayList<Interaction> interactions) {
-        this.interactions = interactions;
-    }
+//    public ArrayList<Interaction> getInteractions() {
+//        return interactions;
+//    }
+//
+//    public void setInteractions(ArrayList<Interaction> interactions) {
+//        this.interactions = interactions;
+//    }
 }

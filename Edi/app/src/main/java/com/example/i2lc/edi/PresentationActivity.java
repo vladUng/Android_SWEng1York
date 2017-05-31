@@ -29,7 +29,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface{
+public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
     private static final int TICK_TIME =  1000;
     private Fragment fragment;
     private PresentationMod presentation;
@@ -42,8 +42,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     private User user;
     private int interactionTime = 10000; //TODO Remove this on finish
     private Presentation currentPresentation;
-
-    //if null, no interactive Element
     private InteractiveElement liveElement;
 
     //for establishing connection
@@ -125,31 +123,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         return super.onKeyDown(keyCode, event);
     }
 
-    private void sendInteraction(int userID, int interactiveElementID, String interactionData) throws Exception {
-        int SDK_INT = Build.VERSION.SDK_INT;
-        // >SDK 8 support async operations
-        if (SDK_INT > 8) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
 
-            //connect client
-            SocketClient socketClient = new SocketClient();
-            String status = socketClient.postInteraction(userID, interactiveElementID, interactionData);
-
-            if (status.equals("success")) {
-                //for debug
-                System.out.println("YAY the question was successfully sent");
-            } else {
-                //for debug
-                System.out.println("There was an error sending the question to server: " + status);
-            }
-        } else {
-            //for debug
-            System.out.println("There was an error. SDK too old");
-            throw new Exception();
-        }
-    }
 
     //better to do the connection here, because we can directly triggered the UI
     public void connectToRemoteSocket() {
@@ -321,6 +295,10 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     @Override
     public User getUserInterface() {
         return user;
+    }
+    @Override
+    public InteractiveElement getInteractiveElementInterface() {
+        return liveElement;
     }
 
 }

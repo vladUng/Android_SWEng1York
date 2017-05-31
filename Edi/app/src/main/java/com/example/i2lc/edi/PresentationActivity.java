@@ -33,16 +33,17 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface{
+    private static final int TICK_TIME =  1000;
     private Fragment fragment;
     private PresentationMod presentation;
-    boolean interactionAvailable = false;
+    boolean interactionAvailable = false; //TODO Change; this is just for testing
     private ProgressBar progressBar;
     private int progress;
     private Button askButton;
     private EditText editText;
     private boolean questionEnabled = true;
     private User user;
-
+    private int interactionTime = 10000; //TODO Remove this on finish
     private Presentation currentPresentation;
 
     //if null, no interactive Element
@@ -78,22 +79,26 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         editText = (EditText)findViewById(R.id.questionText);
 
         replaceFragment();
-        if(interactionAvailable){
-            runInteraction();
-        }
+        //interactionAvailable = true;
+//        if(interactionAvailable){
+//            interactionTime = 10000; // TODO: Remove this; this is just for testing
+//            runInteraction();
+//            interactionAvailable = false;
+//        }
     }
 
-    private void runInteraction(){
-        new CountDownTimer(10000, 1000) {
-            public void onTick(long millisUntilFinished) {
-            }
-
-            public void onFinish() {
-                interactionAvailable = false;
-                replaceFragment();
-            }
-        }.start();
-    }
+//    private void runInteraction(){
+//        new CountDownTimer(interactionTime, TICK_TIME) {
+//            public void onTick(long millisUntilFinished) {
+//                System.out.print("");
+//            }
+//            public void onFinish() {
+//                interactionAvailable = false;
+//                replaceFragment();
+//            }
+//        }.start();
+//
+//    }
 
     private void replaceFragment(){
         if(interactionAvailable == true){
@@ -190,6 +195,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
             public void call(Object... args) {
                 System.out.println("Client knows DB has updated:  " + args[0]);
                 updateLocalTables(args[0]);
+                //TODO: ADD METHOD HERE TO UPDATE THE SCREEN AS WELL
             }
 
         });
@@ -214,9 +220,15 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                         currentPresentation.setInteractiveElements(interactiveElements);
                         liveElement = currentPresentation.getLiveElement();
 
-                        if (liveElement != null) {
-                            replaceFragment();
+                        //if (liveElement != null) {
+                        if(liveElement != null && interactionAvailable == false){
+                            interactionAvailable = true;
+                        } else {
+                            interactionAvailable = false;
                         }
+                        replaceFragment();
+                        //runInteraction();
+                        //}
                     }
                 } catch (Exception e) {
                     System.out.println("Ooops! There was a problem");

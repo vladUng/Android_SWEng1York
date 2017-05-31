@@ -1,32 +1,28 @@
 package com.example.i2lc.edi.dbClasses;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 /**
  * Created by vlad on 11/05/2017.
  */
 
 public class InteractiveElement {
-
     protected int interactiveElementID;
     protected int presentationID;
-    protected String InteractiveElementData;
+    protected String interactiveElementQuestion;
     protected String type;
     protected boolean live;
-    protected Date responsesInterval;
+    protected int responsesInterval;
     protected int slideNumber;
+    protected String answers;
     //protected ArrayList<Interaction> interactions;
 
     public InteractiveElement() {
-
     }
 
-    public InteractiveElement(int interactiveElementID, int presentationID, String interactiveElementData,
-                              String type, boolean live, int slideNumber, Date responsesInterval) {
+    public InteractiveElement(int interactiveElementID, int presentationID, String interactiveElementQuestion,
+                              String type, boolean live, int slideNumber, int responsesInterval) {
         this.interactiveElementID = interactiveElementID;
         this.presentationID = presentationID;
-        InteractiveElementData = interactiveElementData;
+        this.interactiveElementQuestion = interactiveElementQuestion;
         this.type = type;
         this.live = live;
         this.responsesInterval = responsesInterval;
@@ -49,12 +45,12 @@ public class InteractiveElement {
         this.presentationID = presentationID;
     }
 
-    public String getInteractiveElementData() {
-        return InteractiveElementData;
+    public String getInteractiveElementQuestion() {
+        return interactiveElementQuestion;
     }
 
-    public void setInteractiveElementData(String interactiveElementData) {
-        InteractiveElementData = interactiveElementData;
+    public void setInteractiveElementQuestion(String interactiveElementQuestion) {
+        this.interactiveElementQuestion = interactiveElementQuestion;
     }
 
     public String getType() {
@@ -73,12 +69,21 @@ public class InteractiveElement {
         this.live = live;
     }
 
-    public Date getResponsesInterval() {
+    public int getResponsesInterval() {
         return responsesInterval;
     }
 
-    public void setResponsesInterval(Date responsesInterval) {
+    public void setResponsesInterval(int responsesInterval) {
         this.responsesInterval = responsesInterval;
+    }
+
+
+    public String getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(String answers) {
+        this.answers = answers;
     }
 
     public int getSlideNumber() {

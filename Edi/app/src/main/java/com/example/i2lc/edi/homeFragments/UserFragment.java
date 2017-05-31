@@ -8,8 +8,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.i2lc.edi.R;
+import com.example.i2lc.edi.dbClasses.User;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +32,8 @@ public class UserFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private GetUserInterface userInterface;
+    private User user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,7 +72,24 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment3, container, false);
+        View rootView = inflater.inflate(R.layout.user_fragment, container, false);
+        TextView usernameText = (TextView) rootView.findViewById(R.id.usernameText);
+        TextView firstNameText = (TextView) rootView.findViewById(R.id.firstNameText);
+        TextView surnameText = (TextView) rootView.findViewById(R.id.surnameText);
+        TextView emailText = (TextView) rootView.findViewById(R.id.emailText);
+        TextView userIDText = (TextView) rootView.findViewById(R.id.userIDText);
+
+
+        if(userInterface != null){
+            user = userInterface.getUserInterface();
+            userIDText.setText("User ID: " +Integer.toString(user.getUserID()));
+            usernameText.setText("Username: " + user.getUsername());
+            firstNameText.setText("First Name: " +user.getFirstName());
+            surnameText.setText(("Surname: " + user.getSecondName()));
+            emailText.setText("E-mail: " + user.getEmailAddress());
+        }
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -84,6 +107,11 @@ public class UserFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+        try{
+            userInterface = (GetUserInterface) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement GetUserInterface");
         }
     }
 
@@ -106,5 +134,8 @@ public class UserFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public interface GetUserInterface{
+        User getUserInterface();
     }
 }

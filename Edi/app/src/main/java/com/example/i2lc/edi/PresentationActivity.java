@@ -60,10 +60,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
 
         setContentView(R.layout.activity_pres);
-
-        presentation = new PresentationMod();
-        progress = presentation.calculateProgress();
-
         //Show Edit Text to type question
         editText = (EditText)findViewById(R.id.questionText);
 

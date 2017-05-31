@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="15"
+    android:background="@color/midnightBlue">
+
+    <TextView
+        android:id="@+id/userIDText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="This is fragment 3!"
+        android:textColor="@color/icons"
+        android:textSize="30dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/usernameText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="This is fragment 3!"
+        android:textColor="@color/icons"
+        android:textSize="30dp"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/firstNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="This is fragment 3!"
+        android:textColor="@color/icons"
+        android:textSize="30dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/surnameText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="This is fragment 3!"
+        android:textColor="@color/icons"
+        android:textSize="30dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="This is fragment 3!"
+        android:textSize="30dp"
+        android:textColor="@color/icons"
+        android:layout_gravity="center"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        app:srcCompat="@drawable/edi" />
+
+</LinearLayout>

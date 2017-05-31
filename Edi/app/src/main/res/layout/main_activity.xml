@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:id="@+id/main_content"></RelativeLayout>
     <ListView
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:id="@+id/lv_sliding_menu"
         android:background="@color/primary_light"

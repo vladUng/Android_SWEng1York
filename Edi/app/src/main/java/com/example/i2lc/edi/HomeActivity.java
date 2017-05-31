@@ -57,7 +57,7 @@ import io.socket.emitter.Emitter;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface{
+public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface, UserFragment.GetUserInterface{
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -144,8 +144,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         Toast.makeText(this, "You have successfully logged in!", Toast.LENGTH_LONG).show();
         createSlidingMenu();
 
-
-
         try {
             //String userID = "1";
 
@@ -206,9 +204,9 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         listSliding = new ArrayList<>();
         //Add item for sliding list
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_school_black_24dp, "Live Presentations"));
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp, "Settings"));
-        listSliding.add(new ItemSlideMenu(R.drawable.ic_launcher, "User Details"));
+        listSliding.add(new ItemSlideMenu(R.drawable.presentation_icon, "Live Presentations"));
+        //listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp, "Settings"));
+        listSliding.add(new ItemSlideMenu(R.drawable.user_icon, "User Details"));
         adapter = new SlidingMenuAdapter(this, listSliding);
         listViewSliding.setAdapter(adapter);
         //Display icon to open/ close sliding list
@@ -260,10 +258,10 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 fragment = new PresentationListFragment();
                 break;
             case 1:
-                fragment = new Fragment2();
+                fragment = new UserFragment();
                 break;
             case 2:
-                fragment = new UserFragment();
+                fragment = new Fragment2();
                 break;
             default:
                 fragment = new PresentationListFragment();
@@ -344,7 +342,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
             if (!presentations.isEmpty()) {
                 //for debug
                 System.out.println("YAY I have all the presentations for userID: " + forUserID);
-
                 for (Presentation presentation : presentations) {
                     System.out.println("ID: " + presentation.getPresentationID() + " ModuleID: " + presentation.getModuleID() + " Subject: " + presentation.getXmlURL());
                 }

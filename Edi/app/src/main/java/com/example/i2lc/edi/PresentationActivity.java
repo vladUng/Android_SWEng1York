@@ -30,15 +30,15 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
-    private static final int TICK_TIME =  1000;
+    private static final int TICK_TIME =  1000; //TODO is this needed?
     private Fragment fragment;
     private PresentationMod presentation;
-    boolean interactionAvailable = false; //TODO Change; this is just for testing
-    private ProgressBar progressBar;
-    private int progress;
-    private Button askButton;
-    private EditText editText;
-    private boolean questionEnabled = true;
+    boolean isInteractiveElementLive = false; //TODO Change; this is just for testing
+    private ProgressBar progressBar; //TODO is this needed?
+    private int progress; //TODO is this needed?
+    private Button askButton; //TODO is this needed?
+    private EditText editText; //TODO is this needed?
+    private boolean questionEnabled = true; //TODO is this needed?
     private User user;
     private int interactionTime = 10000; //TODO Remove this on finish
     private Presentation currentPresentation;
@@ -51,7 +51,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ;
+
         Intent intent = getIntent();
         currentPresentation = (Presentation) intent.getExtras().getParcelable("presentation");
         user = (User) intent.getExtras().getParcelable("user");
@@ -63,12 +63,17 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         //Show Edit Text to type question
         editText = (EditText)findViewById(R.id.questionText);
 
+        //check if there is a live element
+        liveElement = currentPresentation.getLiveElement();
+        if (liveElement != null) {
+            isInteractiveElementLive = true;
+        }
         replaceFragment();
-        //interactionAvailable = true;
-//        if(interactionAvailable){
+        //isInteractiveElementLive = true;
+//        if(isInteractiveElementLive){
 //            interactionTime = 10000; // TODO: Remove this; this is just for testing
 //            runInteraction();
-//            interactionAvailable = false;
+//            isInteractiveElementLive = false;
 //        }
     }
 
@@ -78,7 +83,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 //                System.out.print("");
 //            }
 //            public void onFinish() {
-//                interactionAvailable = false;
+//                isInteractiveElementLive = false;
 //                replaceFragment();
 //            }
 //        }.start();
@@ -86,7 +91,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 //    }
 
     private void replaceFragment(){
-        if(interactionAvailable == true){
+        if(isInteractiveElementLive == true){
             fragment = new InteractionFragment();
         }else{
             fragment = new MainPresentationFragment();
@@ -118,8 +123,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
 
     //better to do the connection here, because we can directly triggered the UI
     public void connectToRemoteSocket() {
@@ -181,15 +184,12 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                         currentPresentation.setInteractiveElements(interactiveElements);
                         liveElement = currentPresentation.getLiveElement();
 
-                        //if (liveElement != null) {
-                        if(liveElement != null && interactionAvailable == false){
-                            interactionAvailable = true;
+                        if(liveElement != null && isInteractiveElementLive == false){
+                            isInteractiveElementLive = true;
                         } else {
-                            interactionAvailable = false;
+                            isInteractiveElementLive = false;
                         }
                         replaceFragment();
-                        //runInteraction();
-                        //}
                     }
                 } catch (Exception e) {
                     System.out.println("Ooops! There was a problem");
@@ -222,14 +222,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         }
     }
 
-    public Presentation getCurrentPresentation() {
-        return currentPresentation;
-    }
-
-    public void setCurrentPresentation(Presentation currentPresentation) {
-        this.currentPresentation = currentPresentation;
-    }
-
     private void setUserActiveStatus(Boolean isInPresentation) {
 
         int SDK_INT = Build.VERSION.SDK_INT;
@@ -243,9 +235,9 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
             SocketClient socketClient = new SocketClient();
             boolean status;
             if (isInPresentation) {
-                 status = socketClient.toggleUserActivePresentation(currentPresentation.getPresentationID(), Integer.valueOf("14"));
+                 status = socketClient.toggleUserActivePresentation(currentPresentation.getPresentationID(), user.getUserID());
             } else {
-                status = socketClient.toggleUserActivePresentation(0, Integer.valueOf("1"));
+                status = socketClient.toggleUserActivePresentation(0, user.getUserID());
             }
 
             if (status) {
@@ -295,6 +287,16 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     @Override
     public InteractiveElement getInteractiveElementInterface() {
         return liveElement;
+    }
+
+
+    //TODO check if these two methods are used
+    public Presentation getCurrentPresentation() {
+        return currentPresentation;
+    }
+
+    public void setCurrentPresentation(Presentation currentPresentation) {
+        this.currentPresentation = currentPresentation;
     }
 
 }

@@ -145,13 +145,10 @@ public class MainPresentationFragment extends Fragment {
     }
 
     protected void updateProgressBar() {
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 TextView progressBarText = (TextView) rootView.findViewById(R.id.progressBarText);
-
                 progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber() + 1));
                 progress = currentPresentation.calculateProgress();
                 //
@@ -159,8 +156,6 @@ public class MainPresentationFragment extends Fragment {
 
             }
         });
-
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -324,7 +319,6 @@ public class MainPresentationFragment extends Fragment {
                     Presentation presentation;
                     //get a currentPresentation
                     presentation = mySocketClient.getPresentation(currentPresentation.getPresentationID());
-
                     //update just when the interactive elements are different than null
                     if(presentation != null) {
                         System.out.println("we are at slide number" + presentation.getCurrentSlideNumber());
@@ -341,6 +335,8 @@ public class MainPresentationFragment extends Fragment {
                 break;
         }
     }
+
+
 
     @Override
     public void onResume() {

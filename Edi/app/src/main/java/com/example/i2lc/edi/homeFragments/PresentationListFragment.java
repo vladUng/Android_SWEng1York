@@ -20,10 +20,11 @@ import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.adapter.PresentationItemAdapter;
 import com.example.i2lc.edi.backend.DecompressFast;
 import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.backend.Utils;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.User;
-import com.example.i2lc.edi.presentationFragments.MainPresentationFragment;
+import com.example.i2lc.edi.utilities.ParserXML;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -31,9 +32,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.zip.ZipException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 //import static com.example.i2lc.edi.LogInActivity.EXTRA_USERNAME;
 
@@ -67,6 +73,10 @@ public class PresentationListFragment extends Fragment{
     private Button joinButton;
     private GetUserInterface userInterface;
     private User user;
+    //for establishing connection
+    private Socket socket;
+    private String serverIPAddress;
+    private View rootView;
 
 
     public PresentationListFragment() {
@@ -104,7 +114,7 @@ public class PresentationListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
+        rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
         View itemView = inflater.inflate(R.layout.presentation_item, container, false);
 //        presentationList = new ArrayList<Presentation>();
 //        //getPresentation(userID);
@@ -188,9 +198,12 @@ public class PresentationListFragment extends Fragment{
     @Override
     public void onResume(){
         super.onResume();
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
         if(presentationListInterface != null){
             presentationList = presentationListInterface.getLivePresentationList();
         }
+
     }
 
     @Override
@@ -219,6 +232,159 @@ public class PresentationListFragment extends Fragment{
     }
     public interface GetUserInterface{
         User getUserInterface();
+    }
+
+    public void connectToRemoteSocket() {
+        //Alert tester that connection is being attempted
+        System.out.println("Client: Attempting Connection to " + serverIPAddress);
+
+        try {
+            socket = IO.socket(serverIPAddress);
+        } catch (URISyntaxException e) {
+            System.out.println("Couldn't create client port");
+        }
+
+        //Handling socket events
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Connected to socket");
+            }
+
+        });
+
+        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
+            }
+        });
+
+        socket.on("DB_Update", new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Client knows DB has updated:  " + args[0]);
+                updateLocalTables(args[0]);
+            }
+
+        });
+        socket.connect();
+    }
+
+    public void downloadPresentation(Presentation presentation) {
+
+        String filename = "Presentation_" + presentation.getPresentationID();
+        String basePath = getActivity().getFilesDir().getAbsolutePath() + "/";
+
+        try {
+            URL u = presentation.getXmlURL();
+            InputStream is = u.openStream();
+
+            DataInputStream dis = new DataInputStream(is);
+
+            byte[] buffer = new byte[1024];
+            int length;
+
+            FileOutputStream fos = new FileOutputStream(new File(basePath+ "/" + filename + ".zip"));
+            while ((length = dis.read(buffer))>0) {
+                fos.write(buffer, 0, length);
+            }
+
+        } catch (MalformedURLException mue) {
+            Log.e("SYNC getUpdate", "malformed url error", mue);
+        } catch (IOException ioe) {
+            Log.e("SYNC getUpdate", "io error", ioe);
+        } catch (SecurityException se) {
+            Log.e("SYNC getUpdate", "security error", se);
+        }
+
+        String zipFileName = basePath + filename + ".zip";
+        String zipFolder =  basePath + filename +"_folder/";
+
+        try {
+            File destinationFolder = new File(zipFolder);
+
+            DecompressFast.unzip(new File(zipFileName),destinationFolder);
+            System.out.println("Extracted to \n"+ zipFolder);
+            presentation.setFolderPath(destinationFolder.getAbsolutePath());
+        } catch (ZipException e) {
+            Log.e("Problems with zip", e.getMessage());
+        } catch (IOException e) {
+            Log.e("We got a problem", e.getMessage());
+        }
+
+        //Create folder
+        File presentationFolder = new File(presentation.getFolderPath()); //
+        //Create list of files
+        File[] directoryListing = presentationFolder.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                //Check if file in directory is an xml file
+                if (child.getAbsolutePath().contains(".xml")) {
+                    ParserXML parser = new ParserXML(presentation, child);
+                    presentationList.add(parser.parsePresentation());
+                }
+            }
+            for (File child: directoryListing){
+                if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
+                    File[] thumbnails = child.listFiles();
+                    if (thumbnails != null) {
+                        String thumbnailPath;
+                        for (File thumbnail : thumbnails) {
+                            thumbnailPath = thumbnail.getAbsolutePath();
+                            if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
+                                presentationList.get(presentationList.size() - 1).setThumbnailPath(thumbnailPath);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            System.out.println("Folder doesn't exist/is empty!");
+        }
+    }
+
+    public void updateLocalTables(Object tableToUpdate) {
+        System.out.println("Table: " + (String)tableToUpdate + " has been updated on the server");
+        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
+        switch ((String) tableToUpdate) {
+            case "presentations":
+                //go back to homeActivity, if the presentation is not liver anymore
+                SocketClient mySocketClient = new SocketClient();
+
+                ArrayList<Module> modules = mySocketClient.getModules(Integer.toString(user.getUserID()));
+                if(presentationList!=null) {
+                    presentationList.clear();
+                }
+                for(Module module: modules) {
+                    for (Presentation presentation : module.getPresentations()){
+                        if(presentation.isLive()) {
+                            //presentationList.add(presentation);
+                            downloadPresentation(presentation);
+                            System.out.println(" Presentation: " + presentation.getPresentationID() + "is live");
+                        }
+                    }
+                }
+                break;
+            default:
+                System.out.println("Other table than interactive_elements was updated");
+                break;
+        }
+        updatePresentationListView();
+    }
+
+    protected void updatePresentationListView() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ListView newListView = (ListView) rootView.findViewById(R.id.presentation_list);
+                PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
+                newListView.setAdapter(adapter);
+            }
+        });
     }
 
 
@@ -337,4 +503,23 @@ public class PresentationListFragment extends Fragment{
             Log.e("We got a problem", e.getMessage());
         }
     }
+
+//    @Override
+//    public void onResume() {
+//        //connect client
+//        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+//        connectToRemoteSocket();
+//        super.onResume();
+//    }
+
+    @Override
+    public void onPause() {
+        socket.disconnect(); //to avoid having issues with other instances of socketClient
+        super.onPause();
+    }
+
+    //    public void joinPresentation(View view) {
+//        Intent intent = new Intent(this, InitialPresentationActivity.class);
+//        startActivity(intent);
+//    }
 }

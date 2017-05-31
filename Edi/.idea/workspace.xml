@@ -12,18 +12,11 @@
     <bookmark url="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/SignUpActivity.java" description="&#10;" line="34" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f8ea885-1445-4a82-a5dc-1a3c309a4cf7" name="Default" comment="Re">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/presentation_icon.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/user_icon.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/user_fragment.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment3.xml" afterPath="" />
+    <list default="true" id="1f8ea885-1445-4a82-a5dc-1a3c309a4cf7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/UserFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/UserFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_sliding_menu.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_sliding_menu.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/main_activity.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/main_activity.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java" />
     </list>
     <list id="2b401685-ad09-4e9b-8062-fb97c3263df9" name="Failed commit: Default" comment="-- populated the array of Module object with data from DB&#10;&#10;-- (hopefully) optimised a bit the process on how to create sql statements sent to server &#10;&#10;-- temporarily modified Module class, so that I could test something." />
     <ignored path="Edi.iws" />
@@ -77,66 +70,68 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Interaction.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Interaction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1408">
-              <caret line="85" column="28" selection-start-line="85" selection-start-column="28" selection-end-line="85" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PresentationListFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PresentationListFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="105" column="47" selection-start-line="105" selection-start-column="47" selection-end-line="105" selection-end-column="47" />
+            <state relative-caret-position="-787">
+              <caret line="201" column="32" selection-start-line="201" selection-start-column="32" selection-end-line="201" selection-end-column="32" />
               <folding>
                 <element signature="docComment;class#PresentationListFragment#0" expanded="false" />
                 <element signature="method#PresentationListFragment#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="docComment;method#newInstance#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="method#newInstance#0;class#PresentationListFragment#0" expanded="false" />
-                <element signature="e#3917#3976#0" expanded="false" />
+                <element signature="method#onCreate#0;class#PresentationListFragment#0" expanded="false" />
+                <element signature="method#onCreateView#0;class#PresentationListFragment#0" expanded="false" />
+                <element signature="e#4183#4242#0" expanded="false" />
                 <element signature="method#onAttach#0;class#PresentationListFragment#0" expanded="false" />
-                <element signature="method#onResume#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="method#onDetach#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="docComment;class#OnFragmentInteractionListener#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="class#OnFragmentInteractionListener#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="class#GetPresentationListInterface#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="class#GetUserInterface#0;class#PresentationListFragment#0" expanded="false" />
+                <element signature="method#connectToRemoteSocket#0;class#PresentationListFragment#0" expanded="false" />
+                <element signature="method#downloadPresentation#0;class#PresentationListFragment#0" expanded="false" />
+                <element signature="method#updateLocalTables#0;class#PresentationListFragment#0" expanded="false" />
+                <element signature="method#updatePresentationListView#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="method#joinPresentation#0;class#PresentationListFragment#0" expanded="false" />
                 <element signature="method#getPresentation#0;class#PresentationListFragment#0" expanded="false" />
-                <element signature="e#9649#9679#0" expanded="false" />
+                <element signature="e#16177#16207#0" expanded="false" />
                 <element signature="method#getModules#0;class#PresentationListFragment#0" expanded="false" />
-                <element signature="e#10958#10983#0" expanded="false" />
-                <element signature="method#downloadPresentation#0;class#PresentationListFragment#0" expanded="false" />
+                <element signature="e#17486#17511#0" expanded="false" />
+                <element signature="method#downloadPresentation#1;class#PresentationListFragment#0" expanded="false" />
+                <element signature="method#onPause#0;class#PresentationListFragment#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HomeActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="HomeActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="343" column="96" selection-start-line="343" selection-start-column="96" selection-end-line="343" selection-end-column="96" />
+            <state relative-caret-position="19">
+              <caret line="663" column="0" selection-start-line="663" selection-start-column="0" selection-end-line="663" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#HomeActivity#0" expanded="false" />
+                <element signature="e#4002#4043#0" expanded="false" />
+                <element signature="e#6398#6420#0" expanded="false" />
                 <element signature="method#onCreateOptionsMenu#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#onOptionsItemSelected#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#onPostCreate#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#onFragmentInteraction#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#createSlidingMenu#0;class#HomeActivity#0" expanded="false" />
+                <element signature="class#9548:10020" expanded="false" />
+                <element signature="method#onDrawerOpened#0;class#9548:10020" expanded="false" />
+                <element signature="method#onDrawerClosed#0;class#9548:10020" expanded="false" />
                 <element signature="method#replaceFragment#0;class#HomeActivity#0" expanded="false" />
+                <element signature="e#11031#11078#0" expanded="false" />
                 <element signature="method#getModules#0;class#HomeActivity#0" expanded="false" />
+                <element signature="method#getPresentation#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#getInteractiveElements#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#sendQuestion#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#sendInteraction#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#getInteractions#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#getQuestions#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#downloadPresentation#0;class#HomeActivity#0" expanded="false" />
-                <element signature="method#connectToRemoteSocket#0;class#HomeActivity#0" expanded="false" />
                 <element signature="method#onPause#0;class#HomeActivity#0" expanded="false" />
               </folding>
             </state>
@@ -158,28 +153,8 @@
       <file leaf-file-name="PresentationActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1892">
-              <caret line="197" column="0" selection-start-line="197" selection-start-column="0" selection-end-line="197" selection-end-column="0" />
-              <folding>
-                <element signature="method#onCreate#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#replaceFragment#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#onFragmentInteraction#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#onKeyDown#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#connectToRemoteSocket#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#setCurrentPresentation#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#setUserActiveStatus#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#onResume#0;class#PresentationActivity#0" expanded="false" />
-                <element signature="method#onStop#0;class#PresentationActivity#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InteractionFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/InteractionFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1804">
-              <caret line="96" column="50" selection-start-line="96" selection-start-column="50" selection-end-line="96" selection-end-column="50" />
+            <state relative-caret-position="1562">
+              <caret line="172" column="21" selection-start-line="172" selection-start-column="21" selection-end-line="172" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -188,19 +163,18 @@
       <file leaf-file-name="MainPresentationFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="223" column="5" selection-start-line="223" selection-start-column="5" selection-end-line="223" selection-end-column="5" />
+            <state relative-caret-position="210">
+              <caret line="338" column="0" selection-start-line="338" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
               <folding>
+                <element signature="imports" expanded="true" />
                 <element signature="docComment;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="method#MainPresentationFragment#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="docComment;method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="method#onCreate#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#onCreateView#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="e#3598#3637#0" expanded="false" />
                 <element signature="e#4518#4705#0" expanded="false" />
-                <element signature="method#updateProgressBar#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="e#6229#6298#0" expanded="false" />
+                <element signature="e#6222#6291#0" expanded="false" />
                 <element signature="class#GetPresentationInterface#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="class#GetUserInterface#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="method#onAttach#0;class#MainPresentationFragment#0" expanded="false" />
@@ -208,11 +182,9 @@
                 <element signature="docComment;class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="method#dispQuestionTextBox#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="class#9165:9542" expanded="false" />
-                <element signature="method#onTick#0;class#9165:9542" expanded="false" />
+                <element signature="class#9158:9535" expanded="false" />
+                <element signature="method#onTick#0;class#9158:9535" expanded="false" />
                 <element signature="method#cancelQuestion#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#connectToRemoteSocket#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#updateLocalTables#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="method#onResume#0;class#MainPresentationFragment#0" expanded="false" />
                 <element signature="method#onStop#0;class#MainPresentationFragment#0" expanded="false" />
               </folding>
@@ -2926,9 +2898,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/utilities/ParserXML.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/User.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/adapter/PresentationItemAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_presentation.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Presentation.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
@@ -2941,6 +2911,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Interaction.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/InteractionFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java" />
       </list>
     </option>
@@ -3128,6 +3100,118 @@
     <key name="android.template.parentActivityClass">
       <recent name="" />
     </key>
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/InitialPresentationActivity.java</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunManager" selected="Android App.app">
     <configuration default="false" name="ImageRendererTest" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
@@ -3871,7 +3955,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496228621817</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Tidied up a few GUI elements">
+      <created>1496246218588</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1496246218588</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -3917,7 +4008,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32588235" sideWeight="0.4915139" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31882352" sideWeight="0.47711015" order="9" side_tool="false" content_ui="tabs" />
@@ -3926,13 +4017,14 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5035294" sideWeight="0.25510204" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4482353" sideWeight="0.7346939" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5011765" sideWeight="0.46280402" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5011765" sideWeight="0.46280402" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32307693" sideWeight="0.6773963" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32352942" sideWeight="0.48979592" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43216783" sideWeight="0.36337626" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18474758" sideWeight="0.7367089" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5035294" sideWeight="0.4908953" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2918455" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24981523" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21750806" sideWeight="0.3552941" order="10" side_tool="true" content_ui="tabs" />
@@ -3952,7 +4044,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21750806" sideWeight="0.6447059" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2625" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5035294" sideWeight="0.4908953" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -4021,7 +4112,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="ImageRenderer extends SlideElement; added javadoc comments." />
     <MESSAGE value="Wrote methods : intersects, onClick, discardImage, is Clickable.&#10;Tried to implement loadImage() without success.&#10;&#10;Note: I believe that setClickable(boolean bool) and isClickable() from the client requirements document are redundant. These are the same thing as the setter and getter for the field clickable." />
     <MESSAGE value="Side bar/fragments prototype" />
     <MESSAGE value="Added vertical scroll view&#10;Committed all files" />
@@ -4046,7 +4136,8 @@
     <MESSAGE value="User data passed around activities and fragments; fully tied with question; progressBar tied as well." />
     <MESSAGE value="Interaction fragment gets displayed or removed based on Interactive Element state update in db - in real-time." />
     <MESSAGE value="Small UI changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small UI changes" />
+    <MESSAGE value="Tidied up a few GUI elements" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tidied up a few GUI elements" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -4077,7 +4168,7 @@
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java</url>
-          <line>63</line>
+          <line>68</line>
           <properties />
           <option name="timeStamp" value="301" />
         </line-breakpoint>
@@ -4095,13 +4186,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java</url>
-          <line>94</line>
+          <line>97</line>
           <properties />
           <option name="timeStamp" value="320" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java</url>
-          <line>93</line>
+          <line>96</line>
           <properties />
           <option name="timeStamp" value="325" />
         </line-breakpoint>
@@ -4109,7 +4200,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="326" />
+      <option name="time" value="327" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="imagemodule">
@@ -4353,32 +4444,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Interaction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1408">
-          <caret line="85" column="28" selection-start-line="85" selection-start-column="28" selection-end-line="85" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1892">
-          <caret line="197" column="0" selection-start-line="197" selection-start-column="0" selection-end-line="197" selection-end-column="0" />
-          <folding>
-            <element signature="method#onCreate#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#replaceFragment#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#onFragmentInteraction#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#onKeyDown#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#connectToRemoteSocket#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#setCurrentPresentation#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#setUserActiveStatus#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#onResume#0;class#PresentationActivity#0" expanded="false" />
-            <element signature="method#onStop#0;class#PresentationActivity#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/InteractionFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1804">
@@ -4395,64 +4460,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="223" column="5" selection-start-line="223" selection-start-column="5" selection-end-line="223" selection-end-column="5" />
-          <folding>
-            <element signature="docComment;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#MainPresentationFragment#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="docComment;method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#onCreate#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#onCreateView#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="e#3598#3637#0" expanded="false" />
-            <element signature="e#4518#4705#0" expanded="false" />
-            <element signature="method#updateProgressBar#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="e#6229#6298#0" expanded="false" />
-            <element signature="class#GetPresentationInterface#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="class#GetUserInterface#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#onAttach#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#onDetach#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="docComment;class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#dispQuestionTextBox#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="class#9165:9542" expanded="false" />
-            <element signature="method#onTick#0;class#9165:9542" expanded="false" />
-            <element signature="method#cancelQuestion#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#connectToRemoteSocket#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#updateLocalTables#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#onResume#0;class#MainPresentationFragment#0" expanded="false" />
-            <element signature="method#onStop#0;class#MainPresentationFragment#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="343" column="96" selection-start-line="343" selection-start-column="96" selection-end-line="343" selection-end-column="96" />
-          <folding>
-            <element signature="docComment;class#HomeActivity#0" expanded="false" />
-            <element signature="method#onCreateOptionsMenu#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#onOptionsItemSelected#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#onPostCreate#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#onFragmentInteraction#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#createSlidingMenu#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#replaceFragment#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#getModules#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#getInteractiveElements#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#sendQuestion#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#sendInteraction#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#getInteractions#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#getQuestions#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#downloadPresentation#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#connectToRemoteSocket#0;class#HomeActivity#0" expanded="false" />
-            <element signature="method#onPause#0;class#HomeActivity#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="227">
@@ -4463,29 +4470,112 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/PresentationActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1562">
+          <caret line="172" column="21" selection-start-line="172" selection-start-column="21" selection-end-line="172" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Interaction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1196">
+          <caret line="85" column="28" selection-start-line="85" selection-start-column="28" selection-end-line="85" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="338" column="0" selection-start-line="338" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#MainPresentationFragment#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="docComment;method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#onCreate#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="e#3598#3637#0" expanded="false" />
+            <element signature="e#4518#4705#0" expanded="false" />
+            <element signature="e#6222#6291#0" expanded="false" />
+            <element signature="class#GetPresentationInterface#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="class#GetUserInterface#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#onAttach#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="docComment;class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#dispQuestionTextBox#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="class#9158:9535" expanded="false" />
+            <element signature="method#onTick#0;class#9158:9535" expanded="false" />
+            <element signature="method#cancelQuestion#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#onResume#0;class#MainPresentationFragment#0" expanded="false" />
+            <element signature="method#onStop#0;class#MainPresentationFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="105" column="47" selection-start-line="105" selection-start-column="47" selection-end-line="105" selection-end-column="47" />
+        <state relative-caret-position="-787">
+          <caret line="201" column="32" selection-start-line="201" selection-start-column="32" selection-end-line="201" selection-end-column="32" />
           <folding>
             <element signature="docComment;class#PresentationListFragment#0" expanded="false" />
             <element signature="method#PresentationListFragment#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="docComment;method#newInstance#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="method#newInstance#0;class#PresentationListFragment#0" expanded="false" />
-            <element signature="e#3917#3976#0" expanded="false" />
+            <element signature="method#onCreate#0;class#PresentationListFragment#0" expanded="false" />
+            <element signature="method#onCreateView#0;class#PresentationListFragment#0" expanded="false" />
+            <element signature="e#4183#4242#0" expanded="false" />
             <element signature="method#onAttach#0;class#PresentationListFragment#0" expanded="false" />
-            <element signature="method#onResume#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="method#onDetach#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="docComment;class#OnFragmentInteractionListener#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="class#OnFragmentInteractionListener#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="class#GetPresentationListInterface#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="class#GetUserInterface#0;class#PresentationListFragment#0" expanded="false" />
+            <element signature="method#connectToRemoteSocket#0;class#PresentationListFragment#0" expanded="false" />
+            <element signature="method#downloadPresentation#0;class#PresentationListFragment#0" expanded="false" />
+            <element signature="method#updateLocalTables#0;class#PresentationListFragment#0" expanded="false" />
+            <element signature="method#updatePresentationListView#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="method#joinPresentation#0;class#PresentationListFragment#0" expanded="false" />
             <element signature="method#getPresentation#0;class#PresentationListFragment#0" expanded="false" />
-            <element signature="e#9649#9679#0" expanded="false" />
+            <element signature="e#16177#16207#0" expanded="false" />
             <element signature="method#getModules#0;class#PresentationListFragment#0" expanded="false" />
-            <element signature="e#10958#10983#0" expanded="false" />
-            <element signature="method#downloadPresentation#0;class#PresentationListFragment#0" expanded="false" />
+            <element signature="e#17486#17511#0" expanded="false" />
+            <element signature="method#downloadPresentation#1;class#PresentationListFragment#0" expanded="false" />
+            <element signature="method#onPause#0;class#PresentationListFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="663" column="0" selection-start-line="663" selection-start-column="0" selection-end-line="663" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#HomeActivity#0" expanded="false" />
+            <element signature="e#4002#4043#0" expanded="false" />
+            <element signature="e#6398#6420#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#onPostCreate#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#onFragmentInteraction#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#createSlidingMenu#0;class#HomeActivity#0" expanded="false" />
+            <element signature="class#9548:10020" expanded="false" />
+            <element signature="method#onDrawerOpened#0;class#9548:10020" expanded="false" />
+            <element signature="method#onDrawerClosed#0;class#9548:10020" expanded="false" />
+            <element signature="method#replaceFragment#0;class#HomeActivity#0" expanded="false" />
+            <element signature="e#11031#11078#0" expanded="false" />
+            <element signature="method#getModules#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#getPresentation#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#getInteractiveElements#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#sendQuestion#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#sendInteraction#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#getInteractions#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#getQuestions#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#downloadPresentation#0;class#HomeActivity#0" expanded="false" />
+            <element signature="method#onPause#0;class#HomeActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>

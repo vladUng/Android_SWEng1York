@@ -297,8 +297,14 @@ public class SocketClient {
                 if (rowString.get(3).contains("t")) {
                     isLive = true;
                 }
-                retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
-                        new URL(rowString.get(2)), isLive));
+
+                Presentation dummyPresentation = new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
+                        new URL(rowString.get(2)), isLive);
+
+                if (rowString.size() == 5) {
+                    dummyPresentation.setCurrentSlideNumber(Integer.valueOf(rowString.get(4)));
+                }
+                retPresentations.add(dummyPresentation);
             }
 
             //close connection
@@ -356,8 +362,14 @@ public class SocketClient {
                 if (rowString.get(3).contains("t")) {
                     isLive = true;
                 }
-                retPresentations.add(new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
-                        new URL(rowString.get(2)), isLive));
+
+                Presentation dummyPresentation = new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
+                        new URL(rowString.get(2)), isLive);
+
+                if (rowString.size() == 5) {
+                    dummyPresentation.setCurrentSlideNumber(Integer.valueOf(rowString.get(4)));
+                }
+                retPresentations.add(dummyPresentation);
             }
 
             queryResult.close();
@@ -631,6 +643,70 @@ public class SocketClient {
         }
 
         return false;
+    }
+
+    public Presentation getPresentation(int forPresentationID) {
+        Presentation retPresentation = new Presentation();
+
+        try {
+
+            //get the query fields for the sql statement
+            QueryFields queryFields = new QueryFields("Presentation");
+            StringBuilder fieldsSB = queryFields.getSb();
+            ArrayList<String> fieldsList =  queryFields.getFields();
+
+            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
+            query.append("edi.public.presentations ");
+            query.append("where presentation_id = ?;");
+
+            PreparedStatement statement = connection.prepareStatement(query.toString());
+
+            //Fill prepared statements to avoid SQL injection
+            statement.setInt(1, forPresentationID);
+
+            //Call stored procedure on database
+            ResultSet queryResult = statement.executeQuery();
+
+            String tmpString;
+            ArrayList<String> rowString = new ArrayList<>();
+
+            //go through the query results
+            while (queryResult.next()) {
+                rowString.clear();
+
+                //create an ArrayList of strings, that stores the fields from a row
+                for (int idx = 0; idx < fieldsList.size(); idx++) {
+                    tmpString = queryResult.getString(fieldsList.get(idx));
+                    if (tmpString != null) {
+                        rowString.add(tmpString);
+                    }
+                }
+
+                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live)
+                Boolean isLive = false;
+                if (rowString.get(3).contains("t")) {
+                    isLive = true;
+                }
+                retPresentation = new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
+                        new URL(rowString.get(2)), isLive);
+
+                if (rowString.size() == 5) {
+                    retPresentation.setCurrentSlideNumber(Integer.valueOf(rowString.get(4)));
+                }
+            }
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            System.out.print("SQL query is wrong" + e.toString());
+            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.print("There was an unknown problem" + e.toString());
+            e.printStackTrace();
+        }
+
+        return retPresentation;
     }
 
 }

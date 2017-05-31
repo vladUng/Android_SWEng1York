@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -23,9 +22,7 @@ import com.example.i2lc.edi.model.PresentationMod;
 import com.example.i2lc.edi.presentationFragments.InteractionFragment;
 import com.example.i2lc.edi.presentationFragments.MainPresentationFragment;
 
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import io.socket.client.IO;
@@ -56,19 +53,13 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //TODO delete this, is just for testing
-//        try {
-//            currentPresentation = new Presentation(1,1, new URL("http://www.amriksadhra.com/Edi/sampleinput_69.zip"), true);
-            Intent intent = getIntent();
-            currentPresentation = (Presentation) intent.getExtras().getParcelable("presentation");
-            user = (User) intent.getExtras().getParcelable("user");
-            System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
-            SocketClient mySocketClient = new SocketClient();
-            currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
+        ;
+        Intent intent = getIntent();
+        currentPresentation = (Presentation) intent.getExtras().getParcelable("presentation");
+        user = (User) intent.getExtras().getParcelable("user");
+        System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
+        SocketClient mySocketClient = new SocketClient();
+        currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
 
         setContentView(R.layout.activity_pres);
 
@@ -212,7 +203,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                 try {
                     SocketClient mySocketClient = new SocketClient();
 
-                    ArrayList<InteractiveElement> interactiveElements = new ArrayList<>();
+                    ArrayList<InteractiveElement> interactiveElements;
                     interactiveElements = mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID()));
 
                     //update just when the interactive elements are different than null
@@ -237,7 +228,23 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 
                 break;
             case "presentations":
-                //go back to homeActivity, if the presentation is not liver anymore
+                try {
+                    SocketClient mySocketClient = new SocketClient();
+
+                    Presentation presentation;
+                    //get a presentation
+                    presentation = mySocketClient.getPresentation(currentPresentation.getPresentationID());
+
+                    //update just when the interactive elements are different than null
+                    if(presentation != null) {
+                        System.out.println("we are at slide number" + presentation.getCurrentSlideNumber());
+                        currentPresentation.setCurrentSlideNumber(presentation.getCurrentSlideNumber());
+                        currentPresentation.calculateProgress();
+                    }
+                } catch (Exception e) {
+                    System.out.println("Ooops! There was a problem");
+                    e.printStackTrace();
+                }
                 break;
             default:
                 System.out.println("Other table than interactive_elements was updated");

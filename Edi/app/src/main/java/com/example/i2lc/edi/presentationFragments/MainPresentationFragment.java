@@ -3,11 +3,8 @@ package com.example.i2lc.edi.presentationFragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
 import android.os.CountDownTimer;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +17,16 @@ import android.widget.Toast;
 import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.backend.SocketClient;
+import com.example.i2lc.edi.backend.Utils;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.Question;
 import com.example.i2lc.edi.dbClasses.User;
-import com.example.i2lc.edi.model.PresentationMod;
+
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +49,7 @@ public class MainPresentationFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private Presentation presentation;
+    private Presentation currentPresentation;
     private Button askButton;
     private Button cancelButton;
     private EditText editText;
@@ -58,6 +61,12 @@ public class MainPresentationFragment extends Fragment {
     private GetPresentationInterface presentationInterface;
     private GetUserInterface userInterface;
     private User user;
+
+    //for establishing connection
+    private Socket socket;
+    private String serverIPAddress;
+
+    private View rootView;
 
     public MainPresentationFragment() {
         // Required empty public constructor
@@ -94,10 +103,10 @@ public class MainPresentationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.activity_presentation, container, false);
+//        View rootView = inflater.inflate(R.layout.activity_presentation, container, false);
+        rootView = inflater.inflate(R.layout.activity_presentation, container, false);
         PresentationActivity activity = (PresentationActivity) getActivity();
         TextView testText = (TextView) rootView.findViewById(R.id.testData);
-        TextView progressBarText = (TextView) rootView.findViewById(R.id.progressBarText);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         askButton = (Button) rootView.findViewById(R.id.askButton);
         cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
@@ -105,15 +114,18 @@ public class MainPresentationFragment extends Fragment {
 
         //Set progress
         if(presentationInterface != null){
-            presentation = presentationInterface.getLivePresentation();
+            currentPresentation = presentationInterface.getLivePresentation();
         }
         if(userInterface != null){
             user = userInterface.getUserInterface();
         }
-        progressBarText.setText("Slide " + Integer.toString(presentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(presentation.getTotalSlideNumber() + 1));
-        progress = presentation.calculateProgress();
-        //
-        progressBar.setProgress(progress);
+//        progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber() + 1));
+//        progress = currentPresentation.calculateProgress();
+//        //
+//        progressBar.setProgress(progress);
+
+        updateProgressBar();
+
         //When button is pressed
         askButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,9 +140,30 @@ public class MainPresentationFragment extends Fragment {
             }
         });
         //Display test Data
-        testText.setText("User ID:" + Integer.toString(user.getUserID()) + "Pres ID: " + Integer.toString(presentation.getPresentationID())+ " Module ID: " + Integer.toString(presentation.getModuleID()) + " Module: " +presentation.getModule());
+        testText.setText("User ID:" + Integer.toString(user.getUserID()) + "Pres ID: " + Integer.toString(currentPresentation.getPresentationID())+ " Module ID: " + Integer.toString(currentPresentation.getModuleID()) + " Module: " + currentPresentation.getModule());
         return rootView;
     }
+
+    protected void updateProgressBar() {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                TextView progressBarText = (TextView) rootView.findViewById(R.id.progressBarText);
+
+                progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber() + 1));
+                progress = currentPresentation.calculateProgress();
+                //
+                progressBar.setProgress(progress);
+
+            }
+        });
+
+
+    }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
@@ -141,9 +174,11 @@ public class MainPresentationFragment extends Fragment {
     public interface GetPresentationInterface{
         Presentation getLivePresentation();
     }
+
     public interface GetUserInterface{
         User getUserInterface();
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -190,7 +225,7 @@ public class MainPresentationFragment extends Fragment {
 
     public void dispQuestionTextBox(View view){
         if(buttonPressed == false){
-            question = new Question(user.getUserID(),presentation.getPresentationID(),"",presentation.getCurrentSlideNumber());
+            question = new Question(user.getUserID(), currentPresentation.getPresentationID(),"", currentPresentation.getCurrentSlideNumber());
             try {
                 if(questionEnabled == true) {
                     if (editText.getText().toString().length() > 3) {
@@ -227,6 +262,7 @@ public class MainPresentationFragment extends Fragment {
             buttonPressed = false;
         }
     }
+
     public void cancelQuestion(View view){
         askButton.setText(" Ask  ");
         editText.setVisibility(view.INVISIBLE);
@@ -235,5 +271,94 @@ public class MainPresentationFragment extends Fragment {
         buttonPressed = true;
     }
 
+    //better to do the connection here, because we can directly triggered the UI
+    public void connectToRemoteSocket() {
+        //Alert tester that connection is being attempted
+        System.out.println("Client: Attempting Connection to " + serverIPAddress);
 
+        try {
+            socket = IO.socket(serverIPAddress);
+        } catch (URISyntaxException e) {
+            System.out.println("Couldn't create client port");
+        }
+
+        //Handling socket events
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Connected to socket");
+            }
+
+        });
+
+        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
+            }
+        });
+
+        socket.on("DB_Update", new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Client knows DB has updated:  " + args[0]);
+                updateLocalTables(args[0]);
+                //TODO: ADD METHOD HERE TO UPDATE THE SCREEN AS WELL
+            }
+
+        });
+
+        socket.connect();
+    }
+
+    public void updateLocalTables(Object tableToUpdate) {
+
+        System.out.println("Table: " + (String)tableToUpdate + " has been updated on the server");
+        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
+        switch ((String) tableToUpdate) {
+            case "presentations":
+                try {
+                    SocketClient mySocketClient = new SocketClient();
+
+                    Presentation presentation;
+                    //get a currentPresentation
+                    presentation = mySocketClient.getPresentation(currentPresentation.getPresentationID());
+
+                    //update just when the interactive elements are different than null
+                    if(presentation != null) {
+                        System.out.println("we are at slide number" + presentation.getCurrentSlideNumber());
+                        currentPresentation.setCurrentSlideNumber(presentation.getCurrentSlideNumber());
+                        updateProgressBar();
+                    }
+                } catch (Exception e) {
+                    System.out.println("Ooops! There was a problem");
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                System.out.println("Other table than interactive_elements was updated");
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+
+        //connect client
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
+
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        socket.disconnect();
+
+
+        super.onStop();
+    }
 }

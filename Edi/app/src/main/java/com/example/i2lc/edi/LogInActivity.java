@@ -40,7 +40,7 @@ public class LogInActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString();
 
         try {
-            username = "Student1"; //TODO: Remove username and password on finish
+            username = "Student"; //TODO: Remove username and password on finish
             password = "password";
             tryLogin(username, password);
             System.out.print("USER WITH ID = " + Integer.toString(user.getUserID()) + " IS LOGGING IN");

@@ -139,8 +139,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         Toast.makeText(this, "You have successfully logged in!", Toast.LENGTH_LONG).show();
         createSlidingMenu();
 
@@ -380,7 +378,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
                 InteractiveElement dummyInteractiveElement = new InteractiveElement();
                 for (InteractiveElement elem : interactiveElements) {
-                    System.out.println("ID: " + elem.getInteractiveElementID() + " Data: " + elem.getInteractiveElementData() + " Type: " + elem.getType() + " slide number: "
+                    System.out.println("ID: " + elem.getInteractiveElementID() + " Data: " + elem.getInteractiveElementQuestion() + " Type: " + elem.getType() + " slide number: "
                             + elem.getSlideNumber());
                 }
             } else {

@@ -19,7 +19,7 @@ public class InteractiveElement {
     }
 
     public InteractiveElement(int interactiveElementID, int presentationID, String interactiveElementQuestion,
-                              String type, boolean live, int slideNumber, int responsesInterval) {
+                              String type, boolean live, int slideNumber) {
         this.interactiveElementID = interactiveElementID;
         this.presentationID = presentationID;
         this.interactiveElementQuestion = interactiveElementQuestion;

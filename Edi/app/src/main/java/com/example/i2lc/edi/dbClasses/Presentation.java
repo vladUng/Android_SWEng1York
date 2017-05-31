@@ -3,6 +3,8 @@ package com.example.i2lc.edi.dbClasses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.i2lc.edi.utilities.Slide;
+
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -26,6 +28,7 @@ public class Presentation implements Parcelable{
     protected boolean live = true; //TODO remove initiliasations when finished
     protected String folderPath;
     protected String thumbnailPath;
+    protected ArrayList<Slide> slideList;
 
     public Presentation(){
 
@@ -112,6 +115,14 @@ public class Presentation implements Parcelable{
 
     public void setLive(boolean live) {
         this.live = live;
+    }
+
+    public ArrayList<Slide> getSlideList() {
+        return slideList;
+    }
+
+    public void setSlideList(ArrayList<Slide> slideList) {
+        this.slideList = slideList;
     }
 
     public int getCurrentSlideNumber() {

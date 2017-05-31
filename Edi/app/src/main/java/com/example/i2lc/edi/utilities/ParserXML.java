@@ -1,9 +1,5 @@
 package com.example.i2lc.edi.utilities;
 
-import android.renderscript.ScriptGroup;
-import android.view.View;
-
-import com.example.i2lc.edi.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -19,6 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by habl on 23/02/2017.
  */
+import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Presentation;
 public class ParserXML {
 
@@ -61,6 +58,7 @@ public class ParserXML {
 
         parseDocumentDetails();
         setTotalSlideNum();
+        parseSlidesAndSlideElements();
 
 //        if (faultsDetected.size() > 0) {
 //            presentation.setXmlFaults(faultsDetected);
@@ -118,9 +116,154 @@ public class ParserXML {
             faultsDetected.add("No Document Details Tag Found!");
         }
     }
+    private void parseSlidesAndSlideElements() {
+        //Loop through each slide and add elements to every slide and every slide to the presentation:
+        //Instantiate an array to add the slides to
+        ArrayList<Slide> slideArray = new ArrayList<>();
 
+        //Find all elements named "slide"
+        NodeList slideNodeList = xmlDocument.getElementsByTagName("slide");
 
+        if (slideNodeList.getLength() != 0) {
+            //For all slides:
+            for (int i = 0; i < slideNodeList.getLength(); i++) {
+                //Create a new slide for every slide element
+                Slide mySlide = new Slide();
+                //Create a slideElement array to store elements on the current slide
+                ArrayList<InteractiveElement> slideElementArrayList = new ArrayList<>();
 
+                //Find the current slide node
+                Node slideNode = slideNodeList.item(i);
+
+                if (slideNode.getAttributes().getLength() != 0) {
+                    //A slide only has one attribute, slideID
+                    String attributeName = slideNode.getAttributes().item(0).getNodeName();
+
+                    if (attributeName.equals("slideid")) {
+                        String attrContent = slideNode.getAttributes().item(0).getNodeValue();
+                        mySlide.setSlideID(Integer.valueOf(attrContent));
+                    }
+                }
+
+                //Find all children of the current slide:
+                NodeList slideNodeChildrenList = slideNode.getChildNodes();
+                //For all elements on a slide:
+                for (int j = 0; j < slideNodeChildrenList.getLength(); j++) {
+                    //Find the current slide element (slide child)
+                    Node slideElementNode = slideNodeChildrenList.item(j);
+
+                    if (slideElementNode.getNodeType() == Node.ELEMENT_NODE) {
+                        String elementName = slideElementNode.getNodeName();
+                        switch (elementName) {
+                            case "poll":
+                                InteractiveElement pollElement = new InteractiveElement();
+                                pollElement.setType("poll");
+                                parsePollElement(slideElementNode, pollElement);
+                                parseElementAttributes(slideElementNode, pollElement);
+                                slideElementArrayList.add(pollElement);
+                                break;
+                            case "wordcloud":
+                                InteractiveElement wordCloudElement = new InteractiveElement();
+                                wordCloudElement.setType("wordcloud");
+                                parseElementAttributes(slideElementNode, wordCloudElement);
+                                parseWordCloudElement(slideElementNode, wordCloudElement);
+                                slideElementArrayList.add(wordCloudElement);
+                                break;
+
+                            default:
+                                logger.warn("SlideElement Name Not Recognised! Name: " + elementName);
+                                faultsDetected.add("SlideElement Name Not Recognised! Name: " + elementName);
+                        }
+                    }
+                }
+                mySlide.setSlideElementList(slideElementArrayList);
+                slideArray.add(mySlide);
+            }
+        } else {
+            logger.warn("No slides found!");
+            faultsDetected.add("No slides found!");
+        }
+        presentation.setSlideList(slideArray);
+    }
+    private void parseWordCloudElement(Node wordCloudElementNode, InteractiveElement wordCloudElement) {
+        //Find and store all elements of the wordcloud element
+        NodeList textNodeChildrenList = wordCloudElementNode.getChildNodes();
+        for (int i = 0; i < textNodeChildrenList.getLength(); i++) {
+            //Find the current element node
+            Node elementNode = textNodeChildrenList.item(i);
+            if (elementNode.getNodeType() == Node.ELEMENT_NODE) {
+                //Find the element name and its content, and store this in the wordCloudElement
+                String elementName = elementNode.getNodeName();
+                String elementContent = elementNode.getTextContent();
+                switch (elementName){
+                    case "question":
+                        wordCloudElement.setInteractiveElementQuestion(elementContent);
+                        break;
+                    case "timelimit":
+                        wordCloudElement.setResponsesInterval(Integer.valueOf(elementContent));
+                        break;
+                    default:
+                        logger.warn("Wordcloud Element Property Name Not Recognised! Name: " + elementName +
+                                ", Value: " + elementContent + ", and XML-Type: " + elementNode.getNodeType());
+                        faultsDetected.add("Wordcloud Element Property Name Not Recognised! Name: " + elementName +
+                                ", Value: " + elementContent + ", and XML-Type: " + elementNode.getNodeType());
+                }
+            }
+        }
+    }
+    private void parsePollElement(Node pollElementNode, InteractiveElement pollElement) {
+        //Find and store all elements of the poll element
+        NodeList textNodeChildrenList = pollElementNode.getChildNodes();
+        for (int i = 0; i < textNodeChildrenList.getLength(); i++) {
+            //Find the current element node
+            Node elementNode = textNodeChildrenList.item(i);
+            if (elementNode.getNodeType() == Node.ELEMENT_NODE) {
+                //Find the element name and its content, and store this in the pollElement
+                String elementName = elementNode.getNodeName();
+                String elementContent = elementNode.getTextContent();
+
+                switch (elementName){
+                    case "question":
+                        pollElement.setInteractiveElementQuestion(elementContent);
+                        break;
+                    case "answers":
+                        pollElement.setAnswers(elementContent);
+                        break;
+                    case "timelimit":
+                        pollElement.setResponsesInterval(Integer.valueOf(elementContent));
+                        break;
+                    default:
+                        logger.warn("Poll Element Property Name Not Recognised! Name: " + elementName +
+                                ", Value: " + elementContent + ", and XML-Type: " + elementNode.getNodeType());
+                        faultsDetected.add("Poll Element Property Name Not Recognised! Name: " + elementName +
+                                ", Value: " + elementContent + ", and XML-Type: " + elementNode.getNodeType());
+                }
+            }
+        }
+    }
+    private void parseElementAttributes (Node slideElementNode, InteractiveElement slideElement) {
+        for (int i = 0; i < slideElementNode.getAttributes().getLength(); i++) {
+            //Find the current attribute node
+            Node attributeNode = slideElementNode.getAttributes().item(i);
+
+            if (attributeNode.getNodeType() == Node.ATTRIBUTE_NODE) {
+                //Find the attribute name and its content, and store this in the element
+                String attributeName = attributeNode.getNodeName();
+                String attributeContent = attributeNode.getNodeValue();
+
+                switch (attributeName) {
+                    case "elementid":
+                        slideElement.setInteractiveElementID(Integer.valueOf(attributeContent));
+                        break;
+                    default:
+                        logger.warn("Attribute Not Recognised! Name: " + attributeName +
+                                ", Value: " + attributeContent + ", and Type: " + attributeNode.getNodeType());
+                        faultsDetected.add("Attribute Not Recognised! Name: " + attributeName +
+                                ", Value: " + attributeContent + ", and Type: " + attributeNode.getNodeType());
+                }
+            }
+        }
+    }
     private void setTotalSlideNum(){
         //Find all elements named "slide"
         NodeList slideNodeList = xmlDocument.getElementsByTagName("slide");

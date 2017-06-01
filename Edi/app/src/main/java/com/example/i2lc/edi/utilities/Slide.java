@@ -16,8 +16,9 @@ public class Slide implements Parcelable {
     protected int slideID; // same with the slide number
 
     public Slide(Parcel in) {
-        slideElementList = in.createTypedArrayList(InteractiveElement.CREATOR);
+        this();
         slideID = in.readInt();
+        in.readTypedList(slideElementList, InteractiveElement.CREATOR);
     }
 
     public static final Creator<Slide> CREATOR = new Creator<Slide>() {

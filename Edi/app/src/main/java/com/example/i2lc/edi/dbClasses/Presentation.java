@@ -57,8 +57,6 @@ public class Presentation implements Parcelable{
         in.readTypedList(slideList, Slide.CREATOR);
     }
 
-
-
     public static final Creator<Presentation> CREATOR = new Creator<Presentation>() {
         @Override
         public Presentation createFromParcel(Parcel in) {
@@ -159,7 +157,7 @@ public class Presentation implements Parcelable{
     public int calculateProgress(){
         int progress = 0;
         if(totalSlideNumber!=0) {
-            progress = (currentSlideNumber + 1) * 100 / (totalSlideNumber + 1);
+            progress = (currentSlideNumber + 1) * 100 / (totalSlideNumber);
         }
         return progress;
     }

@@ -1,22 +1,23 @@
 package com.example.i2lc.edi.utilities;
 
+import com.example.i2lc.edi.dbClasses.InteractiveElement;
+import com.example.i2lc.edi.dbClasses.Presentation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
 import java.util.ArrayList;
-
 
 /**
  * Created by habl on 23/02/2017.
  */
-import com.example.i2lc.edi.dbClasses.InteractiveElement;
-import com.example.i2lc.edi.dbClasses.Presentation;
 public class ParserXML {
 
     //private DOMParser xmlParser;
@@ -253,7 +254,7 @@ public class ParserXML {
 
                 switch (attributeName) {
                     case "elementid":
-                        slideElement.setInteractiveElementID(Integer.valueOf(attributeContent));
+                        slideElement.setXml_element_id(Integer.valueOf(attributeContent));
                         break;
                     default:
                         logger.warn("Attribute Not Recognised! Name: " + attributeName +

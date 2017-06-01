@@ -149,7 +149,7 @@ public class MainPresentationFragment extends Fragment {
             @Override
             public void run() {
                 TextView progressBarText = (TextView) rootView.findViewById(R.id.progressBarText);
-                progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber() + 1));
+                progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber()));
                 progress = currentPresentation.calculateProgress();
                 //
                 progressBar.setProgress(progress);

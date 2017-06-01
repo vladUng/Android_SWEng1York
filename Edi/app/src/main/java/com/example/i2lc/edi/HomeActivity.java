@@ -92,7 +92,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
         livePresentations = new ArrayList<Presentation>();
         modules = new ArrayList<Module>();
-        //getPresentation(userID);
 
         try {
             getModules(Integer.toString(user.getUserID()));

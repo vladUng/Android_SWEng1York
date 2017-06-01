@@ -58,8 +58,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         user = (User) intent.getExtras().getParcelable("user");
         System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
 
-        putInteractiveElements();
-
         setContentView(R.layout.activity_pres);
         //Show Edit Text to type question
         editText = (EditText) findViewById(R.id.questionText);
@@ -95,10 +93,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 //        }.start();
 //
 //    }
-
-    private void putInteractiveElements() {
-
-    }
 
 
     private void replaceFragment(){
@@ -205,8 +199,10 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                         for(Slide slide: currentPresentation.getSlideList()) {
                             for (InteractiveElement interactiveElement: slide.getSlideElementList()) {
                                 for (InteractiveElement dummyElement : interactiveElementsDB) {
-                                    if (interactiveElement.getInteractiveElementID() == dummyElement.getInteractiveElementID()) {
-                                        interactiveElement.setLive(dummyElement.isLive());
+                                    if (interactiveElement != null ) {
+                                        if (interactiveElement.getXml_element_id() == dummyElement.getXml_element_id()) {
+                                            interactiveElement.setLive(dummyElement.isLive());
+                                        }
                                     }
                                 }
                             }

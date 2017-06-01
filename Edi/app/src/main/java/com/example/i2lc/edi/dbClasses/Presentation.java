@@ -18,7 +18,7 @@ public class Presentation implements Parcelable{
     protected int moduleID;
     protected URL xmlURL;
     protected int currentSlideNumber;
-    protected ArrayList<InteractiveElement> interactiveElements;
+//    protected ArrayList<InteractiveElement> interactiveElements;
     protected int totalSlideNumber;
     //protected Thumbnail thumbnail;
     protected String title = "N/A";
@@ -31,7 +31,7 @@ public class Presentation implements Parcelable{
     protected ArrayList<Slide> slideList;
 
     public Presentation(){
-
+        slideList = new ArrayList<>();
     }
 
     public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live) {
@@ -42,6 +42,7 @@ public class Presentation implements Parcelable{
     }
 
     protected Presentation(Parcel in) {
+        this();
         presentationID = in.readInt();
         moduleID = in.readInt();
         currentSlideNumber = in.readInt();
@@ -53,7 +54,10 @@ public class Presentation implements Parcelable{
         live = in.readByte() != 0;
         folderPath = in.readString();
         thumbnailPath = in.readString();
+        in.readTypedList(slideList, Slide.CREATOR);
     }
+
+
 
     public static final Creator<Presentation> CREATOR = new Creator<Presentation>() {
         @Override
@@ -67,20 +71,31 @@ public class Presentation implements Parcelable{
         }
     };
 
+
+
+//    public static final Creator<Slide> CREATOR_SLIDE = new Creator<Slide>() {
+//        @Override
+//        public Slide createFromParcel(Parcel in) {
+//            return new Slide(in);
+//        }
+//
+//        @Override
+//        public Slide[] newArray(int size) {
+//            return new Slide[size];
+//        }
+//    };
+
     public InteractiveElement getLiveElement() {
 
-//        int index;
-//        for(index = 0; index < interactiveElements.size() - 1; index++) {
-//            if (interactiveElements.get(index).isLive()) {
-//                return index;
-//            }
-//        }
-        for(InteractiveElement interactiveElement: interactiveElements){
-            if (interactiveElement.isLive()) {
-                return interactiveElement;
+        for (Slide slide: slideList) {
+            for (InteractiveElement interactiveElement : slide.getSlideElementList()) {
+                if (interactiveElement != null) {
+                    if (interactiveElement.isLive()) {
+                        return interactiveElement;
+                    }
+                }
             }
         }
-        //if there isn't any
         return null;
     }
 
@@ -141,13 +156,6 @@ public class Presentation implements Parcelable{
         this.totalSlideNumber = totalSlideNumber;
     }
 
-//    public Thumbnail getThumbnail() {
-//        return thumbnail;
-//    }
-//
-//    public void setThumbnail(Thumbnail thumbnail) {
-//        this.thumbnail = thumbnail;
-//    }
     public int calculateProgress(){
         int progress = 0;
         if(totalSlideNumber!=0) {
@@ -196,14 +204,6 @@ public class Presentation implements Parcelable{
         this.thumbnailPath = thumbnailPath;
     }
 
-    public ArrayList<InteractiveElement> getInteractiveElements() {
-        return interactiveElements;
-    }
-
-    public void setInteractiveElements(ArrayList<InteractiveElement> interactiveElements) {
-        this.interactiveElements = interactiveElements;
-    }
-
     public String getFolderPath() {
         return folderPath;
     }
@@ -230,5 +230,6 @@ public class Presentation implements Parcelable{
         dest.writeByte((byte) (live ? 1 : 0));
         dest.writeString(folderPath);
         dest.writeString(thumbnailPath);
+        dest.writeTypedList(slideList);
     }
 }

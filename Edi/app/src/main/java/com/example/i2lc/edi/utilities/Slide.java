@@ -1,5 +1,8 @@
 package com.example.i2lc.edi.utilities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.i2lc.edi.dbClasses.InteractiveElement;
 
 
@@ -8,9 +11,26 @@ import java.util.ArrayList;
 /**
  * Created by habl on 23/02/2017.
  */
-public class Slide{
+public class Slide implements Parcelable {
     protected ArrayList<InteractiveElement> slideElementList;
-    protected int slideID;
+    protected int slideID; // same with the slide number
+
+    public Slide(Parcel in) {
+        slideElementList = in.createTypedArrayList(InteractiveElement.CREATOR);
+        slideID = in.readInt();
+    }
+
+    public static final Creator<Slide> CREATOR = new Creator<Slide>() {
+        @Override
+        public Slide createFromParcel(Parcel in) {
+            return new Slide(in);
+        }
+
+        @Override
+        public Slide[] newArray(int size) {
+            return new Slide[size];
+        }
+    };
 
     public Slide() {
         slideElementList = new ArrayList<>();
@@ -30,6 +50,17 @@ public class Slide{
 
     public void setSlideID(int slideID) {
         this.slideID = slideID;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(slideID);
+        dest.writeTypedList(slideElementList);
     }
 }
 

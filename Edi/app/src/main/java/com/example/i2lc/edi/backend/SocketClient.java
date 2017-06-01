@@ -414,7 +414,8 @@ public class SocketClient {
                 // String type, boolean live, int slideNumber, Timestamp responsesInterval)
                 retInteractiveElements.add(new InteractiveElement(queryResult.getInt(fieldsList.get(0)), queryResult.getInt(fieldsList.get(1)),
                                                                     queryResult.getString(fieldsList.get(2)), queryResult.getString(fieldsList.get(3)),
-                                                                    queryResult.getBoolean(fieldsList.get(4)), queryResult.getInt(fieldsList.get(5))));
+                                                                    queryResult.getBoolean(fieldsList.get(4)), queryResult.getInt(fieldsList.get(5)),
+                                                                    queryResult.getInt(fieldsList.get(6))));
             }
 
             queryResult.close();

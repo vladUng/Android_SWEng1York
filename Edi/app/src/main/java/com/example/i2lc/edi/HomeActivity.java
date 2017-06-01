@@ -139,6 +139,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Toast.makeText(this, "You have successfully logged in!", Toast.LENGTH_LONG).show();
         createSlidingMenu();
 
@@ -571,6 +572,8 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                     livePresentations.add(parser.parsePresentation());
                 }
             }
+
+            //set thumbnail path
             for (File child: directoryListing){
                 if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
                     File[] thumbnails = child.listFiles();

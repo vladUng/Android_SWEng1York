@@ -54,7 +54,7 @@ public class QueryFields {
                 fields.add("type");
                 fields.add("live");
                 fields.add("slide_number");
-                fields.add("response_interval");
+                fields.add("xml_element_id");
                 break;
 
             case "Interaction":

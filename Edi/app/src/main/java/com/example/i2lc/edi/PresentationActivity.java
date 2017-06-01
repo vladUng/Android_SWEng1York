@@ -21,6 +21,7 @@ import com.example.i2lc.edi.dbClasses.User;
 import com.example.i2lc.edi.model.PresentationMod;
 import com.example.i2lc.edi.presentationFragments.InteractionFragment;
 import com.example.i2lc.edi.presentationFragments.MainPresentationFragment;
+import com.example.i2lc.edi.utilities.Slide;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -56,17 +57,22 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         currentPresentation = (Presentation) intent.getExtras().getParcelable("presentation");
         user = (User) intent.getExtras().getParcelable("user");
         System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
-        SocketClient mySocketClient = new SocketClient();
-        currentPresentation.setInteractiveElements(mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID())));
+
+        putInteractiveElements();
 
         setContentView(R.layout.activity_pres);
         //Show Edit Text to type question
-        editText = (EditText)findViewById(R.id.questionText);
+        editText = (EditText) findViewById(R.id.questionText);
 
         //check if there is a live element
-        liveElement = currentPresentation.getLiveElement();
-        if (liveElement != null) {
-            isInteractiveElementLive = true;
+        if (currentPresentation.getSlideList() != null) {
+            if (currentPresentation.getSlideList().get(currentPresentation.getCurrentSlideNumber()).getSlideElementList() != null) {
+
+                liveElement = currentPresentation.getLiveElement();
+                if (liveElement != null) {
+                    isInteractiveElementLive = true;
+                }
+            }
         }
         replaceFragment();
         //isInteractiveElementLive = true;
@@ -89,6 +95,11 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 //        }.start();
 //
 //    }
+
+    private void putInteractiveElements() {
+
+    }
+
 
     private void replaceFragment(){
         if(isInteractiveElementLive == true){
@@ -176,12 +187,31 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                 try {
                     SocketClient mySocketClient = new SocketClient();
 
-                    ArrayList<InteractiveElement> interactiveElements;
-                    interactiveElements = mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID()));
+                    ArrayList<InteractiveElement> interactiveElementsDB;
+                    interactiveElementsDB = mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID()));
 
                     //update just when the interactive elements are different than null
-                    if(interactiveElements != null) {
-                        currentPresentation.setInteractiveElements(interactiveElements);
+                    if(interactiveElementsDB != null) {
+
+//                        //get the interactive element that has been updated
+//                        InteractiveElement dummyElement;
+//                        for(InteractiveElement interactiveElement: interactiveElementsDB) {
+//                            if (interactiveElement.isLive()) {
+//                                dummyElement = interactiveElement;
+//                                break;
+//                            }
+//                        }
+
+                        for(Slide slide: currentPresentation.getSlideList()) {
+                            for (InteractiveElement interactiveElement: slide.getSlideElementList()) {
+                                for (InteractiveElement dummyElement : interactiveElementsDB) {
+                                    if (interactiveElement.getInteractiveElementID() == dummyElement.getInteractiveElementID()) {
+                                        interactiveElement.setLive(dummyElement.isLive());
+                                    }
+                                }
+                            }
+                        }
+
                         liveElement = currentPresentation.getLiveElement();
 
                         if(liveElement != null && isInteractiveElementLive == false){

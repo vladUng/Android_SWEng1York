@@ -54,25 +54,15 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        currentPresentation = (Presentation) intent.getExtras().getParcelable("presentation");
-        user = (User) intent.getExtras().getParcelable("user");
+        currentPresentation = intent.getExtras().getParcelable("presentation");
+        user = intent.getExtras().getParcelable("user");
         System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
 
         setContentView(R.layout.activity_pres);
         //Show Edit Text to type question
         editText = (EditText) findViewById(R.id.questionText);
 
-        //check if there is a live element
-        if (currentPresentation.getSlideList() != null) {
-            if (currentPresentation.getSlideList().get(currentPresentation.getCurrentSlideNumber()).getSlideElementList() != null) {
-
-                liveElement = currentPresentation.getLiveElement();
-                if (liveElement != null) {
-                    isInteractiveElementLive = true;
-                }
-            }
-        }
-        replaceFragment();
+        checkLiveInteractiveElements();
         //isInteractiveElementLive = true;
 //        if(isInteractiveElementLive){
 //            interactionTime = 10000; // TODO: Remove this; this is just for testing
@@ -178,50 +168,9 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
         switch ((String) tableToUpdate) {
             case "interactive_elements":
-                try {
-                    SocketClient mySocketClient = new SocketClient();
-
-                    ArrayList<InteractiveElement> interactiveElementsDB;
-                    interactiveElementsDB = mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID()));
-
-                    //update just when the interactive elements are different than null
-                    if(interactiveElementsDB != null) {//                        //get the interactive element that has been updated
-//                        InteractiveElement dummyElement;
-//                        for(InteractiveElement interactiveElement: interactiveElementsDB) {
-//                            if (interactiveElement.isLive()) {
-//                                dummyElement = interactiveElement;
-//                                break;
-//                            }
-//                        }
-
-                        for(Slide slide: currentPresentation.getSlideList()) {
-                            for (InteractiveElement interactiveElement: slide.getSlideElementList()) {
-                                for (InteractiveElement dummyElement : interactiveElementsDB) {
-                                    if (interactiveElement != null ) {
-                                        if (interactiveElement.getXml_element_id() == dummyElement.getXml_element_id()) {
-                                            interactiveElement.setLive(dummyElement.isLive());
-                                            interactiveElement.setInteractiveElementID(dummyElement.getInteractiveElementID());
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        liveElement = currentPresentation.getLiveElement();
-
-                        if(liveElement != null && isInteractiveElementLive == false){
-                            isInteractiveElementLive = true;
-                        } else {
-                            isInteractiveElementLive = false;
-                        }
-                        replaceFragment();
-                    }
-                } catch (Exception e) {
-                    System.out.println("Ooops! There was a problem");
-                    e.printStackTrace();
-                }
-
+                checkLiveInteractiveElements();
                 break;
+
             case "presentations":
                 try {
                     SocketClient mySocketClient = new SocketClient();
@@ -241,9 +190,50 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                     e.printStackTrace();
                 }
                 break;
+            
             default:
                 System.out.println("Other table than interactive_elements was updated");
                 break;
+        }
+    }
+
+    // Method that checks if there are any interactive elements live for the current presentation
+    // updates the  UI accordingly
+    private void checkLiveInteractiveElements(){
+        try {
+            SocketClient mySocketClient = new SocketClient();
+
+            ArrayList<InteractiveElement> interactiveElementsDB;
+            interactiveElementsDB = mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID()));
+
+            //update just when the interactive elements are different than null
+            if(interactiveElementsDB != null) {                     //get the interactive element that has been updated
+
+                for(Slide slide: currentPresentation.getSlideList()) {
+                    for (InteractiveElement interactiveElement: slide.getSlideElementList()) {
+                        for (InteractiveElement dummyElement : interactiveElementsDB) {
+                            if (interactiveElement != null ) {
+                                if (interactiveElement.getXml_element_id() == dummyElement.getXml_element_id()) {
+                                    interactiveElement.setLive(dummyElement.isLive());
+                                    interactiveElement.setInteractiveElementID(dummyElement.getInteractiveElementID());
+                                }
+                            }
+                        }
+                    }
+                }
+
+                liveElement = currentPresentation.getLiveElement();
+
+                if(liveElement != null && isInteractiveElementLive == false){
+                    isInteractiveElementLive = true;
+                } else {
+                    isInteractiveElementLive = false;
+                }
+                replaceFragment();
+            }
+        } catch (Exception e) {
+            System.out.println("Ooops! There was a problem in checking interactive elements");
+            e.printStackTrace();
         }
     }
 
@@ -260,7 +250,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
             SocketClient socketClient = new SocketClient();
             boolean status;
             if (isInPresentation) {
-                 status = socketClient.toggleUserActivePresentation(currentPresentation.getPresentationID(), user.getUserID());
+                status = socketClient.toggleUserActivePresentation(currentPresentation.getPresentationID(), user.getUserID());
             } else {
                 status = socketClient.toggleUserActivePresentation(0, user.getUserID());
             }

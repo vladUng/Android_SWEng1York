@@ -185,9 +185,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                     interactiveElementsDB = mySocketClient.getInteractiveElements(String.valueOf(currentPresentation.getPresentationID()));
 
                     //update just when the interactive elements are different than null
-                    if(interactiveElementsDB != null) {
-
-//                        //get the interactive element that has been updated
+                    if(interactiveElementsDB != null) {//                        //get the interactive element that has been updated
 //                        InteractiveElement dummyElement;
 //                        for(InteractiveElement interactiveElement: interactiveElementsDB) {
 //                            if (interactiveElement.isLive()) {
@@ -202,6 +200,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                                     if (interactiveElement != null ) {
                                         if (interactiveElement.getXml_element_id() == dummyElement.getXml_element_id()) {
                                             interactiveElement.setLive(dummyElement.isLive());
+                                            interactiveElement.setInteractiveElementID(dummyElement.getInteractiveElementID());
                                         }
                                     }
                                 }

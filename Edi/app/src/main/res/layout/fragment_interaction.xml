@@ -10,20 +10,27 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:weightSum="10"
     tools:context="com.example.i2lc.edi.PresentationActivity">
 
 
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight = "30"/>
+        android:layout_height="0dp"
+        android:layout_weight = "1"/>
+    <TextView
+        android:id="@+id/questionText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textSize="20dp"
+        android:layout_weight = "2"/>
 
     <EditText
         android:id="@+id/answerText"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_weight = "20"
+        android:layout_height="0dp"
+        android:layout_weight = "2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@id/progressBar"
@@ -33,21 +40,28 @@
         android:maxLines="1"
         android:padding="@dimen/activity_horizontal_margin"
         android:visibility="visible" />
+    <ListView
+        android:id="@+id/answersList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/wetAsphalt" />
 
     <TextView
+        android:id="@+id/timerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight = "30"/>
+        android:layout_height="0dp"
+        android:layout_weight = "2"/>
 
     <Button
         android:id="@+id/sendAnswer"
         style="@android:style/Widget.Button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="14dp"
         android:layout_marginEnd="118dp"
         android:layout_marginRight="118dp"
-        android:layout_weight="0.2"
+        android:layout_weight="1"
         android:background="@color/colorPrimaryDark"
         android:backgroundTint="@color/colorAccent"
         android:elevation="0dp"

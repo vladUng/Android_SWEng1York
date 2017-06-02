@@ -55,6 +55,7 @@ public class InteractionFragment extends Fragment {
     private int seconds = 0;
     private TextView timerView;
     private boolean isPollAnswerClicked = false;
+    private View rootView;
 
     public InteractionFragment() {
         // Required empty public constructor
@@ -90,54 +91,29 @@ public class InteractionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        isPollAnswerClicked = false;
         if(interactiveElementInterface != null){
             liveElement = interactiveElementInterface.getInteractiveElementInterface();
         }
         if(userInterface != null){
             user = userInterface.getUserInterface();
         }
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_interaction, container, false);
-        sendButton = (Button) rootView.findViewById(R.id.sendAnswer);
-        answerTextView = (EditText)rootView.findViewById(R.id.answerText);
-        questionTextView = (TextView) rootView.findViewById(R.id.questionText);
-        answersListView = (ListView) rootView.findViewById(R.id.answersList);
-        timerView = (TextView) rootView.findViewById(R.id.timerView);
-        questionTextView.setText(liveElement.getInteractiveElementQuestion());//TODO put this line in back
-//        questionTextView.setText("Test Question");
-//        liveElement = new InteractiveElement();
-//        liveElement.setType("poll");
-//        liveElement.setAnswers("ans1,ans2,ans3");
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(liveElement.getType().toLowerCase().equals("wordcloud")) {
-                    answer = answerTextView.getText().toString();
-                }
-                interaction = new Interaction(user.getUserID(), liveElement.getInteractiveElementID(), answer);
-                try {
-                    if(liveElement.getType().toLowerCase().equals("wordcloud")) {
-                        interaction.sendInteraction();
-                        answerTextView.setText("");
-                        Toast.makeText(getActivity(), "Your answer has been sent!", Toast.LENGTH_LONG).show();
-                        System.out.println("Sent Answer: " + answer);
-                    }
-                    if(liveElement.getType().toLowerCase().equals("poll") && isPollAnswerClicked){
-                        interaction.sendInteraction();
-                        answerTextView.setText("");
-                        Toast.makeText(getActivity(), "Your answer has been sent!", Toast.LENGTH_LONG).show();
-                        System.out.println("Sent Answer: " + answer);
-                    } else{
-                        Toast.makeText(getActivity(), "Please select an answer first!", Toast.LENGTH_LONG).show();
-                    }
+        if(liveElement.getType().toLowerCase().equals("wordcloud")) {
+            // Inflate the layout for this fragment
+            rootView = inflater.inflate(R.layout.wordcloud_fragment, container, false);
+            sendButton = (Button) rootView.findViewById(R.id.sendWordcloudAnswer);
+            answerTextView = (EditText) rootView.findViewById(R.id.answerText);
+            questionTextView = (TextView) rootView.findViewById(R.id.questionTextWordcloud);
+            answersListView = (ListView) rootView.findViewById(R.id.answersList);
+            timerView = (TextView) rootView.findViewById(R.id.timerView);
+            questionTextView.setText(liveElement.getInteractiveElementQuestion());
+        }else if (liveElement.getType().toLowerCase().equals("poll")){
+            // Inflate the layout for this fragment
+            rootView = inflater.inflate(R.layout.poll_fragment, container, false);
+            sendButton = (Button) rootView.findViewById(R.id.sendPollAnswer);
+            questionTextView = (TextView) rootView.findViewById(R.id.questionTextPoll);
+            answersListView = (ListView) rootView.findViewById(R.id.answersList);
 
-                } catch (Exception e) {
-                    System.out.println("Sending Interaction Failed");
-                    e.printStackTrace();
-                }
-            }
-        });
-        if(liveElement.getType().toLowerCase().equals("poll")) {
             answersList = liveElement.getAnswers().split(",");
             //sendButton.setVisibility(View.INVISIBLE);
             final AnswerItemAdapter adapter = new AnswerItemAdapter(rootView.getContext(), answersList, user, liveElement.getInteractiveElementID());
@@ -151,22 +127,78 @@ public class InteractionFragment extends Fragment {
                     isPollAnswerClicked = true;
                     for(int i = 0;i<answersListView.getCount();i++){
                         if(i == position) {
-                            answersListView.getChildAt(i).setBackgroundResource(R.color.primary_light);
-                        } else{
                             answersListView.getChildAt(i).setBackgroundResource(R.color.colorAccent);
+                        } else{
+                            answersListView.getChildAt(i).setBackgroundResource(R.color.colorPrimary);
                         }
 
                     }
 
                 }
             });
+        }else{
+            System.out.println("Error when loading interaction fragment!");
         }
-        else if(liveElement.getType().toLowerCase().equals("wordcloud")){
-            answersListView.setVisibility(ListView.INVISIBLE);
-        } else{
-            System.out.print("Interactive element is not of type poll or wordcloud");
-            questionTextView.setText("Error when loading interactive element");
-        }
+        questionTextView.setText(liveElement.getInteractiveElementQuestion());
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(liveElement.getType().toLowerCase().equals("wordcloud")) {
+                    answer = answerTextView.getText().toString();
+                }
+                interaction = new Interaction(user.getUserID(), liveElement.getInteractiveElementID(), answer);
+                try {
+                    if(liveElement.getType().toLowerCase().equals("wordcloud")) {
+                        interaction.sendInteraction();
+                        answerTextView.setText("");
+                        Toast.makeText(getActivity(), "Your answer has been sent!", Toast.LENGTH_LONG).show();
+                        System.out.println("Sent Answer: " + answer);
+                    }else if(liveElement.getType().toLowerCase().equals("poll") && isPollAnswerClicked){
+                        interaction.sendInteraction();
+                        Toast.makeText(getActivity(), "Your answer has been sent!", Toast.LENGTH_LONG).show();
+                        sendButton.setVisibility(View.INVISIBLE);
+                        System.out.println("Sent Answer: " + answer);
+                    } else{
+                        Toast.makeText(getActivity(), "Please select an answer first!", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Sending Interaction Failed");
+                    e.printStackTrace();
+                }
+            }
+        });
+//        if(liveElement.getType().toLowerCase().equals("poll")) {
+//            answersList = liveElement.getAnswers().split(",");
+//            //sendButton.setVisibility(View.INVISIBLE);
+//            final AnswerItemAdapter adapter = new AnswerItemAdapter(rootView.getContext(), answersList, user, liveElement.getInteractiveElementID());
+//            answersListView.setAdapter(adapter);
+//            answersListView.setVisibility(ListView.VISIBLE);
+//            answersListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+//                @Override
+//                public void onItemClick(AdapterView<?> adapterView,View v,int position, long l){
+//                    //TextView itemTextView =(TextView) getViewByPosition(position,answersListView);
+//                    answer = Integer.toString(position);
+//                    isPollAnswerClicked = true;
+//                    for(int i = 0;i<answersListView.getCount();i++){
+//                        if(i == position) {
+//                            answersListView.getChildAt(i).setBackgroundResource(R.color.primary_light);
+//                        } else{
+//                            answersListView.getChildAt(i).setBackgroundResource(R.color.colorAccent);
+//                        }
+//
+//                    }
+//
+//                }
+//            });
+//        }
+//        else if(liveElement.getType().toLowerCase().equals("wordcloud")){
+//            answersListView.setVisibility(ListView.INVISIBLE);
+//        } else{
+//            System.out.print("Interactive element is not of type poll or wordcloud");
+//            questionTextView.setText("Error when loading interactive element");
+//        }
 
 
 

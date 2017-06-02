@@ -107,6 +107,7 @@ public class MainPresentationFragment extends Fragment {
         rootView = inflater.inflate(R.layout.activity_presentation, container, false);
         PresentationActivity activity = (PresentationActivity) getActivity();
         TextView testText = (TextView) rootView.findViewById(R.id.testData);
+        TextView titleTextView = (TextView) rootView.findViewById(R.id.presentationTitle);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         askButton = (Button) rootView.findViewById(R.id.askButton);
         cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
@@ -119,6 +120,8 @@ public class MainPresentationFragment extends Fragment {
         if(userInterface != null){
             user = userInterface.getUserInterface();
         }
+
+        titleTextView.setText(currentPresentation.getTitle());
 //        progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber() + 1));
 //        progress = currentPresentation.calculateProgress();
 //        //
@@ -140,7 +143,7 @@ public class MainPresentationFragment extends Fragment {
             }
         });
         //Display test Data
-        testText.setText("User ID:" + Integer.toString(user.getUserID()) + "Pres ID: " + Integer.toString(currentPresentation.getPresentationID())+ " Module ID: " + Integer.toString(currentPresentation.getModuleID()) + " Module: " + currentPresentation.getModule());
+        testText.setText("User ID:" + Integer.toString(user.getUserID()) + "Pres ID: " + Integer.toString(currentPresentation.getPresentationID())+ " Module ID: " + Integer.toString(currentPresentation.getModuleID()) + " Module: " + currentPresentation.getModuleName());
         return rootView;
     }
 

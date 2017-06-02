@@ -19,7 +19,6 @@ import com.example.i2lc.edi.dbClasses.User;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Cosmin Frateanu on 27/05/2017.
@@ -100,7 +99,7 @@ public class PresentationItemAdapter extends BaseAdapter{
             holder.presentationTitle.setText("Title: "+ presentation.getTitle());
             holder.presentationDescription.setText("Description: "+ presentation.getDescription());
             holder.presentationAuthor.setText("Author: " + presentation.getAuthor());
-            holder.presentationModule.setText("Module: " + presentation.getModule());
+            holder.presentationModule.setText("Module: " + presentation.getModuleName());
 
             //Set ImageView to be presentation thumbnail from path
             if(presentation.getThumbnailPath() != null) {

@@ -74,6 +74,8 @@
             android:layout_gravity="center"
             android:layout_weight="0.50"
             android:background="@color/liveColor"
+            android:textStyle="bold"
+            android:textColor="@color/icons"
             android:elevation="0dp"
             android:inputType="none"
             android:onClick="logIn"

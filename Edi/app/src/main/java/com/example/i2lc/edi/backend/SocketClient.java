@@ -202,7 +202,7 @@ public class SocketClient {
         return retValue;
     }
 
-    //returns all the modules in which a user is involved including the presentations for each module
+    //returns all the modules in which a user is involved including the presentations for each moduleName
     public ArrayList<Module> getModules(String forUserId) {
 
         ArrayList<Module> retModules = new ArrayList<>();

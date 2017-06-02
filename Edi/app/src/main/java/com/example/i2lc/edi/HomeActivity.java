@@ -14,10 +14,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -101,11 +104,11 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main_menu, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -141,6 +144,18 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         //Display icon to open/ close sliding list
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayOptions(actionBar.getDisplayOptions()
+                | ActionBar.DISPLAY_SHOW_CUSTOM);
+        ImageView imageView = new ImageView(actionBar.getThemedContext());
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.setImageResource(R.drawable.edi_small);
+        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.WRAP_CONTENT, Gravity.RIGHT
+                | Gravity.CENTER_VERTICAL);
+        layoutParams.rightMargin = 40;
+        imageView.setLayoutParams(layoutParams);
+        actionBar.setCustomView(imageView);
         //Set title
         setTitle(listSliding.get(0).getTitle());
         //Item Selected
@@ -269,10 +284,10 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         }
 
         String zipFileName = basePath + filename + ".zip";
-        String zipFolder =  basePath + filename +"_folder/";
+        String zipFolderName =  basePath + filename +"_folder/";
 
         try {
-            File destinationFolder = new File(zipFolder);
+            File destinationFolder = new File(zipFolderName);
 
             if (destinationFolder.exists()) {
                 String deleteCmd = "sudo rm -r " + destinationFolder.getAbsolutePath();
@@ -291,7 +306,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 //            }
 
             DecompressFast.unzip(new File(zipFileName), destinationFolder);
-            System.out.println("Extracted to \n"+ zipFolder);
+            System.out.println("Extracted to \n"+ zipFolderName);
             presentation.setFolderPath(destinationFolder.getAbsolutePath());
         } catch (ZipException e) {
             Log.e("Problems with zip", e.getMessage());
@@ -392,7 +407,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     protected void updatePresentationList(){
         try {
-            //if there are any elements clear module array
+            //if there are any elements clear moduleName array
             //TODO delete this as modules is already cleared in getModules
             if (modules != null) {
                 modules.clear();
@@ -406,6 +421,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 for (Presentation presentation : module.getPresentations()) {
                     if(presentation.isLive()) {
                         System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
+                        presentation.setModuleName(module.getModuleName());
                         downloadPresentation(presentation);
                     }else{
                         System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is not live.");
@@ -420,10 +436,10 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     @Override
     protected void onResume() {
+        super.onResume();
         //connect client
         serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
         connectToRemoteSocket();
-        super.onResume();
         updatePresentationList();
     }
 

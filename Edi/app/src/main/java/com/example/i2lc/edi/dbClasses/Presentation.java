@@ -22,7 +22,7 @@ public class Presentation implements Parcelable{
     protected int totalSlideNumber;
     //protected Thumbnail thumbnail;
     protected String title = "N/A";
-    protected String module=  "N/A";
+    protected String moduleName =  "N/A";
     protected String author = "N/A";
     protected String description = "N/A";
     protected boolean live = true; //TODO remove initiliasations when finished
@@ -48,7 +48,7 @@ public class Presentation implements Parcelable{
         currentSlideNumber = in.readInt();
         totalSlideNumber = in.readInt();
         title = in.readString();
-        module = in.readString();
+        moduleName = in.readString();
         author = in.readString();
         description = in.readString();
         live = in.readByte() != 0;
@@ -178,12 +178,12 @@ public class Presentation implements Parcelable{
         this.author = author;
     }
 
-    public String getModule() {
-        return module;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setModule(String module) {
-        this.module = module;
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 
     public String getDescription() {
@@ -222,7 +222,7 @@ public class Presentation implements Parcelable{
         dest.writeInt(currentSlideNumber);
         dest.writeInt(totalSlideNumber);
         dest.writeString(title);
-        dest.writeString(module);
+        dest.writeString(moduleName);
         dest.writeString(author);
         dest.writeString(description);
         dest.writeByte((byte) (live ? 1 : 0));

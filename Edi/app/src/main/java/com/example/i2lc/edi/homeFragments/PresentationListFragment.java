@@ -107,62 +107,24 @@ public class PresentationListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
-        View itemView = inflater.inflate(R.layout.presentation_item, container, false);
-//        presentationList = new ArrayList<Presentation>();
-//        //getPresentation(userID);
-//        getModules(userID);
-//        for(Module module: modules) {
-//            for (Presentation presentation : module.getPresentations()) {
-//                if(presentation.isLive() == true) {
-//                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
-//                    downloadPresentation(presentation, rootView.getContext());
-//
-//                    //Create folder
-//                    File presentationFolder = new File(presentation.getFolderPath()); //
-//                    //Create list of files
-//                    File[] directoryListing = presentationFolder.listFiles();
-//                    if (directoryListing != null) {
-//                        for (File child : directoryListing) {
-//                            //Check if file in directory is an xml file
-//                            if (child.getAbsolutePath().contains(".xml")) {
-//                                ParserXML parser = new ParserXML(presentation, child);
-//                                presentationList.add(parser.parsePresentation());
-//                            }
-//                        }
-//                        for (File child: directoryListing){
-//                            if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
-//                                File[] thumbnails = child.listFiles();
-//                                if (thumbnails != null) {
-//                                    String thumbnailPath;
-//                                    for (File thumbnail : thumbnails) {
-//                                        thumbnailPath = thumbnail.getAbsolutePath();
-//                                        if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
-//                                            presentationList.get(presentationList.size() - 1).setThumbnailPath(thumbnailPath);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    } else {
-//                        System.out.println("Folder doesn't exist/is empty!");
-//                    }
-//                }else{
-//                    System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
-//                }
-//            }
-//        }
+
 
         if(presentationListInterface != null){
-            presentationList = presentationListInterface.getLivePresentationList();        }
+            presentationList = presentationListInterface.getLivePresentationList();
+        }
         if(userInterface != null){
             user = userInterface.getUserInterface();
         }
-        //Create GUI
-        listView = (ListView) rootView.findViewById(R.id.presentation_list);
-        PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
-        listView.setAdapter(adapter);
-//        in
+        if(presentationList.size() == 0) {
+            rootView = inflater.inflate(R.layout.no_presentations_layout, container, false);
+        }else {
+            rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
+            //Create GUI
+            listView = (ListView) rootView.findViewById(R.id.presentation_list);
+            PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
+            listView.setAdapter(adapter);
+        }
+
         return rootView;
     }
 
@@ -498,8 +460,8 @@ public class PresentationListFragment extends Fragment{
                 if(presentationList!=null) {
                     presentationList.clear();
                 }
-                for(Module module: modules) {
-                    for (Presentation presentation : module.getPresentations()){
+                for(Module moduleName: modules) {
+                    for (Presentation presentation : moduleName.getPresentations()){
                         if(presentation.isLive()) {
                             //presentationList.add(presentation);
                             downloadPresentation(presentation);

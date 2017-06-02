@@ -376,9 +376,14 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
         try {
 
-            //if there are any elements clear array
+            //if there are any elements clear module array
             if (modules != null) {
                 modules.clear();
+            }
+
+            //if there are any elements clear livePresentation array
+            if(livePresentations != null) {
+                livePresentations.clear();
             }
 
             getModules(Integer.toString(user.getUserID()));
@@ -387,35 +392,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                     if(presentation.isLive()) {
                         System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
                         downloadPresentation(presentation);
-//                        //Create folder
-//                        File presentationFolder = new File(presentation.getFolderPath()); //
-//                        //Create list of files
-//                        File[] directoryListing = presentationFolder.listFiles();
-//                        if (directoryListing != null) {
-//                            for (File child : directoryListing) {
-//                                //Check if file in directory is an xml file
-//                                if (child.getAbsolutePath().contains(".xml")) {
-//                                    ParserXML parser = new ParserXML(presentation, child);
-//                                    livePresentations.add(parser.parsePresentation());
-//                                }
-//                            }
-//                            for (File child: directoryListing){
-//                                if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
-//                                    File[] thumbnails = child.listFiles();
-//                                    if (thumbnails != null) {
-//                                        String thumbnailPath;
-//                                        for (File thumbnail : thumbnails) {
-//                                            thumbnailPath = thumbnail.getAbsolutePath();
-//                                            if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
-//                                                livePresentations.get(livePresentations.size() - 1).setThumbnailPath(thumbnailPath);
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        } else {
-//                            System.out.println("Folder doesn't exist/is empty!");
-//                        }
                     }else{
                         System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
                     }
@@ -424,18 +400,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        SocketClient mySocketClient = new SocketClient();
-//
-//        ArrayList<Module> modules = mySocketClient.getModules(Integer.toString(user.getUserID()));
-//        livePresentations.clear();
-//        for(Module module: modules) {
-//            for (Presentation presentation : module.getPresentations()){
-//                if(presentation.isLive()) {
-//                    livePresentations.add(presentation);
-//                    System.out.println(" Presentation: " + presentation.getPresentationID() + "is live");
-//                }
-//            }
-//        }
     }
 
     @Override
@@ -676,7 +640,4 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         }
     }
 
-    public ArrayList<Presentation> getLivePresentations(){
-        return livePresentations;
-    }
 }

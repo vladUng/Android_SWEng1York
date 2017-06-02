@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.i2lc.edi.backend.SocketClient;
@@ -22,6 +23,8 @@ public class LogInActivity extends AppCompatActivity {
 
     private boolean loginSuccessful;
     private boolean isTeacher;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
 
     private User user = new User();
 
@@ -30,18 +33,17 @@ public class LogInActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        usernameEditText = (EditText) findViewById(R.id.username);
+        passwordEditText = (EditText) findViewById(R.id.password);
+        usernameEditText.setText("Student", TextView.BufferType.EDITABLE);//TODO remove when finishing
+        passwordEditText.setText("password", TextView.BufferType.EDITABLE);
     }
 
     //called when the user clicks the log in button
     public void logIn(View view) {
-        EditText usernameEditText = (EditText) findViewById(R.id.username);
-        EditText passwordEditText = (EditText) findViewById(R.id.password);
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-
         try {
-            username = "Student"; //TODO: Remove username and password on finish
-            password = "password";
             tryLogin(username, password);
             System.out.print("USER WITH ID = " + Integer.toString(user.getUserID()) + " IS LOGGING IN");
             Intent intent = new Intent(this, HomeActivity.class);

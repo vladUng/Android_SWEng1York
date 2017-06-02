@@ -208,9 +208,11 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                     for (InteractiveElement interactiveElement: slide.getSlideElementList()) {
                         for (InteractiveElement dummyElement : interactiveElementsDB) {
                             if (interactiveElement != null ) {
-                                if (interactiveElement.getXml_element_id() == dummyElement.getXml_element_id()) {
-                                    interactiveElement.setLive(dummyElement.isLive());
-                                    interactiveElement.setInteractiveElementID(dummyElement.getInteractiveElementID());
+                                if (slide.getSlideID() == dummyElement.getSlideNumber()){
+                                    if (interactiveElement.getXml_element_id() == dummyElement.getXml_element_id()) {
+                                        interactiveElement.setLive(dummyElement.isLive());
+                                        interactiveElement.setInteractiveElementID(dummyElement.getInteractiveElementID());
+                                    }
                                 }
                             }
                         }
@@ -221,6 +223,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 
                 if(liveElement != null && isInteractiveElementLive == false){
                     isInteractiveElementLive = true;
+
                 } else {
                     isInteractiveElementLive = false;
                 }

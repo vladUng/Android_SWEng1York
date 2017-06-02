@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.adapter.AnswerItemAdapter;
@@ -104,21 +105,26 @@ public class InteractionFragment extends Fragment {
         questionTextView = (TextView) rootView.findViewById(R.id.questionText);
         answersListView = (ListView) rootView.findViewById(R.id.answersList);
         timerView = (TextView) rootView.findViewById(R.id.timerView);
-        questionTextView.setText(liveElement.getInteractiveElementQuestion());
-        if(liveElement.getType() == "poll") {
+        questionTextView.setText(liveElement.getInteractiveElementQuestion());//TODO put this line in back
+//        questionTextView.setText("Test Question");
+//        liveElement = new InteractiveElement();
+//        liveElement.setType("poll");
+//        liveElement.setAnswers("ans1,ans2,ans3");
+        if(liveElement.getType().toLowerCase() == "poll") {
             answersList = liveElement.getAnswers().split(",");
-            answersListView.setVisibility(ListView.VISIBLE);
-            sendButton.setVisibility(View.INVISIBLE);
+            //sendButton.setVisibility(View.INVISIBLE);
             AnswerItemAdapter adapter = new AnswerItemAdapter(rootView.getContext(), answersList, user, liveElement.getInteractiveElementID());
             answersListView.setAdapter(adapter);
+            answersListView.setVisibility(ListView.VISIBLE);
             answersListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> adapterView,View v,int position, long l){
-                    TextView itemTextView =(TextView) getViewByPosition(position,answersListView);
-                    answer = itemTextView.getText().toString();
+                    //TextView itemTextView =(TextView) getViewByPosition(position,answersListView);
+                    answer = Integer.toString(position);
                     interaction = new Interaction(user.getUserID(), liveElement.getInteractiveElementID(), answer);
                     try {
                         interaction.sendInteraction();
+                        Toast.makeText(getActivity(), "Your answer has been sent!", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         System.out.println("Sending Interaction Failed");
                         e.printStackTrace();
@@ -126,7 +132,7 @@ public class InteractionFragment extends Fragment {
                 }
             });
         }
-        else {
+        else if(liveElement.getType().toLowerCase() == "wordcloud"){
             sendButton.setVisibility(View.VISIBLE);
             answersListView.setVisibility(ListView.INVISIBLE);
             sendButton.setOnClickListener(new View.OnClickListener() {
@@ -137,25 +143,18 @@ public class InteractionFragment extends Fragment {
                     interaction = new Interaction(user.getUserID(), liveElement.getInteractiveElementID(), answer);
                     try {
                         interaction.sendInteraction();
+                        editTextView.setText("");
+                        Toast.makeText(getActivity(), "Your answer has been sent!", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         System.out.println("Sending Interaction Failed");
                         e.printStackTrace();
                     }
                 }
             });
+        } else{
+            System.out.print("Interactive element is not of type poll or wordcloud");
+            questionTextView.setText("Error when loading interactive element");
         }
-        new CountDownTimer(liveElement.getResponsesInterval(), TICK_TIME) {
-            public void onTick(long millisUntilFinished) {
-                seconds++;
-                if(timerView != null){
-                    timerView.setText(Integer.toString(seconds));
-                }
-                System.out.print(Integer.toString(seconds));
-            }
-            public void onFinish() {
-                seconds = 0;
-            }
-        }.start();
         return rootView;
     }
 

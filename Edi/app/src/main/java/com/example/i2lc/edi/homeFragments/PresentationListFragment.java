@@ -161,8 +161,7 @@ public class PresentationListFragment extends Fragment{
 //        }
 
         if(presentationListInterface != null){
-            presentationList = presentationListInterface.getLivePresentationList();
-        }
+            presentationList = presentationListInterface.getLivePresentationList();        }
         if(userInterface != null){
             user = userInterface.getUserInterface();
         }

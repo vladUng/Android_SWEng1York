@@ -25,7 +25,6 @@
         android:layout_height="0dp"
         android:textSize="20dp"
         android:layout_weight = "2"/>
-
     <EditText
         android:id="@+id/answerText"
         android:layout_width="match_parent"
@@ -40,6 +39,24 @@
         android:maxLines="1"
         android:padding="@dimen/activity_horizontal_margin"
         android:visibility="visible" />
+    <Button
+        android:id="@+id/sendAnswer"
+        style="@android:style/Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="0dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginEnd="118dp"
+        android:layout_marginRight="118dp"
+        android:layout_weight="1"
+        android:background="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorAccent"
+        android:elevation="0dp"
+        android:text="  Send Answer "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
     <ListView
         android:id="@+id/answersList"
         android:layout_width="match_parent"
@@ -53,23 +70,6 @@
         android:layout_height="0dp"
         android:layout_weight = "2"/>
 
-    <Button
-        android:id="@+id/sendAnswer"
-        style="@android:style/Widget.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="14dp"
-        android:layout_marginEnd="118dp"
-        android:layout_marginRight="118dp"
-        android:layout_weight="1"
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorAccent"
-        android:elevation="0dp"
-        android:fontFamily="monospace"
-        android:text="  Send Answer "
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:visibility="visible" />
+
 
 </LinearLayout>

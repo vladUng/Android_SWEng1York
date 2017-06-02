@@ -87,7 +87,6 @@
         android:drawableLeft="@drawable/question"
         android:drawableStart="@drawable/question"
         android:elevation="0dp"
-        android:fontFamily="monospace"
         android:text="  Ask "
         android:textAlignment="center"
         android:textSize="20sp"

@@ -397,6 +397,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                     }
                 }
             }
+            replaceFragment(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -408,6 +409,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
         connectToRemoteSocket();
         super.onResume();
+        updatePresentationList();
     }
 
     @Override
@@ -420,7 +422,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     protected void onRestart() {
         super.onRestart();
         //when coming back check if a presentation live status has changed
-        updatePresentationList();
     }
     //    public void joinPresentation(View view) {
 //        Intent intent = new Intent(this, InitialPresentationActivity.class);

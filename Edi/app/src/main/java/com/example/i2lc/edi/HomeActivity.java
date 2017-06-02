@@ -305,7 +305,9 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                         for (File thumbnail : thumbnails) {
                             thumbnailPath = thumbnail.getAbsolutePath();
                             if (!thumbnail.isHidden() && thumbnailPath.contains("slide0")) {
-                                livePresentations.get(livePresentations.size() - 1).setThumbnailPath(thumbnailPath);
+                                if(livePresentations.size() > 0) {
+                                    livePresentations.get(livePresentations.size() - 1).setThumbnailPath(thumbnailPath);
+                                }
                             }
                         }
                     }
@@ -373,19 +375,15 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     }
 
     protected void updatePresentationList(){
-
         try {
-
             //if there are any elements clear module array
             if (modules != null) {
                 modules.clear();
             }
-
             //if there are any elements clear livePresentation array
             if(livePresentations != null) {
                 livePresentations.clear();
             }
-
             getModules(Integer.toString(user.getUserID()));
             for(Module module: modules) {
                 for (Presentation presentation : module.getPresentations()) {
@@ -393,7 +391,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                         System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
                         downloadPresentation(presentation);
                     }else{
-                        System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
+                        System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is not live.");
                     }
                 }
             }

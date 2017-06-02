@@ -13,18 +13,18 @@
     android:weightSum="10"
     tools:context="com.example.i2lc.edi.PresentationActivity">
 
-
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight = "1"/>
+        android:layout_weight = "0.5"/>
     <TextView
         android:id="@+id/questionText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textSize="20dp"
-        android:layout_weight = "2"/>
+        android:layout_weight = "2"
+        android:background="@color/midnightBlue"
+        android:textColor="@color/icons"/>
     <EditText
         android:id="@+id/answerText"
         android:layout_width="match_parent"
@@ -39,36 +39,38 @@
         android:maxLines="1"
         android:padding="@dimen/activity_horizontal_margin"
         android:visibility="visible" />
+    <ListView
+        android:id="@+id/answersList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:background="@color/wetAsphalt" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight = "1"/>
     <Button
         android:id="@+id/sendAnswer"
         style="@android:style/Widget.Button"
         android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:layout_height="0dp"
-        android:layout_marginBottom="14dp"
-        android:layout_marginEnd="118dp"
-        android:layout_marginRight="118dp"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/liveColor"
         android:elevation="0dp"
         android:text="  Send Answer "
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="visible" />
-    <ListView
-        android:id="@+id/answersList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:background="@color/wetAsphalt" />
+
 
     <TextView
         android:id="@+id/timerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight = "2"/>
+        android:layout_weight = "0.5"/>
 
 
 

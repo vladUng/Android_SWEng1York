@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.backend.Utils;
@@ -31,17 +29,11 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
-    private static final int TICK_TIME =  1000; //TODO is this needed?
     private Fragment fragment;
     private PresentationMod presentation;
-    boolean isInteractiveElementLive = false; //TODO Change; this is just for testing
-    private ProgressBar progressBar; //TODO is this needed?
-    private int progress; //TODO is this needed?
-    private Button askButton; //TODO is this needed?
+    boolean isInteractiveElementLive = false;
     private EditText editText; //TODO is this needed?
-    private boolean questionEnabled = true; //TODO is this needed?
     private User user;
-    private int interactionTime = 10000; //TODO Remove this on finish
     private Presentation currentPresentation;
     private InteractiveElement liveElement;
 
@@ -63,12 +55,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         editText = (EditText) findViewById(R.id.questionText);
 
         checkLiveInteractiveElements();
-        //isInteractiveElementLive = true;
-//        if(isInteractiveElementLive){
-//            interactionTime = 10000; // TODO: Remove this; this is just for testing
-//            runInteraction();
-//            isInteractiveElementLive = false;
-//        }
     }
 
 //    private void runInteraction(){
@@ -176,26 +162,35 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                     SocketClient mySocketClient = new SocketClient();
 
                     Presentation presentation;
-                    //get a presentation
+
+                    //get the latest version of the current presentation on the DB
                     presentation = mySocketClient.getPresentation(currentPresentation.getPresentationID());
 
-                    //update just when the interactive elements are different than null
+                    //check if the current presentation has been updated
                     if(presentation != null) {
-                        System.out.println("we are at slide number" + presentation.getCurrentSlideNumber());
-                        currentPresentation.setCurrentSlideNumber(presentation.getCurrentSlideNumber());
-                        currentPresentation.calculateProgress();
+
+                        if (presentation.isLive()) {
+                            System.out.println("we are at slide number" + presentation.getCurrentSlideNumber());
+                            currentPresentation.setCurrentSlideNumber(presentation.getCurrentSlideNumber());
+                            currentPresentation.calculateProgress();
+                        } else {
+                            System.out.println("Presentation is not live anymore, go to the presentation list");
+                            currentPresentation.setLive(false);
+                            super.finish();
+                        }
                     }
                 } catch (Exception e) {
                     System.out.println("Ooops! There was a problem");
                     e.printStackTrace();
                 }
                 break;
-            
+
             default:
                 System.out.println("Other table than interactive_elements was updated");
                 break;
         }
     }
+
 
     // Method that checks if there are any interactive elements live for the current presentation
     // updates the  UI accordingly
@@ -303,7 +298,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     public InteractiveElement getInteractiveElementInterface() {
         return liveElement;
     }
-
 
     //TODO check if these two methods are used
     public Presentation getCurrentPresentation() {

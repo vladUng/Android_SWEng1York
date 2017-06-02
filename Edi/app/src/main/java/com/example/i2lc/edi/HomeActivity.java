@@ -75,7 +75,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     private ArrayList<Interaction> interactions;
     private ArrayList<Question> questions;
     private ArrayList<Presentation> presentations;
-    private View rootView;
 
     //for establishing connection
     private Socket socket;
@@ -86,88 +85,20 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        user = (User) intent.getExtras().getParcelable("user");
-        System.out.println("USER WITH ID = " + Integer.toString(user.getUserID()) + "just logged in.");
+        user = intent.getExtras().getParcelable("user");
+        if (user != null) {
+            System.out.println("USER WITH ID = " + Integer.toString(user.getUserID()) + "just logged in.");
+        }
         setContentView(R.layout.main_activity);
 
-        livePresentations = new ArrayList<Presentation>();
-        modules = new ArrayList<Module>();
+        livePresentations = new ArrayList<>();
+        modules = new ArrayList<>();
 
-        try {
-            getModules(Integer.toString(user.getUserID()));
-            for(Module module: modules) {
-                for (Presentation presentation : module.getPresentations()) {
-                    if(presentation.isLive() == true) {
-                        System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
-                        downloadPresentation(presentation);
-//                        //Create folder
-//                        File presentationFolder = new File(presentation.getFolderPath()); //
-//                        //Create list of files
-//                        File[] directoryListing = presentationFolder.listFiles();
-//                        if (directoryListing != null) {
-//                            for (File child : directoryListing) {
-//                                //Check if file in directory is an xml file
-//                                if (child.getAbsolutePath().contains(".xml")) {
-//                                    ParserXML parser = new ParserXML(presentation, child);
-//                                    livePresentations.add(parser.parsePresentation());
-//                                }
-//                            }
-//                            for (File child: directoryListing){
-//                                if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
-//                                    File[] thumbnails = child.listFiles();
-//                                    if (thumbnails != null) {
-//                                        String thumbnailPath;
-//                                        for (File thumbnail : thumbnails) {
-//                                            thumbnailPath = thumbnail.getAbsolutePath();
-//                                            if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
-//                                                livePresentations.get(livePresentations.size() - 1).setThumbnailPath(thumbnailPath);
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        } else {
-//                            System.out.println("Folder doesn't exist/is empty!");
-//                        }
-                    }else{
-                        System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        updatePresentationList();
 
         Toast.makeText(this, "You have successfully logged in!", Toast.LENGTH_LONG).show();
         createSlidingMenu();
 
-        try {
-            //String userID = "1";
-
-//            modules = new ArrayList<>();
-//            getModules(userID);
-
-//            sendInteraction(3, 1, "Testing interaction");
-//
-//            for (Module module: modules) {
-//                for (Presentation presentation: module.getPresentations()) {
-//                    downloadPresentation(presentation);
-//                }
-//            }
-//
-//            interactiveElements = new ArrayList<>();
-//            getInteractiveElements("1");
-//
-//            interactions = new ArrayList<>();
-//            getInteractions("1");
-//
-//              questions = new ArrayList<>();
-//              getQuestions("1");
-
-        } catch (Exception e) {
-            System.out.println("Bla bla bla it crashed");
-        }
     }
 
     @Override
@@ -265,23 +196,13 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 fragment = new PresentationListFragment();
                 break;
         }
-        if (null != fragment) {
 
-            FragmentManager fragmentManager = getFragmentManager();
-            android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.main_content, fragment);
-            transaction.commit();
-        }
-    }
+        FragmentManager fragmentManager = getFragmentManager();
+        android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.main_content, fragment);
+        transaction.commit();
 
-    public ArrayList<Presentation> getLivePresentations(){
-        return livePresentations;
     }
-//    public void joinPresentation(View view) {
-//        Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
-//        intent.putExtra("presentation", livePresentations);
-//        startActivity(intent);
-//    }
 
     //populates the modules array list also it gets the info for the presentations
     private void getModules(String userID) throws Exception {
@@ -320,6 +241,244 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         }
     }
 
+    public void downloadPresentation(Presentation presentation) {
+
+        String filename = "Presentation_" + presentation.getPresentationID();
+        String basePath = getFilesDir().getAbsolutePath() + "/";
+
+        try {
+            URL u = presentation.getXmlURL();
+            InputStream is = u.openStream();
+
+            DataInputStream dis = new DataInputStream(is);
+
+            byte[] buffer = new byte[1024];
+            int length;
+
+            FileOutputStream fos = new FileOutputStream(new File(basePath+ "/" + filename + ".zip"));
+            while ((length = dis.read(buffer))>0) {
+                fos.write(buffer, 0, length);
+            }
+
+        } catch (MalformedURLException mue) {
+            Log.e("SYNC getUpdate", "malformed url error", mue);
+        } catch (IOException ioe) {
+            Log.e("SYNC getUpdate", "io error", ioe);
+        } catch (SecurityException se) {
+            Log.e("SYNC getUpdate", "security error", se);
+        }
+
+        String zipFileName = basePath + filename + ".zip";
+        String zipFolder =  basePath + filename +"_folder/";
+
+        try {
+            File destinationFolder = new File(zipFolder);
+
+            DecompressFast.unzip(new File(zipFileName),destinationFolder);
+            System.out.println("Extracted to \n"+ zipFolder);
+            presentation.setFolderPath(destinationFolder.getAbsolutePath());
+        } catch (ZipException e) {
+            Log.e("Problems with zip", e.getMessage());
+        } catch (IOException e) {
+            Log.e("We got a problem", e.getMessage());
+        }
+
+        //Create folder
+        File presentationFolder = new File(presentation.getFolderPath()); //
+        //Create list of files
+        File[] directoryListing = presentationFolder.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                //Check if file in directory is an xml file
+                if (child.getAbsolutePath().contains(".xml")) {
+                    ParserXML parser = new ParserXML(presentation, child);
+                    livePresentations.add(parser.parsePresentation());
+                }
+            }
+
+            //set thumbnail path
+            for (File child: directoryListing){
+                if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
+                    File[] thumbnails = child.listFiles();
+                    if (thumbnails != null) {
+                        String thumbnailPath;
+                        for (File thumbnail : thumbnails) {
+                            thumbnailPath = thumbnail.getAbsolutePath();
+                            if (!thumbnail.isHidden() && thumbnailPath.contains("slide0")) {
+                                livePresentations.get(livePresentations.size() - 1).setThumbnailPath(thumbnailPath);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            System.out.println("Folder doesn't exist/is empty!");
+        }
+    }
+
+    //better to do the connection here, because we can directly triggered the UI
+    public void connectToRemoteSocket() {
+        //Alert tester that connection is being attempted
+        System.out.println("Client: Attempting Connection to " + serverIPAddress);
+
+        try {
+            socket = IO.socket(serverIPAddress);
+        } catch (URISyntaxException e) {
+            System.out.println("Couldn't create client port");
+        }
+
+        //Handling socket events
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Connected to socket");
+            }
+
+        });
+
+        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("For some reason the client is disconnected from the server. Some more info:" + args);
+            }
+        });
+
+        socket.on("DB_Update", new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                System.out.println("Client knows DB has updated:  " + args[0]);
+                updateLocalTables(args[0]);
+            }
+
+        });
+
+        socket.connect();
+    }
+
+    public void updateLocalTables(Object tableToUpdate) {
+
+        System.out.println("Table: " + tableToUpdate + " has been updated on the server");
+        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
+        switch ((String) tableToUpdate) {
+            case "presentations":
+                updatePresentationList();
+                break;
+            default:
+                System.out.println("Other table than interactive_elements was updated");
+                break;
+        }
+    }
+
+    protected void updatePresentationList(){
+
+        try {
+
+            //if there are any elements clear array
+            if (modules != null) {
+                modules.clear();
+            }
+
+            getModules(Integer.toString(user.getUserID()));
+            for(Module module: modules) {
+                for (Presentation presentation : module.getPresentations()) {
+                    if(presentation.isLive()) {
+                        System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + " is live.");
+                        downloadPresentation(presentation);
+//                        //Create folder
+//                        File presentationFolder = new File(presentation.getFolderPath()); //
+//                        //Create list of files
+//                        File[] directoryListing = presentationFolder.listFiles();
+//                        if (directoryListing != null) {
+//                            for (File child : directoryListing) {
+//                                //Check if file in directory is an xml file
+//                                if (child.getAbsolutePath().contains(".xml")) {
+//                                    ParserXML parser = new ParserXML(presentation, child);
+//                                    livePresentations.add(parser.parsePresentation());
+//                                }
+//                            }
+//                            for (File child: directoryListing){
+//                                if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
+//                                    File[] thumbnails = child.listFiles();
+//                                    if (thumbnails != null) {
+//                                        String thumbnailPath;
+//                                        for (File thumbnail : thumbnails) {
+//                                            thumbnailPath = thumbnail.getAbsolutePath();
+//                                            if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
+//                                                livePresentations.get(livePresentations.size() - 1).setThumbnailPath(thumbnailPath);
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        } else {
+//                            System.out.println("Folder doesn't exist/is empty!");
+//                        }
+                    }else{
+                        System.out.println("Presentation " + Integer.toString(presentation.getPresentationID()) + "is not live.");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        SocketClient mySocketClient = new SocketClient();
+//
+//        ArrayList<Module> modules = mySocketClient.getModules(Integer.toString(user.getUserID()));
+//        livePresentations.clear();
+//        for(Module module: modules) {
+//            for (Presentation presentation : module.getPresentations()){
+//                if(presentation.isLive()) {
+//                    livePresentations.add(presentation);
+//                    System.out.println(" Presentation: " + presentation.getPresentationID() + "is live");
+//                }
+//            }
+//        }
+    }
+
+    @Override
+    protected void onResume() {
+        //connect client
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        socket.disconnect(); //to avoid having issues with other instances of socketClient
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //when coming back check if a presentation live status has changed
+        updatePresentationList();
+    }
+    //    public void joinPresentation(View view) {
+//        Intent intent = new Intent(this, InitialPresentationActivity.class);
+//        startActivity(intent);
+//    }
+
+    @Override
+    public ArrayList<Presentation> getLivePresentationList() {
+        return livePresentations;
+    }
+    @Override
+    public User getUserInterface() {
+        return user;
+    }
+
+    //    public void joinPresentation(View view) {
+//        Intent intent = new Intent(fragment.getActivity(), PresentationActivity.class);
+//        intent.putExtra("presentation", livePresentations);
+//        startActivity(intent);
+//    }
+
+    //*************************** methods not use
     //TODO not needed here, but may be useful somewhere else
     private void getPresentation(String forUserID) throws Exception {
 
@@ -517,176 +676,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         }
     }
 
-    public void downloadPresentation(Presentation presentation) {
-
-        String filename = "Presentation_" + presentation.getPresentationID();
-        String basePath = getFilesDir().getAbsolutePath() + "/";
-
-        try {
-            URL u = presentation.getXmlURL();
-            InputStream is = u.openStream();
-
-            DataInputStream dis = new DataInputStream(is);
-
-            byte[] buffer = new byte[1024];
-            int length;
-
-            FileOutputStream fos = new FileOutputStream(new File(basePath+ "/" + filename + ".zip"));
-            while ((length = dis.read(buffer))>0) {
-                fos.write(buffer, 0, length);
-            }
-
-        } catch (MalformedURLException mue) {
-            Log.e("SYNC getUpdate", "malformed url error", mue);
-        } catch (IOException ioe) {
-            Log.e("SYNC getUpdate", "io error", ioe);
-        } catch (SecurityException se) {
-            Log.e("SYNC getUpdate", "security error", se);
-        }
-
-        String zipFileName = basePath + filename + ".zip";
-        String zipFolder =  basePath + filename +"_folder/";
-
-        try {
-            File destinationFolder = new File(zipFolder);
-
-            DecompressFast.unzip(new File(zipFileName),destinationFolder);
-            System.out.println("Extracted to \n"+ zipFolder);
-            presentation.setFolderPath(destinationFolder.getAbsolutePath());
-        } catch (ZipException e) {
-            Log.e("Problems with zip", e.getMessage());
-        } catch (IOException e) {
-            Log.e("We got a problem", e.getMessage());
-        }
-
-        //Create folder
-        File presentationFolder = new File(presentation.getFolderPath()); //
-        //Create list of files
-        File[] directoryListing = presentationFolder.listFiles();
-        if (directoryListing != null) {
-            for (File child : directoryListing) {
-                //Check if file in directory is an xml file
-                if (child.getAbsolutePath().contains(".xml")) {
-                    ParserXML parser = new ParserXML(presentation, child);
-                    livePresentations.add(parser.parsePresentation());
-                }
-            }
-
-            //set thumbnail path
-            for (File child: directoryListing){
-                if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
-                    File[] thumbnails = child.listFiles();
-                    if (thumbnails != null) {
-                        String thumbnailPath;
-                        for (File thumbnail : thumbnails) {
-                            thumbnailPath = thumbnail.getAbsolutePath();
-                            if (thumbnail.isHidden() == false && thumbnailPath.contains("slide0")) {
-                                livePresentations.get(livePresentations.size() - 1).setThumbnailPath(thumbnailPath);
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            System.out.println("Folder doesn't exist/is empty!");
-        }
-    }
-        //server stuff
-
-
-    //better to do the connection here, because we can directly triggered the UI
-    public void connectToRemoteSocket() {
-        //Alert tester that connection is being attempted
-        System.out.println("Client: Attempting Connection to " + serverIPAddress);
-
-        try {
-            socket = IO.socket(serverIPAddress);
-        } catch (URISyntaxException e) {
-            System.out.println("Couldn't create client port");
-        }
-
-        //Handling socket events
-        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-
-            @Override
-            public void call(Object... args) {
-                System.out.println("Connected to socket");
-            }
-
-        });
-
-        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-            @Override
-            public void call(Object... args) {
-                System.out.println("For some reason the client is disconnected from the server. Some more info:" + args.toString());
-            }
-        });
-
-        socket.on("DB_Update", new Emitter.Listener() {
-
-            @Override
-            public void call(Object... args) {
-                System.out.println("Client knows DB has updated:  " + args[0]);
-                updateLocalTables(args[0]);
-            }
-
-        });
-
-        socket.connect();
-    }
-
-    public void updateLocalTables(Object tableToUpdate) {
-
-        System.out.println("Table: " + (String)tableToUpdate + " has been updated on the server");
-        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
-        switch ((String) tableToUpdate) {
-            case "presentations":
-                //go back to homeActivity, if the presentation is not liver anymore
-                SocketClient mySocketClient = new SocketClient();
-
-                ArrayList<Module> modules = mySocketClient.getModules(Integer.toString(user.getUserID()));
-                livePresentations.clear();
-                for(Module module: modules) {
-                    for (Presentation presentation : module.getPresentations()){
-                        if(presentation.isLive()) {
-                            livePresentations.add(presentation);
-                            System.out.println(" Presentation: " + presentation.getPresentationID() + "is live");
-                        }
-                    }
-                }
-                break;
-            default:
-                System.out.println("Other table than interactive_elements was updated");
-                break;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        //connect client
-        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
-        connectToRemoteSocket();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        socket.disconnect(); //to avoid having issues with other instances of socketClient
-        super.onPause();
-    }
-
-    //    public void joinPresentation(View view) {
-//        Intent intent = new Intent(this, InitialPresentationActivity.class);
-//        startActivity(intent);
-//    }
-
-    @Override
-    public ArrayList<Presentation> getLivePresentationList() {
+    public ArrayList<Presentation> getLivePresentations(){
         return livePresentations;
-    }
-    @Override
-    public User getUserInterface() {
-        return user;
     }
 }

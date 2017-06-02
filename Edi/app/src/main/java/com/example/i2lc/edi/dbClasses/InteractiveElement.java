@@ -17,7 +17,6 @@ public class InteractiveElement implements Parcelable {
     protected String type;
     protected int responsesInterval;
     protected String answers;
-    //protected ArrayList<Interaction> interactions;
 
     public InteractiveElement() {
     }
@@ -104,7 +103,6 @@ public class InteractiveElement implements Parcelable {
     public void setResponsesInterval(int responsesInterval) {
         this.responsesInterval = responsesInterval;
     }
-
 
     public String getAnswers() {
         return answers;

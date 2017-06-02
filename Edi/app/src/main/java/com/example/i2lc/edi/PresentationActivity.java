@@ -191,7 +191,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         }
     }
 
-
     // Method that checks if there are any interactive elements live for the current presentation
     // updates the  UI accordingly
     private void checkLiveInteractiveElements(){

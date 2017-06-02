@@ -25,9 +25,7 @@ public class DecompressFast {
             _dirChecker("");
         }
 
-    public static String unzip(File zipFile, File targetDirectory) throws IOException {
-
-        String retPath = "";
+    public static void unzip(File zipFile, File targetDirectory) throws IOException {
 
         ZipInputStream zis = new ZipInputStream(
                 new BufferedInputStream(new FileInputStream(zipFile)));
@@ -40,7 +38,7 @@ public class DecompressFast {
                 String fileName = ze.getName();
                 //skip CSS files,folder and MAC_OSX files
                 if (fileName.contains("CSS") || fileName.contains("__MACOSX/") || fileName.contains(".DS_Store")) {
-                    ze = zis.getNextEntry();
+                    //ze = zis.getNextEntry();
                     continue;
                 }
 
@@ -58,17 +56,10 @@ public class DecompressFast {
                 } finally {
                     fout.close();
                 }
-                /* if time should be restored as well
-            long time = ze.getTime();
-            if (time > 0)
-                file.setLastModified(time);
-            */
             }
         } finally {
             zis.close();
         }
-
-        return retPath;
     }
 
         private void _dirChecker(String dir) {

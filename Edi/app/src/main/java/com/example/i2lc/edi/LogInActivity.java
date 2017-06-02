@@ -21,8 +21,6 @@ public class LogInActivity extends AppCompatActivity {
     //TODO Change this to user instead of String
     public final static String EXTRA_USERNAME = "username";
 
-    private boolean loginSuccessful;
-    private boolean isTeacher;
     private EditText usernameEditText;
     private EditText passwordEditText;
 

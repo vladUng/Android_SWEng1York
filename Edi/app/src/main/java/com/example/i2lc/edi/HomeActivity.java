@@ -274,7 +274,23 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         try {
             File destinationFolder = new File(zipFolder);
 
-            DecompressFast.unzip(new File(zipFileName),destinationFolder);
+            if (destinationFolder.exists()) {
+                String deleteCmd = "sudo rm -r " + destinationFolder.getAbsolutePath();
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    runtime.exec(deleteCmd);
+                } catch (IOException e) { }
+            }
+
+//            //clear folder
+//            if (destinationFolder.isDirectory()) {
+//                String[] children = destinationFolder.list();
+//                for (int i = 0; i < children.length; i++) {
+//                    new File(destinationFolder, children[i]).delete();
+//                }
+//            }
+
+            DecompressFast.unzip(new File(zipFileName), destinationFolder);
             System.out.println("Extracted to \n"+ zipFolder);
             presentation.setFolderPath(destinationFolder.getAbsolutePath());
         } catch (ZipException e) {
@@ -377,6 +393,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     protected void updatePresentationList(){
         try {
             //if there are any elements clear module array
+            //TODO delete this as modules is already cleared in getModules
             if (modules != null) {
                 modules.clear();
             }

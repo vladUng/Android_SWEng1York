@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,13 +128,12 @@ public class InteractionFragment extends Fragment {
                     isPollAnswerClicked = true;
                     for(int i = 0;i<answersListView.getCount();i++){
                         if(i == position) {
-                            answersListView.getChildAt(i).setBackgroundResource(R.color.colorAccent);
+                            answersListView.getChildAt(i).findViewById(R.id.answerItem).setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.colorAccent));
                         } else{
-                            answersListView.getChildAt(i).setBackgroundResource(R.color.colorPrimary);
+                            answersListView.getChildAt(i).findViewById(R.id.answerItem).setBackgroundColor(ContextCompat.getColor(v.getContext(), R.color.colorPrimary));
                         }
 
                     }
-
                 }
             });
         }else{

@@ -54,8 +54,9 @@
         android:id="@+id/answersList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_weight="4"
-        android:background="@color/wetAsphalt" />
+        android:background="@color/midnightBlue" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:paddingTop="@dimen/small_margin"
     android:paddingBottom="@dimen/small_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -13,11 +14,11 @@
         android:layout_width="match_parent"
         android:id="@+id/answerItem"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:textColor="@color/icons"
         android:textAlignment="center"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:textColorHint="@color/primary_text"
-
         android:textSize="30dp"
         android:text="Test Answer" />
 

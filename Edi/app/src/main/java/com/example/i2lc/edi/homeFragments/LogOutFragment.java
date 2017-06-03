@@ -2,13 +2,16 @@ package com.example.i2lc.edi.homeFragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.i2lc.edi.LogInActivity;
 import com.example.i2lc.edi.R;
 
 /**
@@ -28,6 +31,8 @@ public class LogOutFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button logOutButton;
+    private View rootView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,7 +71,17 @@ public class LogOutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.log_out_fragment, container, false);
+        rootView =  inflater.inflate(R.layout.log_out_fragment, container, false);
+        logOutButton = (Button) rootView.findViewById(R.id.logOutButton);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LogInActivity.class);
+                intent.putExtra("logOut", "logOut");
+                v.getContext().startActivity(intent);
+            }
+        });
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

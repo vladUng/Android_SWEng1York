@@ -16,6 +16,8 @@ import com.example.i2lc.edi.dbClasses.User;
 
 import java.util.ArrayList;
 
+import javax.security.auth.login.LoginException;
+
 public class LogInActivity extends AppCompatActivity {
 
     //TODO Change this to user instead of String
@@ -36,7 +38,21 @@ public class LogInActivity extends AppCompatActivity {
         usernameEditText.setText("Student", TextView.BufferType.EDITABLE);//TODO remove when finishing
         passwordEditText.setText("password", TextView.BufferType.EDITABLE);
     }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Intent intent = getIntent();
+        if(intent.getExtras()!= null){
+            Toast.makeText(this , "You have successfully logged out!", Toast.LENGTH_LONG).show();
+        }
 
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Toast.makeText(this , "You have successfully logged out!", Toast.LENGTH_LONG).show();
+    }
     //called when the user clicks the log in button
     public void logIn(View view) {
         String username = usernameEditText.getText().toString();

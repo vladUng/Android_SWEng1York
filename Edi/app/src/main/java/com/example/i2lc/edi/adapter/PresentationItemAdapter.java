@@ -69,8 +69,8 @@ public class PresentationItemAdapter extends BaseAdapter{
         holder = null;
 
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        if(convertView == null){
-            convertView = mInflater.inflate(R.layout.presentation_item,null);
+        if(convertView == null) {
+            convertView = mInflater.inflate(R.layout.presentation_item, null);
             holder = new ViewHolder();
             //We will have to change all these for xml data
             holder.presentationTitle = (TextView) convertView.findViewById(R.id.presentation_title);
@@ -81,42 +81,45 @@ public class PresentationItemAdapter extends BaseAdapter{
             holder.joinButton = (Button) convertView.findViewById(R.id.joinButton);
             holder.joinButton.setTag(position);
             holder.joinButton.setBackgroundResource(R.color.liveColor);
-
-
             holder.joinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    int position=(Integer)arg0.getTag();
-                    Intent intent = new Intent(context, PresentationActivity.class);
-                    intent.putExtra("presentation", presentationList.get(position));
-                    intent.putExtra("user", user);
-                    context.startActivity(intent);
-                    System.out.println("Joined Presentation ID: " + Integer.toString(presentationList.get(position).getPresentationID()));
+                    int position = (Integer) arg0.getTag();
+                    if(presentationList.size() > 0) {
+                        Intent intent = new Intent(context, PresentationActivity.class);
+                        intent.putExtra("presentation", presentationList.get(position));
+                        intent.putExtra("user", user);
+                        context.startActivity(intent);
+                        System.out.println("Joined Presentation ID: " + Integer.toString(presentationList.get(position).getPresentationID()));
+                    }else{
+                        System.out.print("Presentation list is Empty!");
+                    }
                 }
             });
 
+            if (presentationList.size() > 0) {
+                Presentation presentation = presentationList.get(position);
+                holder.presentationTitle.setText("Title: " + presentation.getTitle());
+                holder.presentationDescription.setText("Description: " + presentation.getDescription());
+                holder.presentationAuthor.setText("Author: " + presentation.getAuthor());
+                holder.presentationModule.setText("Module: " + presentation.getModuleName());
 
-            Presentation presentation = presentationList.get(position);
-
-            holder.presentationTitle.setText("Title: "+ presentation.getTitle());
-            holder.presentationDescription.setText("Description: "+ presentation.getDescription());
-            holder.presentationAuthor.setText("Author: " + presentation.getAuthor());
-            holder.presentationModule.setText("Module: " + presentation.getModuleName());
-
-            //Set ImageView to be presentation thumbnail from path
-            if(presentation.getThumbnailPath() != null) {
-                File thumbnailFile = new File(presentation.getThumbnailPath());
-                if (isValidImageFile(thumbnailFile)) {
-                    Uri uri = Uri.fromFile(thumbnailFile);
-                    holder.presentationThumbnail.setImageURI(uri);
-                    holder.presentationThumbnail.setAdjustViewBounds(true);
+                //Set ImageView to be presentation thumbnail from path
+                if (presentation.getThumbnailPath() != null) {
+                    File thumbnailFile = new File(presentation.getThumbnailPath());
+                    if (isValidImageFile(thumbnailFile)) {
+                        Uri uri = Uri.fromFile(thumbnailFile);
+                        holder.presentationThumbnail.setImageURI(uri);
+                        holder.presentationThumbnail.setAdjustViewBounds(true);
+                    } else {
+                        System.out.println("Could not load image file!");
+                    }
                 } else {
-                    System.out.println("Could not load image file!");
+                    holder.presentationThumbnail.setImageResource(R.drawable.edi);//TODO change when thumbnail from xml works
                 }
-            } else{
-                holder.presentationThumbnail.setImageResource(R.drawable.edi);//TODO change when thumbnail from xml works
+            } else {
+                System.out.println("Presentation List is Empty!");
             }
-
         }
         return convertView;
     }

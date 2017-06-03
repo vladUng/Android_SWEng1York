@@ -12,26 +12,10 @@
     <bookmark url="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/SignUpActivity.java" description="&#10;" line="43" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f8ea885-1445-4a82-a5dc-1a3c309a4cf7" name="Default" comment="-- populated the array of Module object with data from DB&#10;&#10;-- (hopefully) optimised a bit the process on how to create sql statements sent to server &#10;&#10;-- temporarily modified Module class, so that I could test something.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/edi_small.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/no_presentations_layout.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/poll_fragment.xml" />
+    <list default="true" id="1f8ea885-1445-4a82-a5dc-1a3c309a4cf7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/SignUpActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/SignUpActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/adapter/PresentationItemAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/adapter/PresentationItemAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/backend/SocketClient.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/backend/SocketClient.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Presentation.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Presentation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/homeFragments/PresentationListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/InteractionFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/InteractionFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_log_in.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_log_in.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_presentation.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_presentation.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_sign_up.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_sign_up.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/presentation_item.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/presentation_item.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_interaction.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/wordcloud_fragment.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/poll_fragment.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/poll_fragment.xml" />
     </list>
     <ignored path="Edi.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -112,11 +96,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="LogInActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="154">
+              <caret line="39" column="49" selection-start-line="39" selection-start-column="49" selection-end-line="39" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="poll_fragment.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/poll_fragment.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="44" />
+            <state relative-caret-position="220">
+              <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
               <folding>
                 <element signature="e#315#348#0" expanded="true" />
                 <element signature="e#373#408#0" expanded="true" />
@@ -130,11 +124,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wordcloud_fragment.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="wordcloud_fragment.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/wordcloud_fragment.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
+            <state relative-caret-position="132">
+              <caret line="22" column="35" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -206,37 +200,6 @@
             <state relative-caret-position="88">
               <caret line="4" column="37" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainPresentationFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="129" column="28" selection-start-line="129" selection-start-column="28" selection-end-line="129" selection-end-column="28" />
-              <folding>
-                <element signature="docComment;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#MainPresentationFragment#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="docComment;method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#newInstance#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#onCreate#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="e#3598#3637#0" expanded="false" />
-                <element signature="e#4673#4860#0" expanded="false" />
-                <element signature="e#6377#6446#0" expanded="false" />
-                <element signature="class#GetPresentationInterface#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="class#GetUserInterface#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#onAttach#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#onDetach#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="docComment;class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="class#OnFragmentInteractionListener#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="class#9313:9690" expanded="false" />
-                <element signature="method#onTick#0;class#9313:9690" expanded="false" />
-                <element signature="method#cancelQuestion#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#connectToRemoteSocket#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#onResume#0;class#MainPresentationFragment#0" expanded="false" />
-                <element signature="method#onStop#0;class#MainPresentationFragment#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -2970,7 +2933,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/main_activity.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/answer_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_interaction.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/backend/DecompressFast.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/dbClasses/Presentation.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/MainPresentationFragment.java" />
@@ -2985,8 +2947,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/HomeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/presentationFragments/InteractionFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/poll_fragment.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/wordcloud_fragment.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/poll_fragment.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java" />
       </list>
     </option>
   </component>
@@ -3281,7 +3244,7 @@
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlEditorPanel.WIDTH" value="218" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPropertiesWindowManager-NlEditorPanel.WIDTH" value="299" />
-    <property name="device.picker.selection" value="Nexus_5X_API_25" />
+    <property name="device.picker.selection" value="SH51EWM02018" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/imagemodule/src/test/java/com/example/i2lc" />
     <property name="android.project.structure.last.selected" value="SDK Location" />
     <property name="android.project.structure.proportion" value="0.15" />
@@ -4211,7 +4174,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496427742926</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Interactions functionality in place; finalising GUI (nearly there)">
+      <created>1496447339173</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1496447339173</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -4325,7 +4295,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Presentation Activity contains progress bar and Ask Question Button;&#10;Ask Question Button changes visibility of EditText&#10;First Join Button  in HomeActivity opens Presentation Activity;&#10;Created Presentation Class;&#10;" />
     <MESSAGE value="Added Ask/Send Question with animated button" />
     <MESSAGE value="Improved user input UI with animated button" />
     <MESSAGE value="latest version" />
@@ -4350,7 +4319,8 @@
     <MESSAGE value="WordCloud Working; UI functionality for poll is there(needs testing when possible)" />
     <MESSAGE value="Polls UI tied to the database; minor UI changes, needs testing with Edi Desktop." />
     <MESSAGE value="-- populated the array of Module object with data from DB&#10;&#10;-- (hopefully) optimised a bit the process on how to create sql statements sent to server &#10;&#10;-- temporarily modified Module class, so that I could test something." />
-    <option name="LAST_COMMIT_MESSAGE" value="-- populated the array of Module object with data from DB&#10;&#10;-- (hopefully) optimised a bit the process on how to create sql statements sent to server &#10;&#10;-- temporarily modified Module class, so that I could test something." />
+    <MESSAGE value="Interactions functionality in place; finalising GUI (nearly there)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Interactions functionality in place; finalising GUI (nearly there)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -4629,14 +4599,6 @@
       </provider>
       <provider editor-type-id="android-designer2">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/backend/DecompressFast.java">
@@ -4955,10 +4917,21 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/wordcloud_fragment.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="22" column="35" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/poll_fragment.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="44" />
+        <state relative-caret-position="220">
+          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
           <folding>
             <element signature="e#315#348#0" expanded="true" />
             <element signature="e#373#408#0" expanded="true" />
@@ -4971,15 +4944,12 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/wordcloud_fragment.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/i2lc/edi/LogInActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
+        <state relative-caret-position="154">
+          <caret line="39" column="49" selection-start-line="39" selection-start-column="49" selection-end-line="39" selection-end-column="49" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
       </provider>
     </entry>
   </component>

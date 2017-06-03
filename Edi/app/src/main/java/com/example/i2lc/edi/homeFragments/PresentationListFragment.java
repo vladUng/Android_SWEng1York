@@ -70,6 +70,7 @@ public class PresentationListFragment extends Fragment{
 //    private Socket socket;
 //    private String serverIPAddress;
     private View rootView;
+    private PresentationItemAdapter adapter;
 
 
     public PresentationListFragment() {
@@ -121,7 +122,8 @@ public class PresentationListFragment extends Fragment{
             rootView = inflater.inflate(R.layout.presentation_list_fragment, container, false);
             //Create GUI
             listView = (ListView) rootView.findViewById(R.id.presentation_list);
-            PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
+            adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
+            //adapter.notifyDataSetChanged();
             listView.setAdapter(adapter);
         }
 
@@ -152,6 +154,7 @@ public class PresentationListFragment extends Fragment{
     @Override
     public void onResume(){
         super.onResume();
+        updatePresentationListView();
 //        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
 //        connectToRemoteSocket();
 //        if(presentationListInterface != null){
@@ -179,6 +182,7 @@ public class PresentationListFragment extends Fragment{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
     }
 
     public interface GetPresentationListInterface {
@@ -192,9 +196,13 @@ public class PresentationListFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ListView newListView = (ListView) rootView.findViewById(R.id.presentation_list);
-                PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
-                newListView.setAdapter(adapter);
+                if(presentationList.size() > 0) {
+                    ListView newListView = (ListView) rootView.findViewById(R.id.presentation_list);
+                    PresentationItemAdapter adapter = new PresentationItemAdapter(rootView.getContext(),presentationList, user);
+                    newListView.setAdapter(adapter);
+                }else{
+                    System.out.print("Presentation List is Empty!");
+                }
             }
         });
     }

@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,7 +33,7 @@ import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.Question;
 import com.example.i2lc.edi.dbClasses.User;
 import com.example.i2lc.edi.homeFragments.PresentationListFragment;
-import com.example.i2lc.edi.homeFragments.Fragment2;
+import com.example.i2lc.edi.homeFragments.LogOutFragment;
 import com.example.i2lc.edi.homeFragments.UserFragment;
 import com.example.i2lc.edi.model.ItemSlideMenu;
 import com.example.i2lc.edi.utilities.ParserXML;
@@ -44,7 +43,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -60,7 +58,7 @@ import io.socket.emitter.Emitter;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, Fragment2.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface, UserFragment.GetUserInterface{
+public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, LogOutFragment.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface, UserFragment.GetUserInterface{
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -139,6 +137,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         listSliding.add(new ItemSlideMenu(R.drawable.presentation_icon, "Live Presentations"));
         //listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp, "Settings"));
         listSliding.add(new ItemSlideMenu(R.drawable.user_icon, "User Details"));
+        listSliding.add(new ItemSlideMenu(R.drawable.logout, "Log Out"));
         adapter = new SlidingMenuAdapter(this, listSliding);
         listViewSliding.setAdapter(adapter);
         //Display icon to open/ close sliding list
@@ -205,7 +204,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 fragment = new UserFragment();
                 break;
             case 2:
-                fragment = new Fragment2();
+                fragment = new LogOutFragment();
                 break;
             default:
                 fragment = new PresentationListFragment();

@@ -35,6 +35,7 @@ public class PresentationItemAdapter extends BaseAdapter{
         this.context = context;
         this.presentationList = presentationList;
         this.user = user;
+
     }
 
     @Override
@@ -61,6 +62,7 @@ public class PresentationItemAdapter extends BaseAdapter{
         TextView presentationDescription;
         Button joinButton;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

@@ -33,7 +33,7 @@ public class LogInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
         usernameEditText = (EditText) findViewById(R.id.username);
         passwordEditText = (EditText) findViewById(R.id.password);
-        usernameEditText.setText("Cosmin", TextView.BufferType.EDITABLE);//TODO remove when finishing
+        usernameEditText.setText("Student", TextView.BufferType.EDITABLE);//TODO remove when finishing
         passwordEditText.setText("password", TextView.BufferType.EDITABLE);
     }
 

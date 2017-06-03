@@ -14,7 +14,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LogInActivity"
-            android:label="Edi">
+            android:label="Edi"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

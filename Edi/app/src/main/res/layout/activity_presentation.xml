@@ -78,25 +78,23 @@
         android:id="@+id/testData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight = "5"
+        android:layout_weight = "4"
         android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/progressBarText"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_gravity="center"
-        android:background="@android:color/transparent" />
+        android:gravity="center"
+        />
     <ProgressBar
         android:id="@+id/progressBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight = "5"
-        android:paddingTop="@dimen/small_margin"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:maxHeight="80dp"
         android:minHeight="65dp"
         android:progress="60"

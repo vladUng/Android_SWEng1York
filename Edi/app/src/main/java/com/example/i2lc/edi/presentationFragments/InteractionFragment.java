@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +93,7 @@ public class InteractionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         isPollAnswerClicked = false;
         if(interactiveElementInterface != null){
             liveElement = interactiveElementInterface.getInteractiveElementInterface();
@@ -123,7 +125,6 @@ public class InteractionFragment extends Fragment {
             answersListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> adapterView,View v,int position, long l){
-                    //TextView itemTextView =(TextView) getViewByPosition(position,answersListView);
                     answer = Integer.toString(position);
                     isPollAnswerClicked = true;
                     for(int i = 0;i<answersListView.getCount();i++){
@@ -169,39 +170,10 @@ public class InteractionFragment extends Fragment {
                 }
             }
         });
-//        if(liveElement.getType().toLowerCase().equals("poll")) {
-//            answersList = liveElement.getAnswers().split(",");
-//            //sendButton.setVisibility(View.INVISIBLE);
-//            final AnswerItemAdapter adapter = new AnswerItemAdapter(rootView.getContext(), answersList, user, liveElement.getInteractiveElementID());
-//            answersListView.setAdapter(adapter);
-//            answersListView.setVisibility(ListView.VISIBLE);
-//            answersListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-//                @Override
-//                public void onItemClick(AdapterView<?> adapterView,View v,int position, long l){
-//                    //TextView itemTextView =(TextView) getViewByPosition(position,answersListView);
-//                    answer = Integer.toString(position);
-//                    isPollAnswerClicked = true;
-//                    for(int i = 0;i<answersListView.getCount();i++){
-//                        if(i == position) {
-//                            answersListView.getChildAt(i).setBackgroundResource(R.color.primary_light);
-//                        } else{
-//                            answersListView.getChildAt(i).setBackgroundResource(R.color.colorAccent);
-//                        }
-//
-//                    }
-//
-//                }
-//            });
-//        }
-//        else if(liveElement.getType().toLowerCase().equals("wordcloud")){
-//            answersListView.setVisibility(ListView.INVISIBLE);
-//        } else{
-//            System.out.print("Interactive element is not of type poll or wordcloud");
-//            questionTextView.setText("Error when loading interactive element");
-//        }
 
-
-
+        Vibrator v = (Vibrator) rootView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        v.vibrate(500);
 
         return rootView;
     }
@@ -260,28 +232,5 @@ public class InteractionFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-//    private ArrayList<String> getAnswersList(String answers){
-//        String[] answerList = answers.split(",");
-//    }
-    public View getViewByPosition(int pos, ListView listView) {
-        final int firstListItemPosition = listView.getFirstVisiblePosition();
-        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
-
-        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
-            return listView.getAdapter().getView(pos, null, listView);
-        } else {
-            final int childIndex = pos - firstListItemPosition;
-            return listView.getChildAt(childIndex);
-        }
-    }
-
-    public int getSeconds() {
-        return seconds;
-    }
-
-    public void setSeconds(int seconds) {
-        this.seconds = seconds;
     }
 }

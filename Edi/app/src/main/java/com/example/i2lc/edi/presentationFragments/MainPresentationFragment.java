@@ -133,7 +133,7 @@ public class MainPresentationFragment extends Fragment {
         askButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispQuestionTextBox(v);
+                showQuestionTextBox(v);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener(){
@@ -154,7 +154,6 @@ public class MainPresentationFragment extends Fragment {
                 TextView progressBarText = (TextView) rootView.findViewById(R.id.progressBarText);
                 progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber()));
                 progress = currentPresentation.calculateProgress();
-                //
                 progressBar.setProgress(progress);
 
             }
@@ -219,7 +218,7 @@ public class MainPresentationFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void dispQuestionTextBox(View view){
+    public void showQuestionTextBox(View view){
         if(buttonPressed == false){
             question = new Question(user.getUserID(), currentPresentation.getPresentationID(),"", currentPresentation.getCurrentSlideNumber());
             try {

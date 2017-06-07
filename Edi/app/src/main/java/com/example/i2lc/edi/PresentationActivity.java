@@ -16,7 +16,6 @@ import com.example.i2lc.edi.backend.Utils;
 import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.User;
-import com.example.i2lc.edi.model.PresentationMod;
 import com.example.i2lc.edi.presentationFragments.InteractionFragment;
 import com.example.i2lc.edi.presentationFragments.MainPresentationFragment;
 import com.example.i2lc.edi.utilities.Slide;
@@ -30,7 +29,6 @@ import io.socket.emitter.Emitter;
 
 public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
     private Fragment fragment;
-    private PresentationMod presentation;
     boolean isInteractiveElementLive = false;
     private EditText editText; //TODO is this needed?
     private User user;
@@ -57,20 +55,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         checkLiveInteractiveElements();
     }
 
-//    private void runInteraction(){
-//        new CountDownTimer(interactionTime, TICK_TIME) {
-//            public void onTick(long millisUntilFinished) {
-//                System.out.print("");
-//            }
-//            public void onFinish() {
-//                isInteractiveElementLive = false;
-//                replaceFragment();
-//            }
-//        }.start();
-//
-//    }
-
-
     private void replaceFragment(){
         if(isInteractiveElementLive == true){
             fragment = new InteractionFragment();
@@ -91,9 +75,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         //can be empty
     }
 
-    public PresentationMod getPresentation(){
-        return this.presentation;
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -301,13 +282,5 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
         return liveElement;
     }
 
-    //TODO check if these two methods are used
-    public Presentation getCurrentPresentation() {
-        return currentPresentation;
-    }
-
-    public void setCurrentPresentation(Presentation currentPresentation) {
-        this.currentPresentation = currentPresentation;
-    }
 
 }

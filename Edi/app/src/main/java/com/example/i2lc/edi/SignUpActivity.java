@@ -31,7 +31,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void createNewUser(View view) {
-        Intent intent = new Intent(this, LogInActivity.class);
         EditText firstNameText = (EditText) findViewById(R.id.firstNameNew);
         EditText lastNameText = (EditText) findViewById(R.id.lastNameNew);
         EditText emailText = (EditText) findViewById(R.id.emailNew);

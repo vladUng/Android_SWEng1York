@@ -72,7 +72,6 @@ public class PresentationItemAdapter extends BaseAdapter{
         if(convertView == null) {
             convertView = mInflater.inflate(R.layout.presentation_item, null);
             holder = new ViewHolder();
-            //We will have to change all these for xml data
             holder.presentationTitle = (TextView) convertView.findViewById(R.id.presentation_title);
             holder.presentationAuthor = (TextView) convertView.findViewById(R.id.presentation_author);
             holder.presentationModule = (TextView) convertView.findViewById(R.id.presentation_module);

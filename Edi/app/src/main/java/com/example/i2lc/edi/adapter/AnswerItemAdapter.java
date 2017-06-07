@@ -56,7 +56,6 @@ public class AnswerItemAdapter extends BaseAdapter {
         }
         convertView.setTag(position);
         answerTextView.setText(answersList[position]);
-        //Interaction interaction = new Interaction(user.getUserID(), liveElement.getInteractiveElementID(), answer);
         return convertView;
     }
 }

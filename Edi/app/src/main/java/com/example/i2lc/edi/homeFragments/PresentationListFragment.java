@@ -2,37 +2,19 @@ package com.example.i2lc.edi.homeFragments;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.i2lc.edi.PresentationActivity;
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.adapter.PresentationItemAdapter;
-import com.example.i2lc.edi.backend.DecompressFast;
-import com.example.i2lc.edi.backend.SocketClient;
-import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
 import com.example.i2lc.edi.dbClasses.User;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.zip.ZipException;
 
 //import static com.example.i2lc.edi.LogInActivity.EXTRA_USERNAME;
 
@@ -57,18 +39,10 @@ public class PresentationListFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Presentation> presentationList;
-    private ArrayList<Presentation> finalPresentationList;
-    private ArrayList<Module> modules;
     private ListView listView;
-    private String userID = "1";
-    private Bitmap presentationThumbnail;
     private GetPresentationListInterface presentationListInterface;
-    private Button joinButton;
     private GetUserInterface userInterface;
     private User user;
-    //for establishing connection
-//    private Socket socket;
-//    private String serverIPAddress;
     private View rootView;
     private PresentationItemAdapter adapter;
 
@@ -200,11 +174,4 @@ public class PresentationListFragment extends Fragment{
             }
         });
     }
-
-    @Override
-    public void onPause() {
-//        socket.disconnect(); //to avoid having issues with other instances of socketClient
-        super.onPause();
-    }
-
 }

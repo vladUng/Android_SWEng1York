@@ -26,14 +26,11 @@ import com.example.i2lc.edi.adapter.SlidingMenuAdapter;
 import com.example.i2lc.edi.backend.DecompressFast;
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.backend.Utils;
-import com.example.i2lc.edi.dbClasses.Interaction;
-import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
-import com.example.i2lc.edi.dbClasses.Question;
 import com.example.i2lc.edi.dbClasses.User;
-import com.example.i2lc.edi.homeFragments.PresentationListFragment;
 import com.example.i2lc.edi.homeFragments.LogOutFragment;
+import com.example.i2lc.edi.homeFragments.PresentationListFragment;
 import com.example.i2lc.edi.homeFragments.UserFragment;
 import com.example.i2lc.edi.model.ItemSlideMenu;
 import com.example.i2lc.edi.utilities.ParserXML;
@@ -71,12 +68,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     private ArrayList<Module> modules;
     private ArrayList<Presentation> livePresentations;
 
-    //these are not needed in this activity, are used for debugging
-    private ArrayList<InteractiveElement> interactiveElements;
-    private ArrayList<Interaction> interactions;
-    private ArrayList<Question> questions;
-    private ArrayList<Presentation> presentations;
-
     //for establishing connection
     private Socket socket;
     private String serverIPAddress;
@@ -87,9 +78,11 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         user = intent.getExtras().getParcelable("user");
+
         if (user != null) {
             System.out.println("USER WITH ID = " + Integer.toString(user.getUserID()) + "just logged in.");
         }
+
         setContentView(R.layout.main_activity);
 
         livePresentations = new ArrayList<>();
@@ -102,16 +95,10 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//        return true;
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -257,9 +244,11 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     public void downloadPresentation(Presentation presentation) {
 
+        //construct filepath for folder
         String filename = "Presentation_" + presentation.getPresentationID();
         String basePath = getFilesDir().getAbsolutePath() + "/";
 
+        //download the zip
         try {
             URL u = presentation.getXmlURL();
             InputStream is = u.openStream();
@@ -269,6 +258,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
             byte[] buffer = new byte[1024];
             int length;
 
+            //write the zip on the internal storage
             FileOutputStream fos = new FileOutputStream(new File(basePath+ "/" + filename + ".zip"));
             while ((length = dis.read(buffer))>0) {
                 fos.write(buffer, 0, length);
@@ -282,6 +272,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
             Log.e("SYNC getUpdate", "security error", se);
         }
 
+        //construct the path for the zip and zip's folder
         String zipFileName = basePath + filename + ".zip";
         String zipFolderName =  basePath + filename +"_folder/";
 
@@ -296,14 +287,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 } catch (IOException e) { }
             }
 
-//            //clear folder
-//            if (destinationFolder.isDirectory()) {
-//                String[] children = destinationFolder.list();
-//                for (int i = 0; i < children.length; i++) {
-//                    new File(destinationFolder, children[i]).delete();
-//                }
-//            }
-
             DecompressFast.unzip(new File(zipFileName), destinationFolder);
             System.out.println("Extracted to \n"+ zipFolderName);
             presentation.setFolderPath(destinationFolder.getAbsolutePath());
@@ -312,6 +295,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         } catch (IOException e) {
             Log.e("We got a problem", e.getMessage());
         }
+
         setThumbnailFromFolder(presentation);
     }
 
@@ -396,6 +380,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
     public void updateLocalTables(Object tableToUpdate) {
 
         System.out.println("Table: " + tableToUpdate + " has been updated on the server");
+
         //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
         switch ((String) tableToUpdate) {
             case "presentations":
@@ -409,11 +394,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     protected void updatePresentationList(){
         try {
-            //if there are any elements clear moduleName array
-            //TODO delete this as modules is already cleared in getModules
-            if (modules != null) {
-                modules.clear();
-            }
+
             //if there are any elements clear livePresentation array
             if(livePresentations != null) {
                 livePresentations.clear();
@@ -450,16 +431,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         socket.disconnect(); //to avoid having issues with other instances of socketClient
         super.onPause();
     }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        //when coming back check if a presentation live status has changed
-    }
-    //    public void joinPresentation(View view) {
-//        Intent intent = new Intent(this, InitialPresentationActivity.class);
-//        startActivity(intent);
-//    }
 
     @Override
     public ArrayList<Presentation> getLivePresentationList() {

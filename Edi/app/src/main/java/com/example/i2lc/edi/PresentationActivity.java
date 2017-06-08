@@ -30,12 +30,12 @@ import io.socket.emitter.Emitter;
 public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
     private Fragment fragment;
     boolean isInteractiveElementLive = false;
-    private EditText editText; //TODO is this needed?
+    private EditText editText;
     private User user;
     private Presentation currentPresentation;
     private InteractiveElement liveElement;
 
-    //for establishing connection
+    //server socket variable
     private Socket socket;
     private String serverIPAddress;
 
@@ -204,7 +204,7 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
                 if(liveElement != null && isInteractiveElementLive == false){
                     isInteractiveElementLive = true;
 
-                } else {
+                } else{
                     isInteractiveElementLive = false;
                 }
                 replaceFragment();
@@ -261,6 +261,8 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
 
     @Override
     protected void onStop() {
+
+        //disconnect from server
         socket.disconnect();
 
         //set user inactive

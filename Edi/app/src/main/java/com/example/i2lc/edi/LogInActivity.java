@@ -7,7 +7,6 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.i2lc.edi.backend.SocketClient;
@@ -16,12 +15,7 @@ import com.example.i2lc.edi.dbClasses.User;
 
 import java.util.ArrayList;
 
-import javax.security.auth.login.LoginException;
-
 public class LogInActivity extends AppCompatActivity {
-
-    //TODO Change this to user instead of String
-    public final static String EXTRA_USERNAME = "username";
 
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -34,9 +28,8 @@ public class LogInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
         usernameEditText = (EditText) findViewById(R.id.username);
         passwordEditText = (EditText) findViewById(R.id.password);
-        usernameEditText.setText("Student", TextView.BufferType.EDITABLE);//TODO remove when finishing
-        passwordEditText.setText("password", TextView.BufferType.EDITABLE);
     }
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -44,7 +37,6 @@ public class LogInActivity extends AppCompatActivity {
         if(intent.getExtras()!= null){
             Toast.makeText(this , "You have successfully logged out!", Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override
@@ -52,6 +44,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onRestart();
         Toast.makeText(this , "You have successfully logged out!", Toast.LENGTH_LONG).show();
     }
+
     //called when the user clicks the log in button
     public void logIn(View view) {
         String username = usernameEditText.getText().toString();
@@ -84,9 +77,7 @@ public class LogInActivity extends AppCompatActivity {
                 SocketClient mySocketClient;
                 mySocketClient = new SocketClient();
 
-                ArrayList<String> userAuthResponse = new ArrayList<String>();
-                userAuthResponse = mySocketClient.userAuth(new UserAuth(username, password));
-
+                ArrayList<String> userAuthResponse = mySocketClient.userAuth(new UserAuth(username, password));
 
                 if (!userAuthResponse.isEmpty()) {
                     //for debug

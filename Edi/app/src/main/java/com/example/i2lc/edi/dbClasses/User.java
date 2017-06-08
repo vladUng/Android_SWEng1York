@@ -82,10 +82,6 @@ public class User implements Parcelable {
         return userID;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -110,20 +106,8 @@ public class User implements Parcelable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 
     public String getEmailAddress() {
@@ -132,22 +116,6 @@ public class User implements Parcelable {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
-    }
-
-    public boolean isTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(boolean teacher) {
-        this.teacher = teacher;
-    }
-
-    public int getActivePresentationID() {
-        return activePresentationID;
-    }
-
-    public void setActivePresentationID(int activePresentationID) {
-        this.activePresentationID = activePresentationID;
     }
 }
 

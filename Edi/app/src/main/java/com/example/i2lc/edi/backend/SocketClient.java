@@ -1,13 +1,10 @@
 package com.example.i2lc.edi.backend;
 
 
-import com.example.i2lc.edi.dbClasses.Interaction;
 import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.Module;
 import com.example.i2lc.edi.dbClasses.Presentation;
-import com.example.i2lc.edi.dbClasses.Question;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,42 +13,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 /**
  * Created by vlad on 06/04/2017.
  */
 
 public class SocketClient {
-    private String serverIPAddress;
 
-
-    Socket socket;
     private Connection connection;
-
-    public void main(String[] args) {
-        new SocketClient("db.amriksadhra.com", 8080);
-    }
-
-    public SocketClient(String serverIP, int serverPort) {
-        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", serverPort);
-
-        connectToRemoteSocket();
-        connectToRemoteDB();
-    }
 
     public SocketClient() {
         connectToRemoteDB();
     }
 
     public void connectToRemoteDB() {
-        //Connect to PostgresSQL Instance
 
+        //Connect to PostgresSQL Instance
         String url = "jdbc:postgresql://db.amriksadhra.com:5432/edi";
         Properties props = new Properties();
         props.setProperty("user", "iilp");
@@ -73,79 +51,6 @@ public class SocketClient {
             System.out.print("Unable to connect to PostgreSQL on port 5432");
             System.out.print(e.toString());
             e.printStackTrace();
-        }
-    }
-
-    public void connectToRemoteSocket() {
-        //Alert tester that connection is being attempted
-        System.out.println("Client: Attempting Connection to " + serverIPAddress);
-
-        try {
-            socket = IO.socket(serverIPAddress);
-        } catch (URISyntaxException e) {
-            System.out.println("Couldn't create client port");
-        }
-
-        //Handling socket events
-        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-
-            @Override
-            public void call(Object... args) {
-               System.out.println("Connected to socket");
-            }
-
-        });
-
-        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-            @Override
-            public void call(Object... args) {
-                System.out.println("For some reason the client is disconnected from the server. Some more info:" + Arrays.toString(args));
-            }
-        });
-
-        socket.on("DB_Update", new Emitter.Listener() {
-
-            @Override
-            public void call(Object... args) {
-                System.out.println("Client knows DB has updated:  " + args[0]);
-                updateLocalTables(args[0]);
-            }
-
-        });
-
-        socket.connect();
-    }
-
-    public void disconnect(){
-        socket.disconnect();
-    }
-
-    public void updateLocalTables(Object tableToUpdate) {
-
-        //SocketIO will pass a generic object. But we know its a string because that's what DB_notify returns from com.i2lp.edi.server side
-        switch ((String) tableToUpdate) {
-            case "interactions":
-                break;
-
-            case "interactive_elements":
-                break;
-
-            case "users":
-                break;
-
-            case "presentations":
-                //Update presentation list whilst no presentation is live
-                break;
-
-            case "jnct_users_modules":
-                break;
-
-            case "modules":
-                break;
-
-            case "questions":
-                break;
         }
     }
 
@@ -254,71 +159,6 @@ public class SocketClient {
         }
 
         return retModules;
-    }
-
-    public ArrayList<Presentation> getPresentationsForUserId(String userID) {
-
-        ArrayList<Presentation> retPresentations = new ArrayList<>();
-        Statement st;
-
-        try {
-
-            st = connection.createStatement();
-
-            //get the query fields for the sql statement
-            QueryFields queryFields = new QueryFields("Presentation");
-            StringBuilder fieldsSB = queryFields.getSb();
-            ArrayList<String> fieldsList = queryFields.getFields();
-
-            //build the sql statement
-            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
-            query.append("edi.public.sp_getpresentationsforuser(");
-            query.append("'" + userID + "');");
-
-            ResultSet queryResult = st.executeQuery(String.valueOf(query));
-
-            String tmpString;
-            ArrayList<String> rowString = new ArrayList<>();
-
-            //go through the query results
-            while (queryResult.next()) {
-                rowString.clear();
-
-                //create an ArrayList of strings, that stores the fields from a row
-                for (int idx = 0; idx < fieldsList.size(); idx++) {
-                    tmpString = queryResult.getString(fieldsList.get(idx));
-                    if (tmpString != null) {
-                        rowString.add(tmpString);
-                    }
-                }
-
-                //public Presentation(int presentationID, int moduleID, URL xmlURL, boolean live)
-                Boolean isLive = false;
-                if (rowString.get(3).contains("t")) {
-                    isLive = true;
-                }
-
-                Presentation dummyPresentation = new Presentation(Integer.parseInt(rowString.get(0)), Integer.parseInt(rowString.get(1)),
-                        new URL(rowString.get(2)), isLive);
-
-                if (rowString.size() == 5) {
-                    dummyPresentation.setCurrentSlideNumber(Integer.valueOf(rowString.get(4)));
-                }
-                retPresentations.add(dummyPresentation);
-            }
-
-            //close connection
-            connection.close();
-        } catch (SQLException e) {
-            System.out.print("SQL query is wrong" + e.toString());
-            e.printStackTrace();
-
-        } catch (Exception e) {
-            System.out.print("There was an unknown problem" + e.toString());
-            e.printStackTrace();
-        }
-
-        return retPresentations;
     }
 
     public ArrayList<Presentation> getPresentationsForModuleId(String moduleID) {
@@ -430,95 +270,6 @@ public class SocketClient {
         }
 
         return retInteractiveElements;
-    }
-
-    //Needed on the Java Client -- accidentally did it here
-    public ArrayList<Interaction> getInteractions(String interactiveElementID) {
-
-        ArrayList<Interaction> retInteractions = new ArrayList<>();
-        Statement st;
-
-        try {
-
-            st = connection.createStatement();
-
-            //get the query fields for the sql statement
-            QueryFields queryFields = new QueryFields("Interaction");
-            StringBuilder fieldsSB = queryFields.getSb();
-            ArrayList<String> fieldsList = queryFields.getFields();
-
-            //build the sql statement
-            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
-            query.append("edi.public.sp_getinteractionsforinteractiveelement(");
-            query.append("'").append(interactiveElementID).append("');");
-
-            ResultSet queryResult = st.executeQuery(String.valueOf(query));
-
-            //go through the query results
-            while (queryResult.next()) {
-
-                // int interactionID, int userID, int interactiveElementID, String Interaction Data, Date timeCreated
-                retInteractions.add(new Interaction(queryResult.getInt(fieldsList.get(0)), queryResult.getInt(fieldsList.get(1)),
-                                    queryResult.getInt(fieldsList.get(2)), queryResult.getString(fieldsList.get(3)),
-                                    queryResult.getTimestamp(fieldsList.get(4)) ));
-            }
-
-            queryResult.close();
-            st.close();
-        } catch (SQLException e) {
-            System.out.print("SQL query is wrong" + e.toString());
-            e.printStackTrace();
-
-        } catch (Exception e) {
-            System.out.print("There was an unknown problem" + e.toString());
-            e.printStackTrace();
-        }
-
-        return retInteractions;
-    }
-
-    //Needed on the Java Client -- accidentally did it here
-    public ArrayList<Question> getQuestions(String presentationID) {
-        ArrayList<Question> retQuestions = new ArrayList<>();
-        Statement st;
-
-        try {
-
-            st = connection.createStatement();
-
-            //get the query fields for the sql statement
-            QueryFields queryFields = new QueryFields("Question");
-            StringBuilder fieldsSB = queryFields.getSb();
-            ArrayList<String> fieldsList = queryFields.getFields();
-
-            //build the sql statement
-            StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
-            query.append("edi.public.sp_getquestionsforpresentation(");
-            query.append("'").append(presentationID).append("');");
-
-            ResultSet queryResult = st.executeQuery(String.valueOf(query));
-
-            //go through the query results
-            while (queryResult.next()) {
-
-                //int questionID, int userID, int presentationID, Timestamp dateCreated, String questionData, int slideNumber
-                //NOTE there is NO field for the time_answered !!!!
-                retQuestions.add(new Question(queryResult.getInt(fieldsList.get(0)), queryResult.getInt(fieldsList.get(1)), queryResult.getInt(fieldsList.get(2)),
-                            queryResult.getTimestamp(fieldsList.get(3)), queryResult.getString(fieldsList.get(5)), queryResult.getInt(fieldsList.get(6))));
-            }
-
-            queryResult.close();
-            st.close();
-        } catch (SQLException e) {
-            System.out.print("SQL query is wrong" + e.toString());
-            e.printStackTrace();
-
-        } catch (Exception e) {
-            System.out.print("There was an unknown problem" + e.toString());
-            e.printStackTrace();
-        }
-
-        return retQuestions;
     }
 
     public boolean postQuestion(int userID, int presentationID, String questionData, int slideNumber) {

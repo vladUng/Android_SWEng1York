@@ -14,21 +14,19 @@ import java.util.ArrayList;
 
 public class Presentation implements Parcelable{
 
-    protected int presentationID;
-    protected int moduleID;
-    protected URL xmlURL;
-    protected int currentSlideNumber;
-//    protected ArrayList<InteractiveElement> interactiveElements;
-    protected int totalSlideNumber;
-    //protected Thumbnail thumbnail;
-    protected String title = "N/A";
-    protected String moduleName =  "N/A";
-    protected String author = "N/A";
+    private int presentationID;
+    private int moduleID;
+    private URL xmlURL;
+    private int currentSlideNumber;
+    private int totalSlideNumber;
+    private String title = "N/A";
+    private String moduleName =  "N/A";
+    private String author = "N/A";
     protected String description = "N/A";
-    protected boolean live = true; //TODO remove initiliasations when finished
-    protected String folderPath;
-    protected String thumbnailPath;
-    protected ArrayList<Slide> slideList;
+    private boolean live = true;
+    private String folderPath;
+    private String thumbnailPath;
+    private ArrayList<Slide> slideList;
 
     public Presentation(){
         slideList = new ArrayList<>();
@@ -69,20 +67,6 @@ public class Presentation implements Parcelable{
         }
     };
 
-
-
-//    public static final Creator<Slide> CREATOR_SLIDE = new Creator<Slide>() {
-//        @Override
-//        public Slide createFromParcel(Parcel in) {
-//            return new Slide(in);
-//        }
-//
-//        @Override
-//        public Slide[] newArray(int size) {
-//            return new Slide[size];
-//        }
-//    };
-
     public InteractiveElement getLiveElement() {
 
         for (Slide slide: slideList) {
@@ -97,29 +81,16 @@ public class Presentation implements Parcelable{
         return null;
     }
 
-
     public int getPresentationID() {
         return presentationID;
-    }
-
-    public void setPresentationID(int presentationID) {
-        this.presentationID = presentationID;
     }
 
     public int getModuleID() {
         return moduleID;
     }
 
-    public void setModuleID(int moduleID) {
-        this.moduleID = moduleID;
-    }
-
     public URL getXmlURL() {
         return xmlURL;
-    }
-
-    public void setXmlURL(URL xmlURL) {
-        this.xmlURL = xmlURL;
     }
 
     public boolean isLive() {

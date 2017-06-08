@@ -22,27 +22,17 @@ public class ParserXML {
 
     //private DOMParser xmlParser;
     private Document xmlDocument;
-    private String presentationXmlPath = "projectResources/sampleFiles/xml/i2lp_sample_xml.xmlml";
     private File xmlFile;
     private Logger logger = LoggerFactory.getLogger(ParserXML.class);
     private Presentation presentation;
     private ArrayList<String> faultsDetected = new ArrayList<>();
-    private ArrayList<Presentation> presentationList;
 
-    public ParserXML(Presentation presentation, File xmlFile){// throws InvalidPathException {
-        this.presentationList = presentationList;
+    public ParserXML(Presentation presentation, File xmlFile){
         this.presentation = presentation;
         this.xmlFile = xmlFile;
-//         if (this.validateExtension(presentationXmlPath))
-//        {
-            //this.presentationXmlPath = presentationXmlPath; //Set the path if valid
-//            logger.info("Path valid...");
-//        } else {
-//            logger.warn("Path not valid, sample XML loaded...");
-//            throw new InvalidPathException(presentationXmlPath, presentationXmlPath.substring(presentationXmlPath.lastIndexOf(".") + 1));
-//        }
 
         XMLDOMParser parser = new XMLDOMParser();
+
         //InputStream stream = rootView.getContext().getResources().openRawResource(R.raw.i2lp_sample_xml);
         InputStream stream = null;
         try {
@@ -55,16 +45,10 @@ public class ParserXML {
     }
 
     public Presentation parsePresentation() {
-        //presentation = new Presentation();
 
         parseDocumentDetails();
         setTotalSlideNum();
         parseSlidesAndSlideElements();
-
-//        if (faultsDetected.size() > 0) {
-//            presentation.setXmlFaults(faultsDetected);
-//        }
-//        logger.info("Presentation Parsed. Faults found: " + this.faultsDetected.size());
 
         return presentation;
     }
@@ -117,6 +101,7 @@ public class ParserXML {
             faultsDetected.add("No Document Details Tag Found!");
         }
     }
+
     private void parseSlidesAndSlideElements() {
         //Loop through each slide and add elements to every slide and every slide to the presentation:
         //Instantiate an array to add the slides to
@@ -186,6 +171,7 @@ public class ParserXML {
         }
         presentation.setSlideList(slideArray);
     }
+
     private void parseWordCloudElement(Node wordCloudElementNode, InteractiveElement wordCloudElement) {
         //Find and store all elements of the wordcloud element
         NodeList textNodeChildrenList = wordCloudElementNode.getChildNodes();
@@ -212,6 +198,7 @@ public class ParserXML {
             }
         }
     }
+
     private void parsePollElement(Node pollElementNode, InteractiveElement pollElement) {
         //Find and store all elements of the poll element
         NodeList textNodeChildrenList = pollElementNode.getChildNodes();
@@ -242,6 +229,7 @@ public class ParserXML {
             }
         }
     }
+
     private void parseElementAttributes (Node slideElementNode, InteractiveElement slideElement) {
         for (int i = 0; i < slideElementNode.getAttributes().getLength(); i++) {
             //Find the current attribute node
@@ -265,27 +253,10 @@ public class ParserXML {
             }
         }
     }
+
     private void setTotalSlideNum(){
         //Find all elements named "slide"
         NodeList slideNodeList = xmlDocument.getElementsByTagName("slide");
         presentation.setTotalSlideNumber(slideNodeList.getLength());
-    }
-
-
-
-    public Boolean validateExtension(String path) {
-        Boolean validated = false;
-        if(path.lastIndexOf(".") != -1 && path.lastIndexOf(".") != 0) {
-            String extension = path.substring(path.lastIndexOf(".") + 1);
-            if ((extension).equals("xml")) validated = true;
-            else logger.warn("File Extension " + extension + " not accepted");
-        }
-        return validated;
-    }
-
-    private String produceLegalXmlCharacters(String textContent) {
-        String xmlSafeHtmlText = "";
-        //TODO do this properly, but not needed until writing
-        return xmlSafeHtmlText;
     }
 }

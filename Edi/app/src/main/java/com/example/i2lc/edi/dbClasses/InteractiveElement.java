@@ -8,15 +8,15 @@ import android.os.Parcelable;
  */
 
 public class InteractiveElement implements Parcelable {
-    protected int interactiveElementID; //DB
-    protected int xml_element_id; //DB
-    protected int slideNumber; //DB
-    protected boolean live; //db
-    protected int presentationID;
-    protected String interactiveElementQuestion;
+    private int interactiveElementID; //DB
+    private int xml_element_id; //DB
+    private int slideNumber; //DB
+    private boolean live; //db
+    private int presentationID;
+    private String interactiveElementQuestion;
     protected String type;
-    protected int responsesInterval;
-    protected String answers;
+    private int responsesInterval;
+    private String answers;
 
     public InteractiveElement() {
     }
@@ -64,14 +64,6 @@ public class InteractiveElement implements Parcelable {
         this.interactiveElementID = interactiveElementID;
     }
 
-    public int getPresentationID() {
-        return presentationID;
-    }
-
-    public void setPresentationID(int presentationID) {
-        this.presentationID = presentationID;
-    }
-
     public String getInteractiveElementQuestion() {
         return interactiveElementQuestion;
     }
@@ -96,10 +88,6 @@ public class InteractiveElement implements Parcelable {
         this.live = live;
     }
 
-    public int getResponsesInterval() {
-        return responsesInterval;
-    }
-
     public void setResponsesInterval(int responsesInterval) {
         this.responsesInterval = responsesInterval;
     }
@@ -114,10 +102,6 @@ public class InteractiveElement implements Parcelable {
 
     public int getSlideNumber() {
         return slideNumber;
-    }
-
-    public void setSlideNumber(int slideNumber) {
-        this.slideNumber = slideNumber;
     }
 
     public int getXml_element_id() {

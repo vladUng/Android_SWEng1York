@@ -17,7 +17,7 @@ public class QueryFields {
     public QueryFields(String type) {
 
         sb = new StringBuilder();
-        fields = new ArrayList<String>();
+        fields = new ArrayList<>();
 
         switch (type) {
             case "User":

@@ -15,14 +15,8 @@ import java.util.zip.ZipInputStream;
 
 public class DecompressFast {
 
-        private String _zipFile;
-        private String _location;
+        public DecompressFast() {
 
-        public DecompressFast(String zipFile, String location) {
-            _zipFile = zipFile;
-            _location = location;
-
-            _dirChecker("");
         }
 
     public static void unzip(File zipFile, File targetDirectory) throws IOException {
@@ -33,6 +27,8 @@ public class DecompressFast {
             ZipEntry ze;
             int count;
             byte[] buffer = new byte[8192];
+
+            //go through each entry in the zip file
             while ((ze = zis.getNextEntry()) != null) {
 
                 String fileName = ze.getName();
@@ -44,11 +40,15 @@ public class DecompressFast {
 
                 File file = new File(targetDirectory, ze.getName());
                 File dir = ze.isDirectory() ? file : file.getParentFile();
+
                 if (!dir.isDirectory() && !dir.mkdirs())
                     throw new FileNotFoundException("Failed to ensure directory: " +
                             dir.getAbsolutePath());
+
                 if (ze.isDirectory())
                     continue;
+
+                //write the data on a file
                 FileOutputStream fout = new FileOutputStream(file);
                 try {
                     while ((count = zis.read(buffer)) != -1)
@@ -61,12 +61,4 @@ public class DecompressFast {
             zis.close();
         }
     }
-
-        private void _dirChecker(String dir) {
-            File f = new File(_location + dir);
-
-            if(!f.isDirectory()) {
-                f.mkdirs();
-            }
-        }
 }

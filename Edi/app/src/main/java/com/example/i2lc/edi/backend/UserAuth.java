@@ -8,9 +8,6 @@ public class UserAuth {
     String userToLogin;
     String password;
 
-    public UserAuth(){
-    }
-
     public UserAuth(String userToLogin, String password) {
         super();
         this.userToLogin = userToLogin;

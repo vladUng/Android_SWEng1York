@@ -78,7 +78,7 @@ public class SocketClient {
 
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
-            query.append("edi.public.sp_authuser(");
+            query.append("edi.public.sp_authenticate_user(");
             query.append("'").append(toAuth.getUserToLogin()).append("',");
             query.append("'").append(toAuth.getPassword()).append("');");
 
@@ -135,7 +135,7 @@ public class SocketClient {
 
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
-            query.append("edi.public.sp_getmodulesforuser(");
+            query.append("edi.public.sp_get_modules_for_user(");
             query.append("'" + forUserId + "');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
@@ -194,7 +194,7 @@ public class SocketClient {
 
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
-            query.append("edi.public.sp_getpresentationsformodule(");
+            query.append("edi.public.sp_get_presentations_for_module(");
             query.append("'").append(moduleID).append("');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
@@ -264,7 +264,7 @@ public class SocketClient {
 
             //build the sql statement
             StringBuilder query = new StringBuilder("select" + fieldsSB + " from ");
-            query.append("edi.public.sp_getinteractiveelementsforpresentation(");
+            query.append("edi.public.sp_get_interactiveelements_for_presentation(");
             query.append("'").append(presentationID).append("');");
 
             ResultSet queryResult = st.executeQuery(String.valueOf(query));
@@ -273,7 +273,7 @@ public class SocketClient {
             while (queryResult.next()) {
 
                 // int interactiveElementID, int presentationID, String interactiveElementData,
-                // String type, boolean live, int slideNumber, Timestamp responsesInterval)
+                // String type, boolean live, int xml_slide_id, Timestamp responsesInterval)
                 retInteractiveElements.add(new InteractiveElement(queryResult.getInt(fieldsList.get(0)), queryResult.getInt(fieldsList.get(1)),
                                                                     queryResult.getString(fieldsList.get(2)), queryResult.getString(fieldsList.get(3)),
                                                                     queryResult.getBoolean(fieldsList.get(4)), queryResult.getInt(fieldsList.get(5)),
@@ -306,7 +306,7 @@ public class SocketClient {
         Boolean retStatus = false;
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_addquestion_to_questionqueue(?, ?, ?, ?);");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_add_question_to_questionqueue(?, ?, ?, ?);");
 
             //Fill prepared statements to avoid SQL injection
             statement.setInt(1, userID);
@@ -354,7 +354,7 @@ public class SocketClient {
         String retString = "failure";
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_addinteraction_to_interactiveelemnt(?, ?, ?);");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.sp_add_interaction_to_interactiveelement(?, ?, ?);");
 
             //Fill prepared statements to avoid SQL injection
             statement.setInt(1, userID);

@@ -57,7 +57,7 @@ public class QueryFields {
                 fields.add("interactive_element_data");
                 fields.add("type");
                 fields.add("live");
-                fields.add("slide_number");
+                fields.add("xml_slide_id");
                 fields.add("xml_element_id");
                 break;
 

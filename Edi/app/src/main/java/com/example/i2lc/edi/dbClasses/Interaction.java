@@ -6,6 +6,8 @@ import android.os.StrictMode;
 import com.example.i2lc.edi.backend.SocketClient;
 
 /**
+ * Holds the relevant information from the Interactions table from the Database
+ *
  * Created by vlad on 11/05/2017.
  */
 
@@ -15,12 +17,22 @@ public class Interaction {
     protected int interactiveElementID;
     protected String interactionData;
 
+    /**
+     * Constructor
+     * @param userID
+     * @param interactiveElementID
+     * @param interactionData
+     */
     public Interaction(int userID, int interactiveElementID, String interactionData) {
         this.userID = userID;
         this.interactiveElementID = interactiveElementID;
         this.interactionData = interactionData;
     }
 
+    /**
+     * Sends interaction to Database, throws exception if fails
+     * @throws Exception
+     */
     public void sendInteraction() throws Exception {
         int SDK_INT = Build.VERSION.SDK_INT;
         // >SDK 8 support async operations

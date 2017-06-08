@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
+ * Holds the relevant information from the Interaction table from the Database
+ *
+ *
  * Created by vlad on 11/05/2017.
  */
 

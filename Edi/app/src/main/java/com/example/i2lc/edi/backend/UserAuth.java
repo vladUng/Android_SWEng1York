@@ -1,6 +1,8 @@
 package com.example.i2lc.edi.backend;
 
 /**
+ * Class that holds the authentication details.
+ *
  * Created by vlad on 06/04/2017.
  */
 

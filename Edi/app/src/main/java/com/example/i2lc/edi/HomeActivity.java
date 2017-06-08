@@ -279,7 +279,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 } catch (IOException e) { }
             }
 
-            DecompressFast.unzip(new File(zipFileName), destinationFolder);
+            DecompressFast.unZip(new File(zipFileName), destinationFolder);
             System.out.println("Extracted to \n"+ zipFolderName);
             presentation.setFolderPath(destinationFolder.getAbsolutePath());
         } catch (ZipException e) {

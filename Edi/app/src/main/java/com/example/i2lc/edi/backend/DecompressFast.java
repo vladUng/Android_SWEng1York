@@ -15,11 +15,17 @@ import java.util.zip.ZipInputStream;
 
 public class DecompressFast {
 
-        public DecompressFast() {
+    public DecompressFast() {
 
-        }
+    }
 
-    public static void unzip(File zipFile, File targetDirectory) throws IOException {
+    /**
+     *
+     * @param zipFile, which represents the path of the zipFile
+     * @param targetDirectory, which represents the path were the zipFile is unarchived
+     * @throws IOException
+     */
+    public static void unZip(File zipFile, File targetDirectory) throws IOException {
 
         ZipInputStream zis = new ZipInputStream(
                 new BufferedInputStream(new FileInputStream(zipFile)));

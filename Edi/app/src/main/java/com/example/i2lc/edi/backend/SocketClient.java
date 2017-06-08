@@ -27,6 +27,9 @@ public class SocketClient {
         connectToRemoteDB();
     }
 
+    /**
+     * Connects to the server
+     */
     public void connectToRemoteDB() {
 
         //Connect to PostgresSQL Instance
@@ -54,6 +57,11 @@ public class SocketClient {
         }
     }
 
+    /**
+     *
+     * @param toAuth, the credentials that are sent to the server to log in
+     * @return null, if authentications fails
+     */
     public ArrayList<String> userAuth(UserAuth toAuth) {
 
         ArrayList<String> retValue = new ArrayList<>();
@@ -107,7 +115,11 @@ public class SocketClient {
         return retValue;
     }
 
-    //returns all the modules in which a user is involved including the presentations for each moduleName
+    /**
+     *
+     * @param forUserId
+     * @return all the modules in which a user is involved including the presentations for each module
+     */
     public ArrayList<Module> getModules(String forUserId) {
 
         ArrayList<Module> retModules = new ArrayList<>();
@@ -161,6 +173,11 @@ public class SocketClient {
         return retModules;
     }
 
+    /**
+     *
+     * @param moduleID
+     * @return all the presentations for a specified module id
+     */
     public ArrayList<Presentation> getPresentationsForModuleId(String moduleID) {
 
         ArrayList<Presentation> retPresentations = new ArrayList<>();
@@ -226,6 +243,11 @@ public class SocketClient {
         return retPresentations;
     }
 
+    /**
+     *
+     * @param presentationID
+     * @return all the interactive elements from a presentation
+     */
     public ArrayList<InteractiveElement> getInteractiveElements(String presentationID) {
 
         ArrayList<InteractiveElement> retInteractiveElements = new ArrayList<>();
@@ -272,6 +294,14 @@ public class SocketClient {
         return retInteractiveElements;
     }
 
+    /**
+     *
+     * @param userID
+     * @param presentationID
+     * @param questionData
+     * @param slideNumber
+     * @return true, if the question was successfully sent to the server
+     */
     public boolean postQuestion(int userID, int presentationID, String questionData, int slideNumber) {
         Boolean retStatus = false;
 
@@ -313,6 +343,13 @@ public class SocketClient {
         return retStatus;
     }
 
+    /**
+     *
+     * @param userID
+     * @param interactiveElementID
+     * @param interactionData
+     * @return true, if the Interaction was successfully sent to the server
+     */
     public String postInteraction(int userID, int interactiveElementID, String interactionData) {
         String retString = "failure";
 
@@ -358,7 +395,13 @@ public class SocketClient {
         return retString;
     }
 
-    //set presentationID to 0, to toggle off
+    /**
+     * Set presentationID to 0, to toggle off the specified user from the presentations that its
+     * involved
+     * @param presentationID
+     * @param userID
+     * @return true, if the user was successfully set to active for the specified presentation
+     */
     public boolean toggleUserActivePresentation(int presentationID, int userID){
         Boolean retStatus;
 
@@ -396,6 +439,11 @@ public class SocketClient {
         return false;
     }
 
+    /**
+     *
+     * @param forPresentationID
+     * @return null if there is no presentation found for the specified ID
+     */
     public Presentation getPresentation(int forPresentationID) {
         Presentation retPresentation = new Presentation();
 

@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
+ *
+ *
  * Created by vlad on 11/05/2017.
  */
 
@@ -66,7 +68,10 @@ public class Presentation implements Parcelable{
             return new Presentation[size];
         }
     };
-
+    /**
+     *
+     * @return the InteractiveElement that is live, from the current presentation, otherwise null
+     */
     public InteractiveElement getLiveElement() {
 
         for (Slide slide: slideList) {
@@ -125,6 +130,10 @@ public class Presentation implements Parcelable{
         this.totalSlideNumber = totalSlideNumber;
     }
 
+    /**
+     *
+     * @return the current progress in %
+     */
     public int calculateProgress(){
         int progress = 0;
         if(totalSlideNumber!=0) {

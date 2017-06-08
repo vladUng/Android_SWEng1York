@@ -23,6 +23,16 @@ public class Question {
     public Question() {
     }
 
+    /**
+     *  Constructor for when the question is taken from the server
+     *
+     * @param questionID
+     * @param userID
+     * @param presentationID
+     * @param dateCreated
+     * @param questionData
+     * @param slideNumber
+     */
     public Question(int questionID, int userID, int presentationID, Timestamp dateCreated, String questionData, int slideNumber) {
         this.questionID = questionID;
         this.userID = userID;
@@ -31,6 +41,15 @@ public class Question {
         this.questionData = questionData;
         this.slideNumber = slideNumber;
     }
+
+    /**
+     *
+     * Constructor used to create an object when the question is sent to server
+     * @param userID
+     * @param presentationID
+     * @param questionData
+     * @param slideNumber
+     */
     public Question(int userID, int presentationID, String questionData, int slideNumber){
         this.userID = userID;
         this.presentationID = presentationID;
@@ -46,6 +65,13 @@ public class Question {
         this.questionData = questionData;
     }
 
+    /**
+     *
+     * Sends the data to server, throws error if fails
+     *
+     *
+     * @throws Exception
+     */
     public void sendQuestion() throws Exception {
         int SDK_INT = Build.VERSION.SDK_INT;
         // >SDK 8 support async operations

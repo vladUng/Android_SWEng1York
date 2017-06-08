@@ -1,6 +1,8 @@
 package com.example.i2lc.edi.backend;
 
 /**
+ * Builds the IPAddress from the serverIP and serverPort
+ *
  * Created by vlad on 06/04/2017.
  */
 

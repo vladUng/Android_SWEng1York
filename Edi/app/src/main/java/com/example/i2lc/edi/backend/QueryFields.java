@@ -14,6 +14,10 @@ public class QueryFields {
     protected StringBuilder sb;
     protected ArrayList<String> fields;
 
+    /**
+     *
+     * @param type, the type of the element that is retrieved from Database
+     */
     public QueryFields(String type) {
 
         sb = new StringBuilder();

@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * Holds the relevant information from the InteractiveElements table from the Database
+ *
  * Created by vlad on 11/05/2017.
  */
 
@@ -21,6 +23,17 @@ public class InteractiveElement implements Parcelable {
     public InteractiveElement() {
     }
 
+    /**
+     * Constructor
+     *
+     * @param interactiveElementID
+     * @param presentationID
+     * @param interactiveElementQuestion
+     * @param type
+     * @param live
+     * @param slideNumber
+     * @param xml_element_id
+     */
     public InteractiveElement(int interactiveElementID, int presentationID, String interactiveElementQuestion,
                               String type, boolean live, int slideNumber, int xml_element_id) {
         this.interactiveElementID = interactiveElementID;
@@ -44,6 +57,7 @@ public class InteractiveElement implements Parcelable {
         answers = in.readString();
     }
 
+    //needed to implement Parcelable
     public static final Creator<InteractiveElement> CREATOR = new Creator<InteractiveElement>() {
         @Override
         public InteractiveElement createFromParcel(Parcel in) {

@@ -23,7 +23,16 @@ public class User implements Parcelable {
 
     }
 
-    //Constructor used when adding Users
+    /**
+     *  Constructor
+     *
+     * @param userID
+     * @param userType
+     * @param username
+     * @param firstName
+     * @param secondName
+     * @param emailAddress
+     */
     public User(int userID, String userType, String username, String firstName, String secondName, String emailAddress) {
         super();
         this.userID = userID;

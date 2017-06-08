@@ -13,7 +13,10 @@ import android.widget.Button;
 import com.example.i2lc.edi.LogInActivity;
 import com.example.i2lc.edi.R;
 
-
+/**
+ * Log Out Fragment
+ * Contains a simple button which sends the user back to the Log In Activity
+ */
 public class LogOutFragment extends Fragment {
     private Button logOutButton;
     private View rootView;

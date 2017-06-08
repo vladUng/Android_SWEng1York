@@ -22,6 +22,12 @@ import com.example.i2lc.edi.dbClasses.Interaction;
 import com.example.i2lc.edi.dbClasses.InteractiveElement;
 import com.example.i2lc.edi.dbClasses.User;
 
+/**
+ * Interaction Fragment
+ * Fragment which gets instantiated when an interactive element is live
+ * It checks for the type of interactive element and shows the corresponding GUI
+ * User input is sent to the database.
+ */
 public class InteractionFragment extends Fragment {
     private String[] answersList;
     private String answer;
@@ -143,6 +149,10 @@ public class InteractionFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Makes device vibrate
+     * @param time - vibration duration
+     */
     public void vibrate(int time){
         Vibrator v = (Vibrator) rootView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(time);

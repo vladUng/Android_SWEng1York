@@ -15,6 +15,11 @@ import com.example.i2lc.edi.dbClasses.User;
 
 import java.util.ArrayList;
 
+/**
+ * Log In Activity
+ * Is instantiated at the start of the app
+ * GUI and functionality for User Log In
+ */
 public class LogInActivity extends AppCompatActivity {
 
     private EditText usernameEditText;

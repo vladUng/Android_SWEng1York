@@ -3,13 +3,11 @@ package com.example.i2lc.edi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.widget.EditText;
 
 import com.example.i2lc.edi.backend.SocketClient;
 import com.example.i2lc.edi.backend.Utils;
@@ -27,6 +25,13 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+/**
+ * Presesentation Activity
+ * It listens to changes onto the database
+ * Replaces and manages the fragments InteractionFragment and MainPresentationFragment
+ * InteractionFragment is instantiated if an interactive element goes live
+ * on the database.
+ */
 public class PresentationActivity extends AppCompatActivity implements MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
     private Fragment fragment;
     boolean isInteractiveElementLive = false;
@@ -49,6 +54,9 @@ public class PresentationActivity extends AppCompatActivity implements MainPrese
         checkLiveInteractiveElements();
     }
 
+    /**
+     * Uses Fragment Transaction to switch between fragments
+     */
     private void replaceFragment(){
         if(isInteractiveElementLive == true){
             fragment = new InteractionFragment();

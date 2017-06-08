@@ -21,6 +21,11 @@ public class SlidingMenuAdapter extends BaseAdapter{
     private Context context;
     private List<ItemSlideMenu> lstItem;
 
+    /**
+     * SlidingMenuAdapter Constructor
+     * @param context - context
+     * @param lstItem - Slidebar menu item list
+     */
     public SlidingMenuAdapter(Context context, List<ItemSlideMenu> lstItem) {
         this.context = context;
         this.lstItem = lstItem;

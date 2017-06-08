@@ -2,7 +2,6 @@ package com.example.i2lc.edi.presentationFragments;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -28,7 +27,12 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-
+/**
+ * Main Presentation Fragment
+ * This fragment is instantiated when user joins presentation
+ * It shows the title of the presentation and the progress during the presentation
+ * Contains the 'Ask' feature, which allows user to send a question to the server
+ */
 public class MainPresentationFragment extends Fragment {
     private static final int QUESTION_DISABLE_TIME =  30000;
     private static final int TICK_TIME =  1000;
@@ -99,6 +103,9 @@ public class MainPresentationFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Updates the progress bar UI element
+     */
     protected void updateProgressBar() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -107,7 +114,6 @@ public class MainPresentationFragment extends Fragment {
                 progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber()));
                 progress = currentPresentation.calculateProgress();
                 progressBar.setProgress(progress);
-
             }
         });
     }
@@ -140,6 +146,25 @@ public class MainPresentationFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onResume() {
+        //connect client
+        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
+        connectToRemoteSocket();
+
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        socket.disconnect();
+        super.onStop();
+    }
+
+    /**
+     * Displays text box for user to type in and send question
+     * @param view
+     */
     public void showQuestionTextBox(View view){
         if(buttonPressed == false){
             question = new Question(user.getUserID(), currentPresentation.getPresentationID(),"", currentPresentation.getCurrentSlideNumber());
@@ -187,6 +212,10 @@ public class MainPresentationFragment extends Fragment {
         }
     }
 
+    /**
+     * Hides textbox and cancel button and makes textbox content to be blank
+     * @param view
+     */
     public void cancelQuestion(View view){
         askButton.setText(" Ask  ");
         editText.setVisibility(view.INVISIBLE);
@@ -265,18 +294,5 @@ public class MainPresentationFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        //connect client
-        serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
-        connectToRemoteSocket();
 
-        super.onResume();
-    }
-
-    @Override
-    public void onStop() {
-        socket.disconnect();
-        super.onStop();
-    }
 }

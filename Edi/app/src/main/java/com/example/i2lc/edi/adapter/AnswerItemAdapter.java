@@ -20,6 +20,11 @@ public class AnswerItemAdapter extends BaseAdapter {
     private String[] answersList;
     private TextView answerTextView;
 
+    /**
+     * AnswerItemAdapter Constructor
+     * @param context - context
+     * @param answersList - poll list of answers
+     */
     public AnswerItemAdapter(Context context, String[] answersList){
         this.context = context;
         this.answersList = answersList;

@@ -15,7 +15,10 @@ import com.example.i2lc.edi.dbClasses.User;
 
 import java.util.ArrayList;
 
-
+/**
+ * Presentation List Fragment
+ * Contains ListView for displaying the custom views for each presentation
+ */
 public class PresentationListFragment extends Fragment{
     private ArrayList<Presentation> presentationList;
     private ListView listView;
@@ -90,6 +93,9 @@ public class PresentationListFragment extends Fragment{
         User getUserInterface();
     }
 
+    /**
+     * Method which updates the the ListView on the UI thread
+     */
     protected void updatePresentationListView() {
         //Updates the list of presentations
         getActivity().runOnUiThread(new Runnable() {

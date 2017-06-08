@@ -51,9 +51,11 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 /**
+ * Activity which contains the app's main menu
+ * It creates the sliding menu which manages the switching betweeen
+ * Presentation List fragment, the User Fragment and the Log Out fragment.
  * Created by Cosmin on 15/03/2017.
  */
-
 public class HomeActivity extends AppCompatActivity implements PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface, UserFragment.GetUserInterface{
 
     private List<ItemSlideMenu> listSliding;
@@ -88,9 +90,9 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         modules = new ArrayList<>();
 
         updatePresentationList();
+        createSlidingMenu();
 
         Toast.makeText(this, "You have successfully logged in!", Toast.LENGTH_LONG).show();
-        createSlidingMenu();
 
     }
 
@@ -109,6 +111,9 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         actionBarDrawerToggle.syncState();
     }
 
+    /**
+     * Creates the sliding menu GUI and functionality
+     */
     public void createSlidingMenu(){
         //Intro Component
         listViewSliding = (ListView) findViewById(R.id.lv_sliding_menu);
@@ -173,9 +178,11 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
-    //Create method replace fragment
+    /**
+     * Uses Fragment Transaction to replace current fragment
+     * @param pos
+     */
     private void replaceFragment(int pos) {
-        //Fragment fragment = null;
         switch (pos) {
             case 0:
                 fragment = new PresentationListFragment();
@@ -234,6 +241,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         }
     }
 
+
     public void downloadPresentation(Presentation presentation) {
 
         //construct filepath for folder
@@ -291,6 +299,13 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         setThumbnailFromFolder(presentation);
     }
 
+    /**
+     * Searches through the presentation directory and if the file is
+     * a .xml it parses it and adds the presentation to the list
+     * and in the case of a folder it finds the slide0 thumbnail's path
+     * and assigns it to the corresponding presentation field
+     * @param presentation
+     */
     public void setThumbnailFromFolder(Presentation presentation){
         //Create folder
         File presentationFolder = new File(presentation.getFolderPath()); //

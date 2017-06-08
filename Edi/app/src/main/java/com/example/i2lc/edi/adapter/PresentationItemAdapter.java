@@ -30,6 +30,12 @@ public class PresentationItemAdapter extends BaseAdapter{
     private ViewHolder holder;
     private User user;
 
+    /**
+     * PresentationItemAdapter
+     * @param context - context
+     * @param presentationList - list of presentations ready to be displayed to the user
+     * @param user - user logged in
+     */
     public PresentationItemAdapter(Context context, ArrayList<Presentation> presentationList, User user) {
         this.context = context;
         this.presentationList = presentationList;
@@ -51,7 +57,10 @@ public class PresentationItemAdapter extends BaseAdapter{
         return position;
     }
 
-    /*private view holder class*/
+    /**
+     * Private View Holder Class
+     * This holds custom presentation view
+     */
     private class ViewHolder{
         ImageView presentationThumbnail;
         TextView presentationTitle;
@@ -65,7 +74,6 @@ public class PresentationItemAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         holder = null;
-
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if(convertView == null) {
             convertView = mInflater.inflate(R.layout.presentation_item, null);
@@ -122,6 +130,11 @@ public class PresentationItemAdapter extends BaseAdapter{
         return convertView;
     }
 
+    /**
+     * Checks if file is a valid image file
+     * @param file - file to be checked
+     * @return true if the file is .jpg, .png, .gif or .jpeg
+     */
     private boolean isValidImageFile (File file) {
         String[] imageExtensions = new String[] {"jpg", "png", "gif", "jpeg"};
         boolean isValidImageFile = false;

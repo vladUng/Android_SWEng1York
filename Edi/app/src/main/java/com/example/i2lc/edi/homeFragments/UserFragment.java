@@ -2,7 +2,6 @@ package com.example.i2lc.edi.homeFragments;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.example.i2lc.edi.R;
 import com.example.i2lc.edi.dbClasses.User;
 
-import org.w3c.dom.Text;
 
 public class UserFragment extends Fragment {
     private GetUserInterface userInterface;

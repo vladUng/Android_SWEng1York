@@ -28,27 +28,11 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainPresentationFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainPresentationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MainPresentationFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final int QUESTION_DISABLE_TIME =  30000;
     private static final int TICK_TIME =  1000;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
     private Presentation currentPresentation;
     private Button askButton;
     private Button cancelButton;
@@ -61,49 +45,23 @@ public class MainPresentationFragment extends Fragment {
     private GetPresentationInterface presentationInterface;
     private GetUserInterface userInterface;
     private User user;
-
-    //for establishing connection
     private Socket socket;
     private String serverIPAddress;
-
     private View rootView;
 
     public MainPresentationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainPresentationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainPresentationFragment newInstance(String param1, String param2) {
-        MainPresentationFragment fragment = new MainPresentationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        View rootView = inflater.inflate(R.layout.activity_presentation, container, false);
         rootView = inflater.inflate(R.layout.activity_presentation, container, false);
         PresentationActivity activity = (PresentationActivity) getActivity();
         TextView testText = (TextView) rootView.findViewById(R.id.testData);
@@ -112,7 +70,6 @@ public class MainPresentationFragment extends Fragment {
         askButton = (Button) rootView.findViewById(R.id.askButton);
         cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
         editText = (EditText)rootView.findViewById(R.id.questionText);
-
         //Set progress
         if(presentationInterface != null){
             currentPresentation = presentationInterface.getLivePresentation();
@@ -122,11 +79,6 @@ public class MainPresentationFragment extends Fragment {
         }
 
         titleTextView.setText(currentPresentation.getTitle());
-//        progressBarText.setText("Slide " + Integer.toString(currentPresentation.getCurrentSlideNumber() + 1) + " of " + Integer.toString(currentPresentation.getTotalSlideNumber() + 1));
-//        progress = currentPresentation.calculateProgress();
-//        //
-//        progressBar.setProgress(progress);
-
         updateProgressBar();
 
         //When button is pressed
@@ -160,12 +112,6 @@ public class MainPresentationFragment extends Fragment {
         });
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
     public interface GetPresentationInterface{
         Presentation getLivePresentation();
     }
@@ -177,19 +123,11 @@ public class MainPresentationFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-
         try{
             presentationInterface = (GetPresentationInterface) context;
         }catch (ClassCastException e){
             throw new ClassCastException(context.toString() + "must implement GetDataInterface");
         }
-
         try{
             userInterface = (GetUserInterface) context;
         }catch (ClassCastException e){
@@ -200,22 +138,6 @@ public class MainPresentationFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     public void showQuestionTextBox(View view){
@@ -223,16 +145,21 @@ public class MainPresentationFragment extends Fragment {
             question = new Question(user.getUserID(), currentPresentation.getPresentationID(),"", currentPresentation.getCurrentSlideNumber());
             try {
                 if(questionEnabled == true) {
-                    if (editText.getText().toString().length() > 3) {
+                    //Question must contain more than 1 character to be sent
+                    if (editText.getText().toString().length() > 1) {
                         question.setQuestionData(editText.getText().toString());
                         question.sendQuestion();
                         editText.setText("");
                         askButton.setText(" Ask  ");
+                        //Hide question text box when question is sent
                         editText.setVisibility(view.INVISIBLE);
+                        //Hide cancel button when question is sent
                         cancelButton.setVisibility(view.INVISIBLE);
                         buttonPressed = true;
+                        //Display toast message to user
                         Toast.makeText(getActivity(), "Your question has been sent!", Toast.LENGTH_LONG).show();
                         System.out.println(question.getQuestionData());
+                        //Timer which keeps asking question disabled until finish
                         new CountDownTimer(QUESTION_DISABLE_TIME, TICK_TIME) {
                             public void onTick(long millisUntilFinished) {
                                 questionEnabled = false;
@@ -242,9 +169,11 @@ public class MainPresentationFragment extends Fragment {
                             }
                         }.start();
                     } else {
+                        //Display toast message if text box is empty and send is clicked
                         Toast.makeText(getActivity(), "Please write a question first", Toast.LENGTH_LONG).show();
                     }
                 }else{
+                    //Display toast message if countdown timer has not finished
                     Toast.makeText(getActivity(), "Please wait for 30s to send new question", Toast.LENGTH_LONG).show();
                 }
             }catch (Exception e) {
@@ -265,7 +194,6 @@ public class MainPresentationFragment extends Fragment {
         cancelButton.setVisibility(view.INVISIBLE);
         buttonPressed = true;
     }
-
     //better to do the connection here, because we can directly triggered the UI
     public void connectToRemoteSocket() {
         //Alert tester that connection is being attempted
@@ -301,7 +229,6 @@ public class MainPresentationFragment extends Fragment {
             public void call(Object... args) {
                 System.out.println("Client knows DB has updated:  " + args[0]);
                 updateLocalTables(args[0]);
-                //TODO: ADD METHOD HERE TO UPDATE THE SCREEN AS WELL
             }
 
         });
@@ -338,11 +265,8 @@ public class MainPresentationFragment extends Fragment {
         }
     }
 
-
-
     @Override
     public void onResume() {
-
         //connect client
         serverIPAddress = Utils.buildIPAddress("db.amriksadhra.com", 8080);
         connectToRemoteSocket();
@@ -353,8 +277,6 @@ public class MainPresentationFragment extends Fragment {
     @Override
     public void onStop() {
         socket.disconnect();
-
-
         super.onStop();
     }
 }

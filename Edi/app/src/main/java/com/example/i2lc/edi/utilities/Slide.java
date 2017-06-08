@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Slide implements Parcelable {
     protected ArrayList<InteractiveElement> slideElementList;
-    protected int slideID; // same with the slide number
+    protected int slideID;
 
     public Slide(Parcel in) {
         this();

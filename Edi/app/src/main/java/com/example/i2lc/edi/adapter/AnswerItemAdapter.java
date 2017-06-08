@@ -7,12 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.i2lc.edi.R;
-import com.example.i2lc.edi.dbClasses.Interaction;
-import com.example.i2lc.edi.dbClasses.User;
 
-import org.w3c.dom.Text;
+
 
 /**
  * Created by Cosmin Frateanu on 01/06/2017.
@@ -21,16 +18,11 @@ import org.w3c.dom.Text;
 public class AnswerItemAdapter extends BaseAdapter {
     private Context context;
     private String[] answersList;
-    private User user;
-    private int interActiveElementID;
     private TextView answerTextView;
 
-
-    public AnswerItemAdapter(Context context, String[] answersList, User user, int interactiveElementID){
+    public AnswerItemAdapter(Context context, String[] answersList){
         this.context = context;
         this.answersList = answersList;
-        this.user = user;
-        this.interActiveElementID = interactiveElementID;
     }
     @Override
     public int getCount() {

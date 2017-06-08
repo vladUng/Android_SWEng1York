@@ -27,10 +27,9 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class PresentationActivity extends AppCompatActivity implements InteractionFragment.OnFragmentInteractionListener,MainPresentationFragment.OnFragmentInteractionListener,MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
+public class PresentationActivity extends AppCompatActivity implements MainPresentationFragment.GetPresentationInterface, MainPresentationFragment.GetUserInterface, InteractionFragment.GetInteractiveElementInterface{
     private Fragment fragment;
     boolean isInteractiveElementLive = false;
-    private EditText editText;
     private User user;
     private Presentation currentPresentation;
     private InteractiveElement liveElement;
@@ -42,16 +41,11 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
         currentPresentation = intent.getExtras().getParcelable("presentation");
         user = intent.getExtras().getParcelable("user");
         System.out.println("Presentation Activity: Received Presentation ID: " + Integer.toString(currentPresentation.getPresentationID()));
-
         setContentView(R.layout.activity_pres);
-        //Show Edit Text to type question
-        editText = (EditText) findViewById(R.id.questionText);
-
         checkLiveInteractiveElements();
     }
 
@@ -69,12 +63,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
             transaction.commit();
         }
     }
-
-    @Override
-    public void onFragmentInteraction(Uri uri){
-        //can be empty
-    }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -121,7 +109,6 @@ public class PresentationActivity extends AppCompatActivity implements Interacti
             public void call(Object... args) {
                 System.out.println("Client knows DB has updated:  " + args[0]);
                 updateLocalTables(args[0]);
-                //TODO: ADD METHOD HERE TO UPDATE THE SCREEN AS WELL
             }
 
         });

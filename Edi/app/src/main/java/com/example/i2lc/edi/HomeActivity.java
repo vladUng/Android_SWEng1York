@@ -4,7 +4,6 @@ package com.example.i2lc.edi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -55,7 +54,7 @@ import io.socket.emitter.Emitter;
  * Created by Cosmin on 15/03/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements PresentationListFragment.OnFragmentInteractionListener, LogOutFragment.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface, UserFragment.GetUserInterface{
+public class HomeActivity extends AppCompatActivity implements PresentationListFragment.GetPresentationListInterface,PresentationListFragment.GetUserInterface, UserFragment.GetUserInterface{
 
     private List<ItemSlideMenu> listSliding;
     private SlidingMenuAdapter adapter;
@@ -110,11 +109,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         actionBarDrawerToggle.syncState();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        //can be empty
-    }
-
     public void createSlidingMenu(){
         //Intro Component
         listViewSliding = (ListView) findViewById(R.id.lv_sliding_menu);
@@ -122,7 +116,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
         listSliding = new ArrayList<>();
         //Add item for sliding list
         listSliding.add(new ItemSlideMenu(R.drawable.presentation_icon, "Live Presentations"));
-        //listSliding.add(new ItemSlideMenu(R.drawable.ic_settings_black_24dp, "Settings"));
         listSliding.add(new ItemSlideMenu(R.drawable.user_icon, "User Details"));
         listSliding.add(new ItemSlideMenu(R.drawable.logout, "Log Out"));
         adapter = new SlidingMenuAdapter(this, listSliding);
@@ -197,7 +190,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                 fragment = new PresentationListFragment();
                 break;
         }
-
         FragmentManager fragmentManager = getFragmentManager();
         android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.main_content, fragment);
@@ -312,8 +304,7 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
                     livePresentations.add(parser.parsePresentation());
                 }
             }
-
-            //set thumbnail path
+            //Set thumbnail path
             for (File child: directoryListing){
                 if (child.isDirectory() && child.getAbsolutePath().contains("Thumbnails")) {
                     File[] thumbnails = child.listFiles();
@@ -394,7 +385,6 @@ public class HomeActivity extends AppCompatActivity implements PresentationListF
 
     protected void updatePresentationList(){
         try {
-
             //if there are any elements clear livePresentation array
             if(livePresentations != null) {
                 livePresentations.clear();

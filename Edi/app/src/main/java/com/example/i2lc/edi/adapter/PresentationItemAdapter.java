@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class PresentationItemAdapter extends BaseAdapter{
     private Context context;
     private ArrayList<Presentation> presentationList;
-    private ArrayList<Presentation> sortedPresentationList;
     private ViewHolder holder;
     private User user;
 
@@ -35,7 +34,6 @@ public class PresentationItemAdapter extends BaseAdapter{
         this.context = context;
         this.presentationList = presentationList;
         this.user = user;
-
     }
 
     @Override
@@ -80,6 +78,7 @@ public class PresentationItemAdapter extends BaseAdapter{
             holder.joinButton = (Button) convertView.findViewById(R.id.joinButton);
             holder.joinButton.setTag(position);
             holder.joinButton.setBackgroundResource(R.color.liveColor);
+            //Listener to start PresentationActivity with the user and list of presentations
             holder.joinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
@@ -114,7 +113,7 @@ public class PresentationItemAdapter extends BaseAdapter{
                         System.out.println("Could not load image file!");
                     }
                 } else {
-                    holder.presentationThumbnail.setImageResource(R.drawable.edi);//TODO change when thumbnail from xml works
+                    holder.presentationThumbnail.setImageResource(R.drawable.edi);
                 }
             } else {
                 System.out.println("Presentation List is Empty!");
@@ -123,11 +122,6 @@ public class PresentationItemAdapter extends BaseAdapter{
         return convertView;
     }
 
-    /**
-     * Checks if file is a valid image file.
-     * @param file  file to check if image file
-     * @return      true if file at path is a valid image file
-     */
     private boolean isValidImageFile (File file) {
         String[] imageExtensions = new String[] {"jpg", "png", "gif", "jpeg"};
         boolean isValidImageFile = false;

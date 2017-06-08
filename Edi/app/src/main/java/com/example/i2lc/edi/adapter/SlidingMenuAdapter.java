@@ -47,11 +47,9 @@ public class SlidingMenuAdapter extends BaseAdapter{
         View v = View.inflate(context, R.layout.item_sliding_menu, null);
         ImageView img = (ImageView)v.findViewById(R.id.item_img);
         TextView tv = (TextView)v.findViewById((R.id.item_title));
-
         ItemSlideMenu item = lstItem.get(position);
         img.setImageResource(item.getImgId());
         tv.setText(item.getTitle());
-
         return v;
     }
 }
